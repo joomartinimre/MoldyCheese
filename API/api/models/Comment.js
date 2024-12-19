@@ -11,18 +11,22 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true
             },
             // User_ID: {
-            //     type: DataTypes.INTEGER,
+           //     type: DataTypes.INTEGER,
             //     allowNull: false,
             // },
             // Place_ID: {
             //     type: DataTypes.INTEGER,
             //     allowNull: false,
             // },
-            text: {
+            text: { 
                 type: DataTypes.STRING(255)
             },
             rate: {
                 type: DataTypes.INTEGER,
+                allowNull: false
+            },
+            date: {
+                type: DataTypes.DATE,
                 allowNull: false
             }
         },
