@@ -53,9 +53,9 @@
 </script>
 
 <template>
-  <v-container>
+  <v-container fluid>
   <v-row>
-    <v-col cols="12">
+    <v-col cols="6">
       <v-card-item>
         <v-card-title style="font-size: large;">{{ helyek[0].title }}</v-card-title>
       </v-card-item>
@@ -66,13 +66,8 @@
       </v-card-item>
     </v-col>
   </v-row>
-</v-container>
-
-<v-container>
   <v-row>
-    <v-col cols="12">
-      <v-row>
-        <v-col v-for="hely in helyek" :key="hely.title" cols="12" md="4">
+        <v-col v-for="hely in helyek" :key="hely.title" cols="12" sm="6" md="4" lg="2">
           <v-card
             rounded="xl"
             :disabled="loading"
@@ -101,8 +96,6 @@
 
           </v-card>
         </v-col>
-      </v-row>
-    </v-col>
   </v-row>
 </v-container>
 
