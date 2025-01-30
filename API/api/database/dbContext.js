@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
-
+require("dotenv").config();
 
 const sequelize = new Sequelize
 (
@@ -47,6 +47,6 @@ db.Sequelize = Sequelize;
 
 db.sequelize = sequelize;
 
-db.sequelize.sync({ force: true });
+db.sequelize.sync({ alter: true });
 
 module.exports = db;
