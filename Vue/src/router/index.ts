@@ -20,7 +20,7 @@ const router = createRouter({
       component: LandingLayout,
       children: [
       {
-        path: '/home',
+        path: '/',
         name: 'home',
         component: HomePage,
       },
