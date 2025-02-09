@@ -6,3 +6,5 @@ npm i @vuelidate/core @vuelidate/validators
 
 API: 
 -
+alap: 
+npm install concurrently --save-dev
