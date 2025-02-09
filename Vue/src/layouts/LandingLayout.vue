@@ -18,7 +18,7 @@ const links = [
       
         <v-app-bar >
           <template v-slot:title>
-            <button  @click="navigateTo('/home')">🧀 Moldy Cheese</button>
+            <button  @click="navigateTo('/')">🧀 Moldy Cheese</button>
           </template>
             <nav>
               <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/school')">Iskolák</v-btn>
