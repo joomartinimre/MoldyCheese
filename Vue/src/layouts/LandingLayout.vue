@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -13,15 +14,29 @@ const links = [
   { label: 'Rólunk', path: '/aboutUs' },
   { label: 'Jelentkezz kritikusnak!', path: '/Apply' },
 ];
+
+const search = ref(''); // Keresősáv értéke
+
 </script>
 
 <template>
   <v-layout class="rounded rounded-md">
     <!-- 📌 FIXÁLT FEJLÉC -->
-    <v-app-bar app class="sticky-header">
-      <template v-slot:title>
-        <button @click="navigateTo('/')">🧀 Moldy Cheese</button>
-      </template>
+    <v-app-bar height="80" app class="sticky-header">
+  <template v-slot:title>
+    <div class="header-container">
+      <button style="font-size: 25px;" @click="navigateTo('/')">🧀 Moldy Cheese</button>
+      <v-text-field
+        v-model="search"
+        placeholder="Keresés..."
+        variant="outlined"
+        dense
+        class="search-bar"
+        hide-details
+        clearable
+      ></v-text-field>
+    </div>
+  </template>
       <nav>
         <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/school')">Iskolák</v-btn>
         <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/restaurant')">Éttermek</v-btn>
@@ -62,7 +77,7 @@ const links = [
 </template>
 
 <style scoped>
-/* 📌 FIXÁLT FEJLÉC */
+
 .sticky-header {
   position: fixed !important;
   top: 0;
@@ -75,9 +90,6 @@ const links = [
   -webkit-backdrop-filter: blur(10px); /* Safari támogatás */
 }
 
-
-
-/* 📌 MEGOLDJA AZ ELCSÚSZOTT OLDALT */
 .page-content {
   padding-top: 64px; /* Fejléc magasságának megfelelő */
   width: 100%;
@@ -86,7 +98,6 @@ const links = [
   align-items: center;
 }
 
-/* 📌 TELJES SZÉLESSÉGŰ FŐ TARTALOM */
 .main-container {
   width: 100vw; /* Teljes nézet szélesség */
   max-width: 100%; /* Garantáltan teljes szélességű */
@@ -99,4 +110,20 @@ const links = [
   min-height: 100vh;
   box-sizing: border-box;
 }
+
+.header-container {
+  display: flex;
+  align-items: center;
+  gap: 40px; /* Távolság a Moldy Cheese és a keresősáv között */
+}
+
+.search-bar {
+  max-width: 600px; /* Keresősáv maximális szélessége hosszabbra állítva */
+  width: 100%; /* Rugalmas szélesség */
+}
+
+::v-deep(.search-bar .v-field__input) {
+  font-size: 18px !important; /* Közvetlenül a szövegmező betűmérete */
+}
+
 </style>
