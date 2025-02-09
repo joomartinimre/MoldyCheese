@@ -40,16 +40,40 @@ const registrationSuccess = ref(false);
 const showErrors = ref(false);
 const showConfirmPasswordError = ref(false);
 
-const submitForm = () => {
+
+
+
+const registerUser = async () => {
   v$.value.$touch();
   showErrors.value = true;
   showConfirmPasswordError.value = true;
-  
-  console.log("🔍 Form adatok:", JSON.parse(JSON.stringify(form)));
-  console.log("✅ Vuelidate állapot:", v$.value);
-  console.log("🛠 Jelszó:", form.password, "Jelszó megerősítés:", form.confirmPassword);
-  console.log("🔍 Egyezés állapot:", confirmPasswordMatches.value);
-  
+  console.log("Elindítottam a regit")
+  try {
+    const response = await fetch('http://localhost:3000/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userName: form.userName,
+        email: form.email,
+        password: form.password
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      alert(`Hiba: ${error.error}`);
+      return;
+    }
+
+    const data = await response.json();
+    alert("Sikeres regisztráció!");
+    console.log(`Sikeres regisztráció: ${data.message}`)
+  } catch (err) {
+    console.error('Hiba történt a regisztráció során:', err);
+    alert('Nem sikerült csatlakozni a szerverhez.');
+  }
   if (v$.value.$invalid) {
     console.error("❌ Hibás adatok!", v$.value.$errors);
     return;
@@ -57,11 +81,14 @@ const submitForm = () => {
   
   console.log("🎉 Sikeres regisztrációs adatok:", form);
   registrationSuccess.value = true;
-  alert("Sikeres regisztráció!");
+  
 };
 </script>
 
 <template>
+  
+
+  
   <div v-if="!registrationSuccess" style="max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; text-align: left;">
     <h2>Regisztráció</h2>
     <label>Felhasználónév</label>
@@ -80,13 +107,15 @@ const submitForm = () => {
     <input v-model="form.confirmPassword" type="password" />
     <p v-if="showConfirmPasswordError && v$.confirmPassword.$error" style="color: red;">{{ v$.confirmPassword.$errors[0]?.$message }}</p>
 
-    <button @click="submitForm">Regisztráció</button>
+    <button  @click="registerUser">Regisztráció</button>
+    
   </div>
   
   <div v-else style="max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; text-align: center; background-color: #f0f8ff;">
     <h2>Sikeres regisztráció!</h2>
     <p>A regisztráció sikeres volt. Kérlek, jelentkezz be.</p>
   </div>
+
 </template>
 
 <style>
@@ -107,5 +136,4 @@ button {
   cursor: pointer;
 }
 </style>
-
 
