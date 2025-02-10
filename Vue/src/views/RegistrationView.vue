@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { reactive, ref, computed } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { required, minLength, email, sameAs, helpers } from '@vuelidate/validators';
@@ -12,12 +12,11 @@ const form = reactive({
   password: '',
   confirmPassword: ''
 });
+const containsUppercase = (value: string): boolean => /[A-Z]/.test(value);
+const containsNumber = (value: string): boolean => /\d/.test(value);
+const containsSpecialChar = (value: string): boolean => /[@$!%*?&]/.test(value);
 
-const containsUppercase = (value) => /[A-Z]/.test(value);
-const containsNumber = (value) => /\d/.test(value);
-const containsSpecialChar = (value) => /[@$!%*?&]/.test(value);
-
-const confirmPasswordMatches = computed(() => form.confirmPassword === form.password);
+const confirmPasswordMatches = computed((): boolean => form.confirmPassword === form.password);
 
 const rules = {
   userName: { required: helpers.withMessage("A felhasználónév megadása kötelező!", required), minLength: helpers.withMessage("Legalább 6 karakter szükséges!", minLength(6)) },
