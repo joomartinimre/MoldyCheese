@@ -137,9 +137,26 @@
   text-align: left;
 }
 
+.content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 2300px;
+  padding: 20px;
+  border-radius: 10px;
+  flex-wrap: wrap; /* Engedélyezi a sorok törését */
+  z-index: 2;
+  box-sizing: border-box;
+  margin: 0 90px;
+  min-height: fit-content; /* Dinamikus magasság a tartalom alapján */
+}
+
 .homepage-container {
   width: 100%;
-  height: 94vh; /* Teljes nézetablak magassága */
+  min-height: 100%; /* A tartalom magasságához igazodik */
+  height: 94vh;
   background-size: cover;
   background-position: center;
   position: relative;
@@ -147,6 +164,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  padding-bottom: 20px; /* Alsó padding a biztonság kedvéért */
 }
 
 .homepage-container::before {
@@ -158,22 +176,6 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.7); /* Fekete opacitásos réteg */
   z-index: 1; /* Háttérként marad a tartalom alatt */
-}
-
-.content {
-  position: relative; /* A tartalom fölé kerül a háttér */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 2300px; /* Maximális szélesség */
-  padding: 20px;
-  border-radius: 10px;
-  flex-wrap: wrap; /* Engedélyezi a törést */
-  height: auto; /* Dinamikus magasság */
-  z-index: 2; /* A tartalom a háttér fölött helyezkedik el */
-  box-sizing: border-box;
-  margin: 0 90px;
 }
 
 /* Szöveges rész */
@@ -199,11 +201,12 @@
   .content {
     flex-direction: column; /* Oszlopos elrendezés */
     align-items: center; /* Középre igazítás */
+    min-height: fit-content; /* Dinamikus magasság a tartalom alapján */
   }
 
   .image-section {
     order: -1; /* A kép kerül előre */
-    justify-content: center; /* Kép középre igazítása */
+    justify-content: center;
     width: 100%; /* Kép teljes szélességet kitölt */
   }
 
@@ -215,6 +218,12 @@
   .text-section {
     text-align: center; /* Szöveg középre igazítása */
     margin: 0; /* Margók eltávolítása */
+    width: 100%; /* Szöveg a teljes szélességhez igazodik */
+  }
+
+  .homepage-container
+  {
+    height: 100%;
   }
 }
 
