@@ -9,7 +9,7 @@ const navigateTo = (path: string) => {
 
 </script>
 <template>
-    <v-container class="d-flex flex-column align-center justify-center" style="max-width: 400px; margin-top: 50px; text-align: left;">
+    <v-container class="d-flex flex-column align-center justify-center" style="box-shadow: black 5px 5px 20px; background-color: wheat; max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; text-align: left;">
       <h1 class="mb-4" style="width: 100%;">Bejelentkezés</h1>
       <v-text-field
         style="width: 100%;"
@@ -31,7 +31,7 @@ const navigateTo = (path: string) => {
       </v-btn>
       <p class='text-start' style='width: 100%;'>
       Még nem regisztráltál?
-      <span class='text-primary cursor-pointer' @click="navigateTo('/registration')">
+      <span style="font-style: italic;" class='text-primary cursor-pointer' @click="navigateTo('/registration')">
         Tedd meg itt!
       </span>
     </p>
