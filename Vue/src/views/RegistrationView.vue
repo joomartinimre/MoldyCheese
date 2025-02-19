@@ -2,9 +2,16 @@
 import { reactive, ref, computed } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { required, minLength, email, sameAs, helpers } from '@vuelidate/validators';
+import { useRouter } from 'vue-router';
 
 //ötletek/teendők: dinamikus Adatbázis. Bodával megbeszélni az API hívását (egyszerre lefuttatása, összekötés). Egyszeri API hívás, adatok lementése. Regi design (Márk). Elfelejtett jelszó, Emailes megerősítés. Login/Regi mükődés
 //Profile page: username email, role, number of comments. top 3 most liked comments, profile picture, smtp server (google smtp mair trap(test) )
+
+const router = useRouter();
+
+const navigateTo = (path: string) => {
+  router.push(path);
+};
 
 const form = reactive({
   userName: '',
@@ -86,29 +93,74 @@ const registerUser = async () => {
 
 <template>
   
+  <v-container class="d-flex flex-column align-center justify-center" v-if="!registrationSuccess" style="box-shadow: black 5px 5px 20px; background-color: wheat; max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; text-align: left;">
 
-  
-  <div v-if="!registrationSuccess" style="max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; text-align: left;">
-    <h2>Regisztráció</h2>
-    <label>Felhasználónév</label>
-    <input v-model="form.userName" type="text" @blur="v$.userName.$touch" />
-    <p v-if="v$.userName.$error" style="color: red;">{{ v$.userName.$errors[0]?.$message }}</p>
+    <h1 class="mb-4" style="width: 100%;">Regisztráció</h1>
 
-    <label>Email</label>
-    <input v-model="form.email" type="email" @blur="v$.email.$touch" />
-    <p v-if="v$.email.$error" style="color: red;">{{ v$.email.$errors[0]?.$message }}</p>
+    <v-text-field
+      style="width: 100%;"
+      label="Felhasználónév"
+      variant="outlined"
+      class="mb-3"
+      dense
+      v-model="form.userName" 
+      type="text" 
+      @blur="v$.userName.$touch"
+      :hint="v$.userName.$errors.length > 0 ? String(v$.userName.$errors[0].$message || '') : ''"
+      persistent-hint
+    ></v-text-field>
 
-    <label>Jelszó</label>
-    <input v-model="form.password" type="password" @blur="v$.password.$touch" />
-    <p v-if="v$.password.$error" style="color: red;">{{ v$.password.$errors.map(e => e.$message).join(', ') }}</p>
+    <v-text-field
+      style="width: 100%;"
+      label="Email"
+      variant="outlined"
+      class="mb-3"
+      dense
+      v-model="form.email" 
+      type="email" 
+      @blur="v$.email.$touch"
+      :hint="v$.email.$errors.length > 0 ? String(v$.email.$errors[0].$message || '') : ''"
+      persistent-hint
+    ></v-text-field>
 
-    <label>Jelszó megerősítése</label>
-    <input v-model="form.confirmPassword" type="password" />
-    <p v-if="showConfirmPasswordError && v$.confirmPassword.$error" style="color: red;">{{ v$.confirmPassword.$errors[0]?.$message }}</p>
+    <v-text-field
+      style="width: 100%;"
+      label="Jelszó"
+      variant="outlined"
+      class="mb-3"
+      dense
+      v-model="form.password" 
+      type="password" 
+      @blur="v$.password.$touch"
+      :hint="v$.password.$errors.length > 0 ? String(v$.password.$errors.map(e => e.$message).join(', ') || '') : ''"
+      persistent-hint
+    ></v-text-field>
 
-    <button  @click="registerUser">Regisztráció</button>
+    <v-text-field
+      style="width: 100%;"
+      label="Jelszó megerősítése"
+      variant="outlined"
+      class="mb-3"
+      dense
+      v-model="form.confirmPassword" 
+      type="password"
+      @blur="v$.confirmPassword.$touch"
+      :hint="v$.confirmPassword.$errors.length > 0 ? String(v$.confirmPassword.$errors[0].$message || '') : ''"
+      persistent-hint
+    ></v-text-field>
+
+    <v-btn color="primary" variant="elevated" class="mb-3" style="width: 100%;" @click="registerUser">
+      Regisztráció
+    </v-btn>
+
+    <p class='text-start' style='width: 100%;'>
+      Már van fiókod?
+      <span style="font-style: italic;" class='text-primary cursor-pointer' @click="navigateTo('/login')">
+        Jelentkezz be itt!
+      </span>
+    </p>
     
-  </div>
+  </v-container>
   
   <div v-else style="max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; text-align: center; background-color: #f0f8ff;">
     <h2>Sikeres regisztráció!</h2>
@@ -117,4 +169,10 @@ const registerUser = async () => {
 
 </template>
 
-
+<style>
+.v-messages__message {
+    color: red;
+    line-height: 1.5 !important;
+    font-weight: bold;
+}
+</style>
