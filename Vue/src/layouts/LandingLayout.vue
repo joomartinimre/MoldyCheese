@@ -137,7 +137,7 @@ const search = ref(''); // Keresősáv értéke
 }
 
 .page-content {
-  padding-top: 64px; /* Fejléc magasságának megfelelő */
+  padding-top: 64px;
   width: 100%;
   display: flex;
   justify-content: center;
