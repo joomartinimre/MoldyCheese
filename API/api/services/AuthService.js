@@ -4,10 +4,27 @@ const jwt = require("jsonwebtoken");
 
 class AuthService {
     async register(userName, password, email, role) {
+        // Ellenőrzés: ne lehessen üres értékekkel regisztrálni
+        if (!userName || !password || !email) {
+            throw new Error("All fields (username, password, email) are required");
+        }
+
+        // Ellenőrzés: a jelszó legyen legalább 6 karakter hosszú
+        if (password.length < 6) {
+            throw new Error("Password must be at least 6 characters long");
+        }
+
+        // Ellenőrzés: email formátum validálása
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            throw new Error("Invalid email format");
+        }
+
         const existingUser = await UserRepository.findUserByEmail(email);
         if (existingUser) {
             throw new Error("User already exists with this email");
         }
+        
         return await UserRepository.createUser(userName, password, email, role);
     }
 
@@ -27,10 +44,8 @@ class AuthService {
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );
-
         return { token, user };
     }
 }
 
-module.exports = new AuthService();
-
+module.exports = new AuthService;
