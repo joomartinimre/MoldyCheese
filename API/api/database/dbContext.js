@@ -23,15 +23,12 @@ try {
 
 const db = {};
 
-const { Comment, Playground, Restaurant, School, Shop, Topic, User } = require("../models")(sequelize, DataTypes);
+const { Comment, User, Topic, Place } = require("../models")(sequelize, DataTypes);
 
 db.Comment = Comment;
-db.Playground = Playground;
-db.Restaurant = Restaurant;
-db.School = School;
-db.Shop = Shop;
-db.Topic = Topic;
 db.User = User;
+db.Topic = Topic;
+db.Place = Place;
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
@@ -54,19 +51,13 @@ const saveDataOnExit = async () => {
         const users = await db.User.findAll({ raw: true });
         console.log("Users found:", users);
 
-        const schools = await db.School.findAll({ raw: true });
-        const playgrounds = await db.Playground.findAll({ raw: true });
-        const restaurants = await db.Restaurant.findAll({ raw: true });
-        const shops = await db.Shop.findAll({ raw: true });
+        const places = await db.Place.findAll({ raw: true });
         const topics = await db.Topic.findAll({ raw: true });
         const comments = await db.Comment.findAll({ raw: true });
 
         const seedData = {
             users: users || [],
-            schools: schools || [],
-            playgrounds: playgrounds || [],
-            restaurants: restaurants || [],
-            shops: shops || [],
+            places: places || [],
             topics: topics || [],
             comments: comments || [],
         };
@@ -86,7 +77,6 @@ const gracefulShutdown = async (signal) => {
     try {
         await saveDataOnExit();
         console.log("Shutdown complete.");
-        // Delay exit to ensure file write completes
         setTimeout(() => process.exit(0), 500);
     } catch (error) {
         console.error("Error during shutdown:", error.message);

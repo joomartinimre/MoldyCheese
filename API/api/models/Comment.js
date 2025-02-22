@@ -8,32 +8,34 @@ module.exports = (sequelize, DataTypes) => {
             ID: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                primaryKey: true
+                primaryKey: true,
+                autoIncrement: true
             },
-            // User_ID: {
-           //     type: DataTypes.INTEGER,
-            //     allowNull: false,
-            // },
-            // Place_ID: {
-            //     type: DataTypes.INTEGER,
-            //     allowNull: false,
-            // },
             text: { 
                 type: DataTypes.STRING(255)
+            },
+            likes: { 
+                type: DataTypes.INTEGER
             },
             rate: {
                 type: DataTypes.INTEGER,
                 allowNull: false
             },
-            date: {
+            createdAt: {
                 type: DataTypes.DATE,
-                allowNull: false
+                allowNull: false,
+                defaultValue: DataTypes.NOW
+            },
+            updatedAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW
             }
         },
         {
             sequelize,
             modelName: "Comments",
-            timestamps: false,
+            timestamps: true,
             freezeTableName: true
         }
     );
