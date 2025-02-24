@@ -3,6 +3,8 @@ npm i
 npm i axios
 npm i vuetify
 npm i @vuelidate/core @vuelidate/validators
+npm install pinia
+
 
 API: 
 -

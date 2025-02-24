@@ -74,7 +74,6 @@ const registerUser = async () => {
     }
 
     const data = await response.json();
-    alert("Sikeres regisztráció!");
     console.log(`Sikeres regisztráció: ${data.message}`)
   } catch (err) {
     console.error('Hiba történt a regisztráció során:', err);

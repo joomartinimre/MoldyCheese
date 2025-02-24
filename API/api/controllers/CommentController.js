@@ -3,9 +3,9 @@ const CommentService = require("../services/CommentService");
 class CommentController {
     static async addComment(req, res) {
         try {
-            const { place_ID, text, rate } = req.body;
+            const { place_ID, text } = req.body;
             const user_ID = req.user.id;
-            const newComment = await CommentService.addComment(user_ID, place_ID, text, rate);
+            const newComment = await CommentService.addComment(user_ID, place_ID, text);
             res.status(201).json({ message: "Comment added successfully", comment: newComment });
         } catch (error) {
             res.status(400).json({ error: error.message });

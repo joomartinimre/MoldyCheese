@@ -17,10 +17,6 @@ module.exports = (sequelize, DataTypes) => {
             likes: { 
                 type: DataTypes.INTEGER
             },
-            rate: {
-                type: DataTypes.INTEGER,
-                allowNull: false
-            },
             createdAt: {
                 type: DataTypes.DATE,
                 allowNull: false,
@@ -28,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             updatedAt: {
                 type: DataTypes.DATE,
-                allowNull: false,
+                allowNull: true,
                 defaultValue: DataTypes.NOW
             }
         },
