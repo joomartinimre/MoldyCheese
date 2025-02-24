@@ -297,4 +297,9 @@ const prevSlide = () => {
   opacity: 1;
 }
 
+.content .v-card-text
+{
+  padding: 0px !important;
+}
+
 </style>

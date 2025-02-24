@@ -49,6 +49,23 @@ const search = ref(''); // Keresősáv értéke
         </div>
       </template>
       <div class="d-flex justify-space-around">
+        <!-- Bejelentkezés/Regisztráció menü -->
+        <v-menu transition="scale-transition" v-if="mobile">
+          <template v-slot:activator="{ props }">
+            <v-app-bar-nav-icon variant="elevated" color="primary" class="text-surface ma-1" v-bind="props">
+              <v-icon class="text-surface">mdi-account</v-icon>
+            </v-app-bar-nav-icon>
+          </template>
+          <v-list>
+            <v-list-item>
+              <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/login')">Bejelentkezés</v-btn>
+            </v-list-item>
+            <v-list-item>
+              <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/registration')">Regisztráció</v-btn>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
         <!-- Helyek menü -->
         <v-menu transition="scale-transition">
           <template v-slot:activator="{ props }">
@@ -60,38 +77,34 @@ const search = ref(''); // Keresősáv értéke
             </v-list-item>
           </v-list>
         </v-menu>
-
-        <!-- Bejelentkezés/Regisztráció menü -->
-        <v-menu transition="scale-transition" v-if="mobile">
-          <template v-slot:activator="{ props }">
-            <v-app-bar-nav-icon variant="elevated" color="primary" class="text-surface ma-1" v-bind="props">
-              <v-icon class="text-surface">mdi-account</v-icon>
-            </v-app-bar-nav-icon>
-          </template>
-          <v-list>
-            <v-list-item>
-              <v-btn variant="elevated" color="primary" class="text-surface ma-1" @click="navigateTo('/login')">Bejelentkezés</v-btn>
-            </v-list-item>
-            <v-list-item>
-              <v-btn variant="elevated" color="primary" class="text-surface ma-1" @click="navigateTo('/registration')">Regisztráció</v-btn>
-            </v-list-item>
-          </v-list>
-        </v-menu>
       </div>
 
-      <!-- Helyek navigáció (asztali nézetben) -->
-      <nav v-if="!mobile">
-        <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/school')">Iskolák</v-btn>
-        <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/restaurant')">Éttermek</v-btn>
-        <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/shop')">Vegyesboltok</v-btn>
-        <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/playground')">Játszóterek</v-btn>
+      <!-- Helyek navigáció és bejelentkezési ikon (asztali nézetben) -->
+      <nav v-if="!mobile" class="desktop-nav">
+        <div class="desktop-nav-items">
+          <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/school')">Iskolák</v-btn>
+          <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/restaurant')">Éttermek</v-btn>
+          <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/shop')">Vegyesboltok</v-btn>
+          <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/playground')">Játszóterek</v-btn>
+        </div>
+        <div class="desktop-nav-account">
+          <v-menu transition="scale-transition">
+            <template v-slot:activator="{ props }">
+              <v-app-bar-nav-icon variant="elevated" color="primary" class="text-surface ma-1" v-bind="props">
+                <v-icon class="text-surface">mdi-account</v-icon>
+              </v-app-bar-nav-icon>
+            </template>
+            <v-list>
+              <v-list-item>
+                <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/login')">Bejelentkezés</v-btn>
+              </v-list-item>
+              <v-list-item>
+                <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/registration')">Regisztráció</v-btn>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
       </nav>
-
-      <!-- Bejelentkezés/Regisztráció gombok (asztali nézetben) -->
-      <div class="auth-buttons" v-if="!mobile">
-        <v-btn variant="elevated" color="primary" class="text-surface ma-1" @click="navigateTo('/login')">Bejelentkezés</v-btn>
-        <v-btn variant="elevated" color="primary" class="text-surface ma-1" @click="navigateTo('/registration')">Regisztráció</v-btn>
-      </div>
     </v-app-bar>
 
     <!-- 📌 A FŐ TARTALOM KÖZÉPRE IGAZÍTVA -->
@@ -174,6 +187,13 @@ const search = ref(''); // Keresősáv értéke
 
 .v-btn--size-default {
   padding: 0 4px !important;
+}
+
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px; /* opcionális, ha szeretnél belső margót */
 }
 
 </style>
