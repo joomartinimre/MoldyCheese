@@ -187,21 +187,22 @@ const comments = ref([
 
     <!-- Kommentek szekció -->
     <div class="comments">
-      <!-- Kommentek címe -->
+      <!-- Kommentek címe és elválasztó -->
       <h5 class="comments-title">Hozzászólások / Reakciók</h5>
+      <div class="comments-divider"></div>
 
-      <!-- Komment lista, a comments tömb alapján -->
+      <!-- Komment lista a comments tömb alapján -->
       <div class="comments-list">
         <div v-for="(comment, index) in comments" :key="index" class="comment-item">
-          <div class="comment-header">
-            <img :src="comment.avatar" alt="Profilkép" class="comment-avatar">
-            <div class="comment-meta">
-              <a href="" class="comment-author">{{ comment.author }}</a>
+          <img :src="comment.avatar" alt="Profilkép" class="comment-avatar">
+          <div class="comment-bubble">
+            <div class="bubble-header">
+              <span class="comment-author">{{ comment.author }}</span>
               <span class="comment-time">{{ comment.time }}</span>
             </div>
-          </div>
-          <div class="comment-content">
-            <p>{{ comment.content }}</p>
+            <div class="bubble-content">
+              <p>{{ comment.content }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -368,8 +369,15 @@ const comments = ref([
 .comments-title {
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: left;
+}
+
+/* Vastagabb elválasztó csak a címsor alatt */
+.comments-divider {
+  width: 50%;
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 20px;
 }
 
 .comments-list {
@@ -378,53 +386,65 @@ const comments = ref([
   box-sizing: border-box;
 }
 
+/* Komment item: avatar és szövegbuborék */
 .comment-item {
-  padding: 10px 0;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #ddd;
   width: 100%;
   box-sizing: border-box;
 }
 
-.comment-item:last-child {
-  border-bottom: none;
-}
-
-.comment-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
 .comment-avatar {
-  width: 40px;
-  height: 40px;
+  width: 50px; /* kicsit nagyobb, mint korábban */
+  height: 50px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.comment-meta {
+/* Szövegbuborék stílus */
+.comment-bubble {
+  background: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
   margin-left: 10px;
+  position: relative;
+  flex: 1;
 }
 
-.comment-author {
+/* Buborék kis nyíl */
+.comment-bubble::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent #f1f1f1 transparent transparent;
+}
+
+/* Buborék fejléc: felhasználónév és dátum */
+.bubble-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.bubble-header .comment-author {
   font-weight: bold;
   color: #333;
   text-decoration: none;
 }
 
-.comment-author:hover {
-  text-decoration: underline;
-}
-
-.comment-time {
-  display: block;
+.bubble-header .comment-time {
   font-size: 0.85rem;
   color: #777;
 }
 
-.comment-content p {
+.bubble-content p {
   margin: 0;
   line-height: 1.4;
   text-align: left;
@@ -432,6 +452,7 @@ const comments = ref([
   box-sizing: border-box;
 }
 
+/* Komment beküldő űrlap stílusai */
 .comment-form {
   display: flex;
   flex-direction: column;
