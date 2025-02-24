@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
 import { useAuthStore } from '@/stores/authStore';
 
 const router = useRouter();
 const authStore = useAuthStore();
+const route = useRoute();
 
 const navigateTo = (path: string) => {
   router.push(path);
@@ -32,6 +33,12 @@ const items = [
 const { mobile } = useDisplay();
 
 const search = ref(''); // Keresősáv értéke
+
+// Visitor figyelmeztetés láthatóságának vezérlése
+const showVisitor = ref(true);
+const hideVisitor = () => {
+  showVisitor.value = false;
+};
 </script>
 
 <template>
@@ -64,7 +71,8 @@ const search = ref(''); // Keresősáv értéke
               class="text-surface ma-1"
               v-bind="props"
             >
-              <v-icon class="text-surface">mdi-account</v-icon>
+              <v-icon class="text-surface" v-if="authStore.isLoggedIn">mdi-account</v-icon>
+              <v-icon class="text-surface" v-if="!authStore.isLoggedIn">mdi-login</v-icon>
             </v-app-bar-nav-icon>
           </template>
           <v-list>
@@ -127,7 +135,8 @@ const search = ref(''); // Keresősáv értéke
                 class="text-surface ma-1"
                 v-bind="props"
               >
-                <v-icon class="text-surface">mdi-account</v-icon>
+              <v-icon class="text-surface" v-if="authStore.isLoggedIn">mdi-account</v-icon>
+              <v-icon class="text-surface" v-if="!authStore.isLoggedIn">mdi-login</v-icon>
               </v-app-bar-nav-icon>
             </template>
             <v-list>
@@ -167,6 +176,19 @@ const search = ref(''); // Keresősáv értéke
         <router-view />
       </v-container>
     </div>
+
+    <!-- Visitor figyelmeztetés, X gombbal -->
+    <v-container>
+      <div class="visitor-container" v-if="showVisitor && !authStore.isLoggedIn && !['/login', '/registration'].includes(route.path)">
+        <button class="close-btn" @click="hideVisitor" aria-label="Bezárás">×</button>
+        <div class="visitor">
+          <strong>Kedves Látogató!</strong> Tudtad, hogy nem vagy bejelentkezve?
+          <v-btn variant="elevated" color="primary" class="text-surface ma-1" @click="navigateTo('/login')">
+            Bejelentkezés
+          </v-btn>
+        </div>
+      </div>
+    </v-container>
 
     <!-- LÁBLÉC -->
     <v-navigation-drawer location="bottom" :mobile="false">
@@ -250,5 +272,43 @@ const search = ref(''); // Keresősáv értéke
 
 .v-navigation-drawer {
   height: auto !important;
+}
+
+/* Visitor üzenet konténer és stílusok */
+.visitor-container {
+  position: fixed;
+  bottom: 70px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  max-width: 80%;
+  z-index: 1050;
+}
+
+.visitor {
+  text-align: center;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 0.25rem;
+  transition: opacity 0.15s linear;
+  color: rgb(109,76,65);
+  background-color: rgb(253,216,53);
+  border: 1px solid rgb(109,76,65);
+}
+
+/* Bezáró X gomb stílusa */
+.close-btn {
+  position: absolute;
+  top: -20px;
+  right: -18px;
+  padding-right: 10px;
+  padding-left: 10px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: rgb(253,216,53);
+  background-color: rgb(109,76,65);
+  border-radius: 100%;
 }
 </style>
