@@ -436,7 +436,6 @@ const comments = ref([
 .bubble-header .comment-author {
   font-weight: bold;
   color: #333;
-  text-decoration: none;
 }
 
 .bubble-header .comment-time {
@@ -448,8 +447,6 @@ const comments = ref([
   margin: 0;
   line-height: 1.4;
   text-align: left;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 /* Komment beküldő űrlap stílusai */
@@ -483,11 +480,6 @@ const comments = ref([
 
 .comment-form button:hover {
   background-color: #286090;
-}
-
-.content .v-card-text 
-{
-    padding: 0px !important;
 }
 
 </style>
