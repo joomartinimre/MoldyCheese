@@ -2,12 +2,18 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
+import { useAuthStore } from '@/stores/authStore';
 
 const router = useRouter();
+const authStore = useAuthStore();
 
-// Navigációs függvény
 const navigateTo = (path: string) => {
   router.push(path);
+};
+
+const handleLogout = () => {
+  authStore.logout();
+  navigateTo('/');
 };
 
 const links = [
@@ -25,9 +31,7 @@ const items = [
 
 const { mobile } = useDisplay();
 
-
 const search = ref(''); // Keresősáv értéke
-
 </script>
 
 <template>
@@ -36,7 +40,9 @@ const search = ref(''); // Keresősáv értéke
     <v-app-bar height="80" app class="sticky-header">
       <template v-slot:title>
         <div class="header-container">
-          <button style="font-size: 25px;" @click="navigateTo('/')">🧀 <span v-if="!mobile">Moldy Cheese</span></button>
+          <button style="font-size: 25px;" @click="navigateTo('/')">
+            🧀 <span v-if="!mobile">Moldy Cheese</span>
+          </button>
           <v-text-field
             v-model="search"
             placeholder="Keresés..."
@@ -49,20 +55,43 @@ const search = ref(''); // Keresősáv értéke
         </div>
       </template>
       <div class="d-flex justify-space-around">
-        <!-- Bejelentkezés/Regisztráció menü -->
+        <!-- Mobil nézet: account menü -->
         <v-menu transition="scale-transition" v-if="mobile">
           <template v-slot:activator="{ props }">
-            <v-app-bar-nav-icon variant="elevated" color="primary" class="text-surface ma-1" v-bind="props">
+            <v-app-bar-nav-icon
+              variant="elevated"
+              color="primary"
+              class="text-surface ma-1"
+              v-bind="props"
+            >
               <v-icon class="text-surface">mdi-account</v-icon>
             </v-app-bar-nav-icon>
           </template>
           <v-list>
-            <v-list-item>
-              <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/login')">Bejelentkezés</v-btn>
-            </v-list-item>
-            <v-list-item>
-              <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/registration')">Regisztráció</v-btn>
-            </v-list-item>
+            <template v-if="!authStore.isLoggedIn">
+              <v-list-item>
+                <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/login')">
+                  Bejelentkezés
+                </v-btn>
+              </v-list-item>
+              <v-list-item>
+                <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/registration')">
+                  Regisztráció
+                </v-btn>
+              </v-list-item>
+            </template>
+            <template v-else>
+              <v-list-item>
+                <v-btn variant="text" color="primary" class="ma-1" @click="handleLogout">
+                  Kijelentkezés
+                </v-btn>
+              </v-list-item>
+              <v-list-item>
+                <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/profile')">
+                  Profil
+                </v-btn>
+              </v-list-item>
+            </template>
           </v-list>
         </v-menu>
 
@@ -73,13 +102,15 @@ const search = ref(''); // Keresősáv értéke
           </template>
           <v-list>
             <v-list-item v-for="(item, i) in items" :key="i">
-              <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo(item.path)">{{ item.title }}</v-btn>
+              <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo(item.path)">
+                {{ item.title }}
+              </v-btn>
             </v-list-item>
           </v-list>
         </v-menu>
       </div>
 
-      <!-- Helyek navigáció és bejelentkezési ikon (asztali nézetben) -->
+      <!-- Asztali nézet: navigáció és account menü -->
       <nav v-if="!mobile" class="desktop-nav">
         <div class="desktop-nav-items">
           <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/school')">Iskolák</v-btn>
@@ -90,17 +121,40 @@ const search = ref(''); // Keresősáv értéke
         <div class="desktop-nav-account">
           <v-menu transition="scale-transition">
             <template v-slot:activator="{ props }">
-              <v-app-bar-nav-icon variant="elevated" color="primary" class="text-surface ma-1" v-bind="props">
+              <v-app-bar-nav-icon
+                variant="elevated"
+                color="primary"
+                class="text-surface ma-1"
+                v-bind="props"
+              >
                 <v-icon class="text-surface">mdi-account</v-icon>
               </v-app-bar-nav-icon>
             </template>
             <v-list>
-              <v-list-item>
-                <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/login')">Bejelentkezés</v-btn>
-              </v-list-item>
-              <v-list-item>
-                <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/registration')">Regisztráció</v-btn>
-              </v-list-item>
+              <template v-if="!authStore.isLoggedIn">
+                <v-list-item>
+                  <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/login')">
+                    Bejelentkezés
+                  </v-btn>
+                </v-list-item>
+                <v-list-item>
+                  <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/registration')">
+                    Regisztráció
+                  </v-btn>
+                </v-list-item>
+              </template>
+              <template v-else>
+                <v-list-item>
+                  <v-btn variant="text" color="primary" class="ma-1" @click="handleLogout">
+                    Kijelentkezés
+                  </v-btn>
+                </v-list-item>
+                <v-list-item>
+                  <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/profile')">
+                    Profil
+                  </v-btn>
+                </v-list-item>
+              </template>
             </v-list>
           </v-menu>
         </div>
@@ -134,9 +188,7 @@ const search = ref(''); // Keresősáv értéke
   </v-layout>
 </template>
 
-
 <style scoped>
-
 .sticky-header {
   position: fixed !important;
   top: 0;
@@ -145,8 +197,8 @@ const search = ref(''); // Keresősáv értéke
   z-index: 1000;
   background: rgba(0, 0, 0, 0.9);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px); /* Elmosás a háttérhez */
-  -webkit-backdrop-filter: blur(10px); /* Safari támogatás */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .page-content {
@@ -158,8 +210,8 @@ const search = ref(''); // Keresősáv értéke
 }
 
 .main-container {
-  width: 100vw; /* Teljes nézet szélesség */
-  max-width: 100%; /* Garantáltan teljes szélességű */
+  width: 100vw;
+  max-width: 100%;
   margin: 0;
   padding: 0;
   display: flex;
@@ -173,16 +225,16 @@ const search = ref(''); // Keresősáv értéke
 .header-container {
   display: flex;
   align-items: center;
-  gap: 20px; /* Távolság a Moldy Cheese és a keresősáv között */
+  gap: 20px;
 }
 
 .search-bar {
-  max-width: 600px; /* Keresősáv maximális szélessége hosszabbra állítva */
-  width: 100%; /* Rugalmas szélesség */
+  max-width: 600px;
+  width: 100%;
 }
 
 ::v-deep(.search-bar .v-field__input) {
-  font-size: 18px !important; /* Közvetlenül a szövegmező betűmérete */
+  font-size: 18px !important;
 }
 
 .v-btn--size-default {
@@ -193,7 +245,10 @@ const search = ref(''); // Keresősáv értéke
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px; /* opcionális, ha szeretnél belső margót */
+  padding: 0 20px;
 }
 
+.v-navigation-drawer {
+  height: auto !important;
+}
 </style>
