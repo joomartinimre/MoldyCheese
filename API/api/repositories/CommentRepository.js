@@ -1,12 +1,11 @@
 const db = require("../database/dbContext");
 
 class CommentRepository {
-    async createComment(user_ID, place_ID, text, rate) {
+    async createComment(user_ID, place_ID, text) {
         return await db.Comment.create({
             user_ID,
             place_ID,
             text,
-            rate,
             likes: 0, 
             createdAt: new Date() 
         });

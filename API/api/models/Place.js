@@ -21,6 +21,19 @@ module.exports = (sequelize, DataTypes) => {
             critic_rate: {
                 type: DataTypes.INTEGER 
             },
+            NumberOfRate_L: {
+                type: DataTypes.INTEGER 
+            },
+            NumberOfRate_C: {
+                type: DataTypes.INTEGER 
+            },
+            Likes: {
+                type: DataTypes.INTEGER 
+            },
+            Picture: {
+                type: DataTypes.STRING(255),
+                allowNull: false
+            },
             added_date: {
                 type: DataTypes.DATE,
                 allowNull: false
@@ -33,6 +46,11 @@ module.exports = (sequelize, DataTypes) => {
             },
             text: {
                 type: DataTypes.STRING(255)
+            },
+            tags: {
+                type: DataTypes.JSON, // MySQL esetén JSON típus
+                allowNull: true,
+                defaultValue: [] // alapértelmezettként üres tömb
             },
             topic_ID: {
                 type: DataTypes.INTEGER,

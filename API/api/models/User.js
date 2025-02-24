@@ -13,7 +13,11 @@ module.exports = (sequelize, DataTypes) => {
             },
             userName: {
                 type: DataTypes.STRING(100),
-                allowNull: false
+                allowNull: false, 
+            },
+            ProfilePicture: {
+                type: DataTypes.STRING(255),
+                allowNull: true
             },
             password: {
                 type: DataTypes.STRING(100),

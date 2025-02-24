@@ -1,11 +1,11 @@
 const CommentRepository = require("../repositories/CommentRepository");
 
 class CommentService {
-    async addComment(user_ID, place_ID, text, rate) {
+    async addComment(user_ID, place_ID, text) {
         if (!text || !rate || !place_ID) {
-            throw new Error("All fields (place_ID, text, rate) are required");
+            throw new Error("All fields (place_ID, text) are required");
         }
-        return await CommentRepository.createComment(user_ID, place_ID, text, rate);
+        return await CommentRepository.createComment(user_ID, place_ID, text);
     }
 
     async getCommentsByPlace(place_ID) {
