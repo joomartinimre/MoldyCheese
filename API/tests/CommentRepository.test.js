@@ -33,18 +33,16 @@ describe("Comment Repository Tests", () => {
                 user_ID: 1,
                 place_ID: testPlace.id,
                 text: "This is a test comment",
-                rate: 5
+                
             };
             
             const newComment = await commentRepository.createComment(
                 commentData.user_ID,
                 commentData.place_ID,
-                commentData.text,
-                commentData.rate
+                commentData.text
             );
             
             expect(newComment).toHaveProperty("text", "This is a test comment");
-            expect(newComment).toHaveProperty("rate", 5);
             expect(newComment).toHaveProperty("likes", 0);
             expect(newComment.place_ID).toBe(testPlace.id);
         });

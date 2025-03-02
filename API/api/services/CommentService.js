@@ -2,8 +2,9 @@ const CommentRepository = require("../repositories/CommentRepository");
 
 class CommentService {
     async addComment(user_ID, place_ID, text) {
-        if (!text || !rate || !place_ID) {
+        if (!text || !place_ID) {
             throw new Error("All fields (place_ID, text) are required");
+        
         }
         return await CommentRepository.createComment(user_ID, place_ID, text);
     }
