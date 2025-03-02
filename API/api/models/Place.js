@@ -34,9 +34,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(255),
                 allowNull: false
             },
-            added_date: {
+            createdAt: {
                 type: DataTypes.DATE,
-                allowNull: false
+                allowNull: false,
+                defaultValue: DataTypes.NOW
             },
             visits: {
                 type: DataTypes.INTEGER 
@@ -64,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: "Places",
-            timestamps: false,
+            timestamps: true,
             freezeTableName: true
         }
     );

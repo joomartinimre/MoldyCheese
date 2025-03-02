@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const authRoutes = require("./api/routes/AuthRoutes");
 const commentRoutes = require("./api/routes/CommentRoutes");
+const ratingRoutes = require("./api/routes/RatingRoutes");
 require("dotenv").config();
 
 
@@ -19,6 +20,7 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/comment",commentRoutes)
+app.use("/api/rating", ratingRoutes);
 
 require("./api/database/dbContext");
 

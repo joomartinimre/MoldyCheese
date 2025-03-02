@@ -26,17 +26,16 @@ db.Place = sequelize.define("Place", {
     },
     user_rate: { type: DataTypes.INTEGER },
     critic_rate: { type: DataTypes.INTEGER },
-    added_date: { type: DataTypes.DATE, allowNull: false },
+    createdAt: { type: DataTypes.DATE, allowNull: false },
     visits: { type: DataTypes.INTEGER },
     location: { type: DataTypes.STRING(255) },
     text: { type: DataTypes.STRING(255) }
-}, { timestamps: false });
+}, { timestamps: true });
 
 db.Comment = sequelize.define("Comment", {
     user_ID: { type: DataTypes.INTEGER, allowNull: false },
     place_ID: { type: DataTypes.INTEGER, allowNull: false },
     text: { type: DataTypes.STRING(255) },
-    rate: { type: DataTypes.INTEGER, allowNull: false },
     likes: { type: DataTypes.INTEGER, defaultValue: 0 }
 }, { timestamps: true });
 

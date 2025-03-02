@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { ref, computed } from 'vue'
+import { ref, reactive, computed } from 'vue'
+import axios from 'axios'
+import { useAuthStore } from '@/stores/authStore'
 
-// Külön opciók a három dropdownhoz
+axios.defaults.baseURL = "http://localhost:3000"
+
+const authStore = useAuthStore()
+
+// Dropdown opciók
 const items1 = ref([
   { title: 'Nem ismerem' },
   { title: 'Tervezek elmenni' },
@@ -23,21 +29,21 @@ const items3 = ref([
   { title: 'Option 3C' }
 ])
 
-// Reaktív változók a kiválasztott értékek tárolására
 const selected1 = ref(items1.value[0]?.title || 'Dropdown 1')
 const selected2 = ref(items2.value[0]?.title || 'Dropdown 2')
 const selected3 = ref(items3.value[0]?.title || 'Dropdown 3')
 
 const route = useRoute()
+const placeID = computed(() => route.params?.id ? Number(route.params.id) : null)
 
-// Példa helyek (Ezt backendről is tölthetnéd később)
+// Példa helyek
 const helyek = ref([
   {
     id: 1,
     url: "https://ceg-kozgazdasagi.cms.intezmeny.edir.hu/uploads/background_eb15905baa.jpg",
     title: "Hely1",
     rating: 4,
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. orem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. orem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis.",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     types: ["Általános iskola", "1-8", "Alap ismeretek"]
   },
   {
@@ -50,56 +56,137 @@ const helyek = ref([
   }
 ])
 
-// Az URL-ből kinyert ID számként
-const placeID = computed(() => Number(route.params.id))
-
-// A kiválasztott hely megkeresése
 const selectedPlace = computed(() => {
-  return helyek.value.find(hely => hely.id === placeID.value)
+  return placeID.value !== null ? helyek.value.find(hely => hely.id === placeID.value) : null
 })
 
-// Kommentek tömbje, 5 azonos objektummal
+const form = reactive({
+  place_ID: placeID.value,
+  text: ""
+})
+
+const userID = computed(() => authStore.user?.id || (authStore.user as any)?.ID)
+
+// Kommentek tömbje – kezdetben statikus lista
 const comments = ref([
   {
     author: "Felhasználónév",
     time: "2025.01.30 14:10:27",
-    avatar: "https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/369807815_3611893209131278_1119172429369100096_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=WNcBuA_pn14Q7kNvgH3Doio&_nc_oc=Adjq-abhhDfhpjgLEwV7ZDzbGu4EwCLZFIpK9uOtqTQGdRQgy0P2ZQ00iRIGenQ0GXH68-T57uO4xUvQjXeiiFPN&_nc_zt=23&_nc_ht=scontent-vie1-1.xx&_nc_gid=AGA-gJi2BOiqZTS1VIreCnL&oh=00_AYCKMzVXOHdYRpuzf2zBpUN7xIih51GF1V71125y-tMIAA&oe=67BFF4D7",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis."
+    avatar: "https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/369807815_3611893209131278_1119172429369100096_n.jpg",
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
   },
   {
     author: "Felhasználónév",
     time: "2025.01.30 14:10:27",
-    avatar: "https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/369807815_3611893209131278_1119172429369100096_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=WNcBuA_pn14Q7kNvgH3Doio&_nc_oc=Adjq-abhhDfhpjgLEwV7ZDzbGu4EwCLZFIpK9uOtqTQGdRQgy0P2ZQ00iRIGenQ0GXH68-T57uO4xUvQjXeiiFPN&_nc_zt=23&_nc_ht=scontent-vie1-1.xx&_nc_gid=AGA-gJi2BOiqZTS1VIreCnL&oh=00_AYCKMzVXOHdYRpuzf2zBpUN7xIih51GF1V71125y-tMIAA&oe=67BFF4D7",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis."
-  },
-  {
-    author: "Felhasználónév",
-    time: "2025.01.30 14:10:27",
-    avatar: "https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/369807815_3611893209131278_1119172429369100096_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=WNcBuA_pn14Q7kNvgH3Doio&_nc_oc=Adjq-abhhDfhpjgLEwV7ZDzbGu4EwCLZFIpK9uOtqTQGdRQgy0P2ZQ00iRIGenQ0GXH68-T57uO4xUvQjXeiiFPN&_nc_zt=23&_nc_ht=scontent-vie1-1.xx&_nc_gid=AGA-gJi2BOiqZTS1VIreCnL&oh=00_AYCKMzVXOHdYRpuzf2zBpUN7xIih51GF1V71125y-tMIAA&oe=67BFF4D7",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis."
-  },
-  {
-    author: "Felhasználónév",
-    time: "2025.01.30 14:10:27",
-    avatar: "https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/369807815_3611893209131278_1119172429369100096_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=WNcBuA_pn14Q7kNvgH3Doio&_nc_oc=Adjq-abhhDfhpjgLEwV7ZDzbGu4EwCLZFIpK9uOtqTQGdRQgy0P2ZQ00iRIGenQ0GXH68-T57uO4xUvQjXeiiFPN&_nc_zt=23&_nc_ht=scontent-vie1-1.xx&_nc_gid=AGA-gJi2BOiqZTS1VIreCnL&oh=00_AYCKMzVXOHdYRpuzf2zBpUN7xIih51GF1V71125y-tMIAA&oe=67BFF4D7",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis."
-  },
-  {
-    author: "Felhasználónév",
-    time: "2025.01.30 14:10:27",
-    avatar: "https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/369807815_3611893209131278_1119172429369100096_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=WNcBuA_pn14Q7kNvgH3Doio&_nc_oc=Adjq-abhhDfhpjgLEwV7ZDzbGu4EwCLZFIpK9uOtqTQGdRQgy0P2ZQ00iRIGenQ0GXH68-T57uO4xUvQjXeiiFPN&_nc_zt=23&_nc_ht=scontent-vie1-1.xx&_nc_gid=AGA-gJi2BOiqZTS1VIreCnL&oh=00_AYCKMzVXOHdYRpuzf2zBpUN7xIih51GF1V71125y-tMIAA&oe=67BFF4D7",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis."
+    avatar: "https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/369807815_3611893209131278_1119172429369100096_n.jpg",
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
   }
 ])
+
+// Komment beküldését végző függvény
+const submitComment = async () => {
+  console.log("Elindult a komment beküldése:", form, userID.value);
+  
+  if (form.place_ID === null) {
+    alert("Hiba: Nem található érvényes hely ID.");
+    return;
+  }
+  if (!authStore.user) {
+    alert("Kérlek, jelentkezz be a kommenteléshez!");
+    return;
+  }
+  
+  try {
+    const response = await fetch('http://localhost:3000/api/comment/comment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_ID: userID.value,  
+        place_ID: form.place_ID,
+        text: form.text
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      alert(`Hiba: ${error.error}`);
+      return;
+    }
+
+    const data = await response.json();
+    console.log(`Sikeres komment létrehozás: ${data.message}`);
+    
+    if (data.comment) {
+      comments.value.push(data.comment);
+    }
+    
+    form.text = "";
+  } catch (err) {
+    console.error('Hiba történt a komment beküldése során:', err);
+    alert('Nem sikerült csatlakozni a szerverhez.');
+  }
+};
+
+// Értékelés beküldését végző függvény
+const createRating = async () => {
+  if (form.place_ID === null) {
+    alert("Hiba: Nem található érvényes hely ID.");
+    return;
+  }
+  if (!authStore.user) {
+    alert("Kérlek, jelentkezz be az értékeléshez!");
+    return;
+  }
+  
+  // Kinyerjük a számot a selected2 értékéből, pl. "(3) Elégedett" -> 3
+  const ratingMatch = selected2.value.match(/\((\d+)\)/);
+  if (!ratingMatch) {
+    alert("Hiba: Érvénytelen értékelési érték.");
+    return;
+  }
+  const ratingValue = Number(ratingMatch[1]);
+  console.log(userID.value,
+        form.place_ID,
+         ratingValue)
+  try {
+    const response = await fetch('http://localhost:3000/api/rating/rating', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_ID: userID.value,
+        place_ID: form.place_ID,
+        rating: ratingValue
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      alert(`Hiba: ${error.error}`);
+      return;
+    }
+
+    const data = await response.json();
+    console.log(`Sikeres értékelés beküldés: ${data.message}`);
+  } catch (err) {
+    console.error('Hiba történt az értékelés beküldése során:', err);
+    alert('Nem sikerült csatlakozni a szerverhez.');
+  }
+};
+
+// Külön függvény, ami beállítja a selected2 értéket és azonnal elküldi az értékelést
+const handleRatingSelection = (ratingTitle: string) => {
+  selected2.value = ratingTitle;
+  createRating();
+};
 </script>
 
 <template>
   <v-container fluid>
-    <div
-      v-if="selectedPlace"
-      class="homepage-container"
-      :style="{ backgroundImage: `url(${selectedPlace.url})` }"
-    >
+    <div v-if="selectedPlace" class="homepage-container" :style="{ backgroundImage: `url(${selectedPlace.url})` }">
       <div class="content">
         <div class="image-section">
           <img :src="selectedPlace.url" alt="Hely képe" />
@@ -112,10 +199,8 @@ const comments = ref([
                 {{ type }}
               </span>
             </div>
-
-            <!-- Három dropdown gomb, külön opciókkal -->
+            <!-- Dropdown gombok -->
             <div class="dropdown-buttons" style="display: flex; gap: 10px; margin: 10px 0;">
-              <!-- Dropdown 1 -->
               <v-menu offset-y>
                 <template v-slot:activator="{ props }">
                   <v-btn v-bind="props" color="primary" style="border: 1px solid rgb(253,216,53);">
@@ -123,17 +208,11 @@ const comments = ref([
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-item
-                    v-for="(item, index) in items1"
-                    :key="'menu1-' + index"
-                    @click="selected1 = item.title"
-                  >
+                  <v-list-item v-for="(item, index) in items1" :key="'menu1-' + index" @click="selected1 = item.title">
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-menu>
-
-              <!-- Dropdown 2 -->
               <v-menu offset-y>
                 <template v-slot:activator="{ props }">
                   <v-btn v-bind="props" color="primary" style="border: 1px solid rgb(253,216,53);">
@@ -141,17 +220,16 @@ const comments = ref([
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-item
-                    v-for="(item, index) in items2"
-                    :key="'menu2-' + index"
-                    @click="selected2 = item.title"
+                  <!-- Az itt lévő click esemény beállítja az értéket, majd meghívja a createRating-t -->
+                  <v-list-item 
+                    v-for="(item, index) in items2" 
+                    :key="'menu2-' + index" 
+                    @click="handleRatingSelection(item.title)"
                   >
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-menu>
-
-              <!-- Dropdown 3 -->
               <v-menu offset-y>
                 <template v-slot:activator="{ props }">
                   <v-btn v-bind="props" color="primary" style="border: 1px solid rgb(253,216,53);">
@@ -159,17 +237,12 @@ const comments = ref([
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-item
-                    v-for="(item, index) in items3"
-                    :key="'menu3-' + index"
-                    @click="selected3 = item.title"
-                  >
+                  <v-list-item v-for="(item, index) in items3" :key="'menu3-' + index" @click="selected3 = item.title">
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-menu>
             </div>
-
             <v-card-text style="text-align: left;">
               <v-rating readonly :model-value="selectedPlace.rating" :length="5" size="large"></v-rating>
             </v-card-text>
@@ -180,18 +253,14 @@ const comments = ref([
         </div>
       </div>
     </div>
-
     <div v-else class="not-found">
       <h2>Nincs ilyen hely!</h2>
     </div>
 
     <!-- Kommentek szekció -->
     <div class="comments">
-      <!-- Kommentek címe és elválasztó -->
       <h5 class="comments-title">Hozzászólások / Reakciók</h5>
       <div class="comments-divider"></div>
-
-      <!-- Komment lista a comments tömb alapján -->
       <div class="comments-list">
         <div v-for="(comment, index) in comments" :key="index" class="comment-item">
           <img :src="comment.avatar" alt="Profilkép" class="comment-avatar">
@@ -206,10 +275,9 @@ const comments = ref([
           </div>
         </div>
       </div>
-
       <!-- Komment beküldő űrlap -->
-      <div class="comment-form">
-        <textarea placeholder="Írd meg a hozzászólásodat..." rows="8"></textarea>
+      <form @submit.prevent="submitComment" class="comment-form">
+        <textarea v-model="form.text" placeholder="Írd meg a hozzászólásodat..." rows="8"></textarea>
         <p>
           Hozzászólásban más látogatók, az oldal kritikusainak sértegetése vagy más weboldalak hirdetése tilos.
           Az ilyen hozzászólásokat töröljük, és a hozzászólási lehetőségedet letiltjuk.
@@ -217,10 +285,12 @@ const comments = ref([
           <span style="color: gold">Köszönjük a megértést!</span>
         </p>
         <button type="submit">Küldés</button>
-      </div>
+      </form>
     </div>
   </v-container>
 </template>
+
+
 
 <style scoped>
 .text-section {
