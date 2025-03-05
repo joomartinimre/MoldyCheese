@@ -185,8 +185,8 @@ const handleRatingSelection = (ratingTitle: string) => {
 </script>
 
 <template>
-  <v-container fluid>
-    <div v-if="selectedPlace" class="homepage-container" :style="{ backgroundImage: `url(${selectedPlace.url})` }">
+  <v-container fluid v-if="selectedPlace">
+    <div class="homepage-container" :style="{ backgroundImage: `url(${selectedPlace.url})` }">
       <div class="content">
         <div class="image-section">
           <img :src="selectedPlace.url" alt="Hely képe" />
@@ -244,7 +244,7 @@ const handleRatingSelection = (ratingTitle: string) => {
               </v-menu>
             </div>
             <v-card-text style="text-align: left;">
-              <v-rating readonly :model-value="selectedPlace.rating" :length="5" size="large"></v-rating>
+              <v-rating hover half-increments :model-value="selectedPlace.rating" :length="10" size="large" active-color="elevated text-surface"></v-rating>
             </v-card-text>
           </div>
           <div class="description-container">
@@ -253,10 +253,6 @@ const handleRatingSelection = (ratingTitle: string) => {
         </div>
       </div>
     </div>
-    <div v-else class="not-found">
-      <h2>Nincs ilyen hely!</h2>
-    </div>
-
     <!-- Kommentek szekció -->
     <div class="comments">
       <h5 class="comments-title">Hozzászólások / Reakciók</h5>
@@ -287,6 +283,9 @@ const handleRatingSelection = (ratingTitle: string) => {
         <button type="submit">Küldés</button>
       </form>
     </div>
+  </v-container>
+  <v-container v-else class="not-found">
+      <h2>Nincs ilyen hely!</h2>
   </v-container>
 </template>
 
@@ -395,7 +394,7 @@ const handleRatingSelection = (ratingTitle: string) => {
   border-radius: 10px;
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1300px) {
   .content {
     flex-direction: column;
     align-items: center;
