@@ -43,7 +43,7 @@ const helyek = ref([
     url: "https://ceg-kozgazdasagi.cms.intezmeny.edir.hu/uploads/background_eb15905baa.jpg",
     title: "Hely1",
     rating: 4,
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     types: ["Általános iskola", "1-8", "Alap ismeretek"]
   },
   {
@@ -357,7 +357,7 @@ const handleRatingSelection = (ratingTitle: string) => {
   flex-wrap: wrap;
   z-index: 2;
   box-sizing: border-box;
-  margin: 0 90px;
+  margin: 0 60px;
   min-height: fit-content;
 }
 
@@ -410,7 +410,7 @@ const handleRatingSelection = (ratingTitle: string) => {
 
   .image-section img {
     margin-bottom: 20px;
-    width: 80%;
+    width: 100%;
   }
 
   .text-section {
