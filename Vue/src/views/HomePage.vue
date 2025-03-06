@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useDisplay } from 'vuetify';
 
   const helyek = [
     {
@@ -263,37 +264,6 @@
     }
   ]
 
-const loading = ref(false)
-const transitionState = ref(""); // Az animáció iránya
-
-const window= ref(0)
-const CurrentHely = computed(() => helyek[window.value]);
-
-// Állapotkezelés
-const displayedPlaces = ref(18); // Kezdetben 18 hely jelenik meg
-const totalPlaces = helyek.length; // Helyek összes száma
-
-// Függvény a további helyek betöltéséhez
-const loadMore = () => {
-  displayedPlaces.value += 18; // Még 18 helyet betöltünk
-}
-
-// Az aktuális slide indexét tároljuk
-const activeIndex = ref(0)
-// Drag eseményekhez szükséges változók
-const dragStart = ref(0)
-const dragOffset = ref(0)
-const dragging = ref(false)
-
-// A slider-track stílusa, ami a slide-ok eltolását szabályozza
-const sliderStyle = computed(() => ({
-  transform: `translateX(calc(-${activeIndex.value * 100}% + ${dragOffset.value}px))`,
-  transition: dragging.value ? 'none' : 'transform 0.3s ease'
-}))
-function onMouseMove(e: MouseEvent) {
-  if (!dragging.value) return
-  dragOffset.value = e.clientX - dragStart.value
-}
 
 const isUserInteracting = ref(false);
 let autoplayInterval: ReturnType<typeof setInterval> | null = null;
@@ -322,7 +292,49 @@ const stopAutoplay = () => {
   }
 };
 
-// **Frissített egér eventek**
+
+onMounted(() => {
+  startAutoplay(); // Induláskor elindítjuk az autoplay-t
+});
+
+onUnmounted(() => {
+  stopAutoplay(); // Ha az oldal elhagyódik, leállítjuk az autoplay-t
+});
+
+const { mobile } = useDisplay();
+const loading = ref(false)
+const transitionState = ref(""); // Az animáció iránya
+
+const window = ref(0)
+
+// Állapotkezelés
+const displayedPlaces = ref(18); // Kezdetben 18 hely jelenik meg
+const totalPlaces = helyek.length; // Helyek összes száma
+
+// Függvény a további helyek betöltéséhez
+const loadMore = () => {
+  displayedPlaces.value += 18; // Még 18 helyet betöltünk
+}
+
+// Az aktuális slide indexét tároljuk
+const activeIndex = ref(0)
+// Drag eseményekhez szükséges változók
+const dragStart = ref(0)
+const dragOffset = ref(0)
+const dragging = ref(false)
+
+const sliderStyle = computed(() => ({
+  transform: `translateX(calc(-${activeIndex.value * 100}% + ${dragOffset.value}px))`,
+  transition: dragging.value ? 'none' : 'transform 0.3s ease'
+}))
+
+// Mouse move event
+function onMouseMove(e: MouseEvent) {
+  if (!dragging.value) return
+  dragOffset.value = e.clientX - dragStart.value
+}
+
+// A mouse down event
 function onMouseDown(e: MouseEvent) {
   dragging.value = true;
   isUserInteracting.value = true; // Felhasználó húz, állítsuk le az autoplay-t
@@ -330,6 +342,7 @@ function onMouseDown(e: MouseEvent) {
   dragStart.value = e.clientX;
 }
 
+// Mouse up event
 function onMouseUp() {
   if (!dragging.value) return;
   dragging.value = false;
@@ -344,11 +357,40 @@ function onMouseUp() {
   dragOffset.value = 0;
 }
 
+// Mouse leave event
 function onMouseLeave() {
   if (dragging.value) {
     onMouseUp();
   }
 }
+
+// Touchstart event (mobil)
+function onTouchStart(e: TouchEvent) {
+  const touchStart = e.touches[0].clientX;
+  onMouseDown({ clientX: touchStart } as MouseEvent);  // Itt átalakítjuk MouseEventté
+}
+
+// Touchmove event (mobil)
+function onTouchMove(e: TouchEvent) {
+  const touchMove = e.touches[0].clientX;
+  onMouseMove({ clientX: touchMove } as MouseEvent);  // Itt is átalakítjuk MouseEventté
+}
+
+// Touchend event (mobil)
+function onTouchEnd(e: TouchEvent) {
+  if (!dragging.value) return;
+  dragging.value = false;
+  isUserInteracting.value = false;
+  startAutoplay();
+  const threshold = 50;
+  if (dragOffset.value < -threshold && activeIndex.value < helyek.length - 1) {
+    activeIndex.value++;
+  } else if (dragOffset.value > threshold && activeIndex.value > 0) {
+    activeIndex.value--;
+  }
+  dragOffset.value = 0;
+}
+
 
 onMounted(() => {
   startAutoplay(); // Induláskor elindítjuk az autoplay-t
@@ -358,6 +400,9 @@ onUnmounted(() => {
   stopAutoplay(); // Ha az oldal elhagyódik, leállítjuk az autoplay-t
 });
 
+const goToSlide = (index:number) => {
+  activeIndex.value = index;  // Az aktív index módosítása
+};
 
 </script>
 
@@ -365,7 +410,7 @@ onUnmounted(() => {
   <v-container fluid style="padding: 0px;">
     <v-window v-model="window" :show-arrows="$vuetify.display.mdAndUp">
       <v-window-item v-for="hely in helyek" :key="hely.id">
-        <div class="homepage-container" :style="{ backgroundImage: `url(${CurrentHely.url})` }">
+        <div class="homepage-container" :style="{ backgroundImage: `url(${hely.url})` }">
           <div class="content" :class="transitionState">
             <div class="text-section">
               <h1>{{ hely.title }}</h1>
@@ -373,11 +418,18 @@ onUnmounted(() => {
                 <p>{{ hely.description }}</p>
               </div>
               <v-card-text style="text-align: left;">
-                <v-rating
+                <v-rating v-if="!mobile"
                   readonly
                   :model-value="hely.rating"
                   :length="10"
                   size="large"
+                  active-color="elevated text-surface"
+                ></v-rating>
+                <v-rating v-if="mobile"
+                  readonly
+                  :model-value="hely.rating"
+                  :length="10"
+                  :size="40"
                   active-color="elevated text-surface"
                 ></v-rating>
               </v-card-text>
@@ -438,39 +490,59 @@ onUnmounted(() => {
       Továbbiak betöltése
     </v-btn>
     <div class="slider-container"
-         @mousedown="onMouseDown"
-         @mousemove="onMouseMove"
-         @mouseup="onMouseUp"
-         @mouseleave="onMouseLeave">
-      <!-- Slider-track, amely a slide-ok eltolását végzi -->
+     @mousedown="onMouseDown"
+     @mousemove="onMouseMove"
+     @mouseup="onMouseUp"
+     @mouseleave="onMouseLeave"
+     @touchstart="onTouchStart"   
+     @touchmove="onTouchMove"    
+     @touchend="onTouchEnd">
       <div class="slider-track" :style="sliderStyle">
         <div v-for="hely in helyek" :key="hely.id" class="slide">
-          <div class="homepage-container" :style="{ backgroundImage: `url(${CurrentHely.url})` }">
-          <div class="content" :class="transitionState">
-            <div class="text-section">
-              <h1>{{ hely.title }}</h1>
-              <div class="description-container">
-                <p>{{ hely.description }}</p>
+          <div class="homepage-container" :style="{ backgroundImage: `url(${hely.url})` }">
+            <div class="content" :class="transitionState">
+              <div class="text-section">
+                <h1>{{ hely.title }}</h1>
+                <div class="description-container">
+                  <p>{{ hely.description }}</p>
+                </div>
+                <v-card-text style="text-align: left;">
+                  <v-rating v-if="!mobile"
+                    readonly
+                    :model-value="hely.rating"
+                    :length="10"
+                    size="large"
+                    active-color="elevated text-surface"
+                  ></v-rating>
+                  <v-rating v-if="mobile"
+                    readonly
+                    :model-value="hely.rating"
+                    :length="10"
+                    :size="25"
+                    active-color="elevated text-surface"
+                  ></v-rating>
+                </v-card-text>
+                <v-btn :to="`/place/${hely.id}`" color="primary" class="text-surface"> Adatlap </v-btn>
               </div>
-              <v-card-text style="text-align: left;">
-                <v-rating
-                  readonly
-                  :model-value="hely.rating"
-                  :length="10"
-                  size="large"
-                  active-color="elevated text-surface"
-                ></v-rating>
-              </v-card-text>
-              <v-btn :to="`/place/${hely.id}`" color="primary" class="text-surface"> Adatlap </v-btn>
-            </div>
-            <div class="image-section">
+              <div class="image-section">
+              </div>
             </div>
           </div>
         </div>
-        </div>
+      </div>
+      <div class="bars-container">
+        <div
+          v-for="(hely, index) in helyek"
+          :key="hely.id"
+          class="bar"
+          :class="{ active: activeIndex === index }"
+          @click="goToSlide(index)"
+        ></div>
       </div>
     </div>
   </v-container>
+  <br>
+  <br>
 </template>
 
 <style scoped>
@@ -618,5 +690,74 @@ div .v-card-text
   flex: 0 0 100%;
   padding: 0px 40px;
 }
+@media (max-width: 870px) {
+  /* Slide szélesség automatikusan 100%-ra állítva */
+  .slide {
+    flex: 0 0 100%;  /* Minden slide 100%-os szélességet kap */
+    max-width: 100%; /* Biztosítjuk, hogy a szélesség nem haladja meg a szülő szélességét */
+  }
+
+  /* A slide tartalma is igazodik a slide szélességéhez */
+  .slide .content {
+    flex-direction: column; /* Oszlopos elrendezés, ha kisebb a képernyő */
+    align-items: center; /* Középre igazítjuk a tartalmat */
+    width: 100%; /* A tartalom szélessége 100% */
+    padding: 20px; /* Hézag a tartalom körül */
+  }
+
+  .slide .text-section {
+    width: 100%; /* A szöveges rész szélessége 100% */
+    padding: 10px; /* Hézag hozzáadása */
+  }
+
+  .slide .image-section {
+    width: 100%; /* Kép szélessége 100% */
+    display: flex;
+    justify-content: center; /* Kép középre igazítása */
+  }
+
+  .slide .image-section img {
+    width: 100%; /* Kép automatikusan kitölti a szülő szélességét */
+    max-width: 300px; /* Kép ne legyen túl nagy */
+    margin-bottom: 20px; /* Hézag a kép alján */
+  }
+
+  .slide .description-container {
+    max-height: 200px; /* A leírás dobozának maximális magassága */
+    overflow-y: auto; /* Ha túl hosszú, görgethető lesz */
+    padding: 10px;
+  }
+}
+
+/* Fogó kurzor, amikor lenyomod az egeret */
+.slider-container:active {
+  cursor: grab;  /* Amikor megfogod */
+}
+
+.bars-container {
+  position: absolute;
+  bottom: 20px; /* A slider alján */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+/* Csíkok (bars) alap stílusai */
+.bar {
+  width: 30px; /* A csíkok szélessége */
+  height: 5px; /* A csíkok magassága */
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Aktív csík kiemelése */
+.bar.active {
+  background-color: white;
+}
+
 
 </style>
