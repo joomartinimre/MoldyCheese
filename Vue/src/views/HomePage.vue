@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, computed, onMounted, onUnmounted } from 'vue'
 
   const helyek = [
     {
@@ -253,6 +253,13 @@
       title:"Hely7",
       rating:4,
       description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
+    },
+    {
+      id:6,
+      url:"https://mosthir.hu/wp-content/uploads/2023/08/spar-magyarorszag-bolt-860x459.jpg",
+      title:"Hely7",
+      rating:4,
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
     }
   ]
 
@@ -270,6 +277,87 @@ const totalPlaces = helyek.length; // Helyek összes száma
 const loadMore = () => {
   displayedPlaces.value += 18; // Még 18 helyet betöltünk
 }
+
+// Az aktuális slide indexét tároljuk
+const activeIndex = ref(0)
+// Drag eseményekhez szükséges változók
+const dragStart = ref(0)
+const dragOffset = ref(0)
+const dragging = ref(false)
+
+// A slider-track stílusa, ami a slide-ok eltolását szabályozza
+const sliderStyle = computed(() => ({
+  transform: `translateX(calc(-${activeIndex.value * 100}% + ${dragOffset.value}px))`,
+  transition: dragging.value ? 'none' : 'transform 0.3s ease'
+}))
+function onMouseMove(e: MouseEvent) {
+  if (!dragging.value) return
+  dragOffset.value = e.clientX - dragStart.value
+}
+
+const isUserInteracting = ref(false);
+let autoplayInterval: ReturnType<typeof setInterval> | null = null;
+
+const nextSlide = () => {
+  if (!isUserInteracting.value) {  // Csak akkor léptet, ha NEM húzod
+    if (activeIndex.value < helyek.length - 1) {
+      activeIndex.value++;
+    } else {
+      setTimeout(() => {
+        activeIndex.value = 0;
+      }, 2000);
+    }
+  }
+};
+
+const startAutoplay = () => {
+  stopAutoplay(); // Biztos ami biztos, előbb leállítjuk, hogy ne induljon többször
+  autoplayInterval = setInterval(nextSlide, 10000);
+};
+
+const stopAutoplay = () => {
+  if (autoplayInterval) {
+    clearInterval(autoplayInterval);
+    autoplayInterval = null;
+  }
+};
+
+// **Frissített egér eventek**
+function onMouseDown(e: MouseEvent) {
+  dragging.value = true;
+  isUserInteracting.value = true; // Felhasználó húz, állítsuk le az autoplay-t
+  stopAutoplay();
+  dragStart.value = e.clientX;
+}
+
+function onMouseUp() {
+  if (!dragging.value) return;
+  dragging.value = false;
+  isUserInteracting.value = false; // Vége a húzásnak, indítsuk újra az autoplay-t
+  startAutoplay();
+  const threshold = 50;
+  if (dragOffset.value < -threshold && activeIndex.value < helyek.length - 1) {
+    activeIndex.value++;
+  } else if (dragOffset.value > threshold && activeIndex.value > 0) {
+    activeIndex.value--;
+  }
+  dragOffset.value = 0;
+}
+
+function onMouseLeave() {
+  if (dragging.value) {
+    onMouseUp();
+  }
+}
+
+onMounted(() => {
+  startAutoplay(); // Induláskor elindítjuk az autoplay-t
+});
+
+onUnmounted(() => {
+  stopAutoplay(); // Ha az oldal elhagyódik, leállítjuk az autoplay-t
+});
+
 
 </script>
 
@@ -303,12 +391,12 @@ const loadMore = () => {
       </v-window-item>
     </v-window>
 
-    <h1 style="margin: 0px 100px;">Legújabb helyek</h1>
-    <v-row style="margin: 0px 88px;">
+    <h1 style="padding: 0px  40px; max-width: 2300px; margin: auto;">Legújabb helyek</h1>
+    <v-row style="max-width: 2300px; margin: auto; padding: 0px 40px 0px 40px">
       <v-col
         v-for="hely in helyek.slice(0, displayedPlaces)" 
         :key="hely.title" 
-        cols="12" sm="6" md="4" lg="2">
+        cols="12" sm="6" md="4" lg="3" xl="2">
         <v-card
           rounded="xl"
           :disabled="loading"
@@ -345,10 +433,43 @@ const loadMore = () => {
       @click="loadMore"
       color="primary"
       class="text-surface"
-      style="display: block; margin: auto; margin-bottom: 100px;"
+      style="display: block; margin: auto; margin-bottom: 12px;"
     >
       Továbbiak betöltése
     </v-btn>
+    <div class="slider-container"
+         @mousedown="onMouseDown"
+         @mousemove="onMouseMove"
+         @mouseup="onMouseUp"
+         @mouseleave="onMouseLeave">
+      <!-- Slider-track, amely a slide-ok eltolását végzi -->
+      <div class="slider-track" :style="sliderStyle">
+        <div v-for="hely in helyek" :key="hely.id" class="slide">
+          <div class="homepage-container" :style="{ backgroundImage: `url(${CurrentHely.url})` }">
+          <div class="content" :class="transitionState">
+            <div class="text-section">
+              <h1>{{ hely.title }}</h1>
+              <div class="description-container">
+                <p>{{ hely.description }}</p>
+              </div>
+              <v-card-text style="text-align: left;">
+                <v-rating
+                  readonly
+                  :model-value="hely.rating"
+                  :length="10"
+                  size="large"
+                  active-color="elevated text-surface"
+                ></v-rating>
+              </v-card-text>
+              <v-btn :to="`/place/${hely.id}`" color="primary" class="text-surface"> Adatlap </v-btn>
+            </div>
+            <div class="image-section">
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
   </v-container>
 </template>
 
@@ -473,6 +594,29 @@ div .v-card-text
   background: rgba(0, 0, 0, 0.5);
   border-radius: 8px;
   color: white;
+}
+
+/* Slider konténer */
+.slider-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  user-select: none;
+  max-width: 2300px;
+  margin: auto;
+
+}
+
+/* A slider-track flexbox elrendezéssel egymás mellé helyezi a slide-okat */
+.slider-track {
+  display: flex;
+  width: 100%;
+}
+
+/* Minden slide 100% szélességet kap */
+.slide {
+  flex: 0 0 100%;
+  padding: 0px 40px;
 }
 
 </style>
