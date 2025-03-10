@@ -486,11 +486,11 @@ onMounted(() => {
       </v-window-item>
     </v-window>
 
-    <v-row class="horizontal-scroll-container">
-      <v-col
+    <v-container class="horizontal-scroll-container" fluid>
+      <v-row class="horizontal-scroll-track">
+        <v-col
         v-for="hely in helyek.slice(0, displayedPlaces)" 
-        :key="hely.title" 
-        cols="12" sm="6" md="4" lg="3" xl="2" class="horizontal-scroll-track">
+        :key="hely.title">
         <v-card
           rounded="xl"
           :disabled="loading"
@@ -519,7 +519,8 @@ onMounted(() => {
           <v-btn :to="`/place/${hely.id}`" color="primary" class="text-surface" style="margin: 15px;"> Adatlap </v-btn>
         </v-card>
       </v-col>
-    </v-row>
+      </v-row>
+    </v-container>
 
     <h1 style="padding: 0px 80px; max-width: 2300px; margin: auto;">Legújabb helyek</h1>
     <v-row style="max-width: 2300px; margin: auto; padding: 0px 68px 0px 68px">
@@ -946,9 +947,6 @@ div .v-card-text
   display: flex;
   width: 100%;
   max-width: 2300px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0px 80px;
 }
 
 .horizontal-scroll-track {
