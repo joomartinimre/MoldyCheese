@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     const User = require("./User")(sequelize, DataTypes);
     const Place = require("./Place")(sequelize, DataTypes);
     const Rating = require("./Rating")(sequelize, DataTypes);
+    const RoleRequest = require("./RoleRequests")(sequelize, DataTypes);
 
 
     //user kapcsolat 
@@ -25,5 +26,5 @@ module.exports = (sequelize, DataTypes) => {
 
 
 
-    return { Comment, User,  Topic,  Place, Rating };
+    return { Comment, User,  Topic,  Place, Rating, RoleRequest };
 };

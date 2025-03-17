@@ -42,9 +42,6 @@ module.exports = (sequelize, DataTypes) => {
             visits: {
                 type: DataTypes.INTEGER 
             },
-            location: {
-                type: DataTypes.STRING(255)
-            },
             text: {
                 type: DataTypes.STRING(255)
             },

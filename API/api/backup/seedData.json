@@ -1,10 +1,157 @@
 {
-    "users": [],
-    "schools": [],
-    "playgrounds": [],
-    "restaurants": [],
-    "shops": [],
-    "topics": [],
-    "comments": []
-  }
-  
+  "User": [
+    {
+      "ID": 1,
+      "userName": "martin534",
+      "ProfilePicture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "password": "$2b$10$KNNAMnwvSdLQ6jAAVtAFXeAoIK54mP7YYEw.NPnjhlD5s6cKU9Gp.",
+      "email": "martin@gmail.com",
+      "role": "User"
+    },
+    {
+      "ID": 2,
+      "userName": "mark342",
+      "ProfilePicture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "password": "$2b$10$PLJHLm/WfonVjl.nCrOcY./VDQcBSknSRPtbJvsKBptF4xxFpkNx6",
+      "email": "mark@gmail.com",
+      "role": "User"
+    },
+    {
+      "ID": 3,
+      "userName": "jancsi123",
+      "ProfilePicture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "password": "$2b$10$v9mAwdZitFJZ6kX40yT.5OZH8WYQIvhIURENVwlsWc0VRDmGOV1bK",
+      "email": "jancsi@gmail.com",
+      "role": "User"
+    }
+  ],
+  "Topic": [
+    {
+      "ID": 1,
+      "name": "Iskola"
+    }
+  ],
+  "Place": [
+    {
+      "ID": 1,
+      "name": "xd",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": "ads",
+      "createdAt": "2025-03-17T00:00:00.000Z",
+      "visits": 0,
+      "text": "asd",
+      "tags": null,
+      "topic_ID": 1,
+      "updatedAt": "2025-03-17T00:00:00.000Z"
+    }
+  ],
+  "Comment": [
+    {
+      "ID": 1,
+      "text": "asd",
+      "likes": 0,
+      "createdAt": "2025-03-17T17:08:03.000Z",
+      "updatedAt": "2025-03-17T17:08:03.000Z",
+      "user_ID": 1,
+      "place_ID": 1
+    },
+    {
+      "ID": 2,
+      "text": "asdasd",
+      "likes": 0,
+      "createdAt": "2025-03-17T17:17:00.000Z",
+      "updatedAt": "2025-03-17T17:17:00.000Z",
+      "user_ID": 1,
+      "place_ID": 1
+    },
+    {
+      "ID": 3,
+      "text": "jancsivok",
+      "likes": 0,
+      "createdAt": "2025-03-17T17:34:02.000Z",
+      "updatedAt": "2025-03-17T17:34:02.000Z",
+      "user_ID": 3,
+      "place_ID": 1
+    }
+  ],
+  "Rating": [
+    {
+      "user_ID": 1,
+      "place_ID": 1,
+      "rating": 3
+    }
+  ],
+  "RoleRequest": [
+    {
+      "id": 1,
+      "user_id": 2,
+      "reason": "asd",
+      "requested_role": "Étterem kritikus",
+      "status": "pending",
+      "processed_by": null,
+      "createdAt": "2025-03-17T18:23:46.000Z",
+      "updatedAt": "2025-03-17T18:23:46.000Z"
+    }
+  ]
+}

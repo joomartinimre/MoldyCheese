@@ -2,13 +2,15 @@ const db = require("../database/dbContext");
 const bcrypt = require("bcrypt");
 
 class UserRepository {
-    async createUser(userName, password, email, role) {
+    async createUser(userName, password, email, role, ProfilePicture) {
         const hashedPassword = await bcrypt.hash(password, 10);
+
         return await db.User.create({
             userName,
             password: hashedPassword,
             email,
-            role : "user"
+            role,
+            ProfilePicture 
         });
     }
 
