@@ -46,7 +46,7 @@ db.Place.hasMany(db.Comment, { foreignKey: "place_ID" });
 db.Comment.belongsTo(db.Place, { foreignKey: "place_ID" });
 
 async function initializeMockData() {
-    await db.sequelize.sync({ force: true });
+    await db.sequelize.sync({ force: true });3
     const defaultTopic = await db.Topic.create({ name: "Default Test Topic" });
     return defaultTopic;
 }

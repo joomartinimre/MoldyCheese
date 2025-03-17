@@ -1,0 +1,6 @@
+{
+  "ignore": ["backup/seedData.json", "nodemon.json"],
+  "execMap": {
+    "js": "node"
+  }
+}

@@ -1,6 +1,8 @@
 const UserRepository = require("../repositories/UserRepository");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const path = require("path");
 
 class AuthService {
     async register(userName, password, email, role) {
@@ -20,12 +22,18 @@ class AuthService {
             throw new Error("Invalid email format");
         }
 
+        // Ellenőrizzük, hogy létezik-e már a felhasználó ezzel az emaillel
         const existingUser = await UserRepository.findUserByEmail(email);
         if (existingUser) {
             throw new Error("User already exists with this email");
         }
-        
-        return await UserRepository.createUser(userName, password, email, role);
+
+        // **Alapértelmezett profilkép beolvasása BLOB formátumban**
+        const defaultProfilePath = path.join(__dirname, "..", "uploads", "defaultPP.jpg");
+        const defaultProfilePicture = fs.readFileSync(defaultProfilePath); // Bináris adatként olvassuk be
+
+        // **Létrehozzuk az új user-t az alapértelmezett képpel**
+        return await UserRepository.createUser(userName, password, email, role, Buffer.from(defaultProfilePicture));
     }
 
     async login(email, password) {
@@ -48,4 +56,4 @@ class AuthService {
     }
 }
 
-module.exports = new AuthService;
+module.exports = new AuthService();

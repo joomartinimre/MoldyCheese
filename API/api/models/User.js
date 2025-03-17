@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false, 
             },
             ProfilePicture: {
-                type: DataTypes.STRING(255),
+                type: DataTypes.BLOB("long"),
                 allowNull: true
             },
             password: {
@@ -29,8 +29,14 @@ module.exports = (sequelize, DataTypes) => {
                 unique: true
             },
             role: {
-                type: DataTypes.STRING(20),
-                allowNull: false
+                type: DataTypes.ENUM("Étterem kritikus", "Játszótér szakértő", "Iskológus", "Vegyesbolt vegyész", "Admin", "User"), defaultValue: "User", 
+                allowNull: false,
+                validate:{
+                    isIn:{
+                        args: [["Étterem kritikus", "Játszótér szakértő", "Iskológus", "Vegyesbolt vegyész", "Admin", "User"]],
+                        msg: "A role-nak létezőnek kell lennie!"
+                    }
+                }
             }
         },
         {
