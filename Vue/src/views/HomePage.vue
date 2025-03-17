@@ -486,6 +486,7 @@ onMounted(() => {
       </v-window-item>
     </v-window>
 
+    <h1 style="padding: 0px 30px; max-width: 2300px; margin: auto;">Korábban megtekintve</h1>
     <v-container class="horizontal-scroll-container" fluid>
       <v-row class="horizontal-scroll-track">
         <v-col
@@ -522,8 +523,8 @@ onMounted(() => {
       </v-row>
     </v-container>
 
-    <h1 style="padding: 0px 80px; max-width: 2300px; margin: auto;">Legújabb helyek</h1>
-    <v-row style="max-width: 2300px; margin: auto; padding: 0px 68px 0px 68px">
+    <h1 style="padding: 0px 30px; max-width: 2300px; margin: auto;">Legújabb helyek</h1>
+    <v-row style="max-width: 2300px; margin: auto; padding: 0px 18px 0px 18px">
       <v-col
         v-for="hely in helyek.slice(0, displayedPlaces)" 
         :key="hely.title" 
@@ -619,6 +620,7 @@ onMounted(() => {
         ></div>
       </div>
     </div>
+    <h1 style="padding: 0px 30px; max-width: 2300px; margin: auto;">A legjobb 10</h1>
   </v-container>
   <div class="custom-slider-container">
     <v-btn icon class="custom-arrow custom-left">
@@ -795,7 +797,7 @@ div .v-card-text
 /* Minden slide 100% szélességet kap */
 .slide {
   flex: 0 0 100%;
-  padding: 0px 80px;
+  padding: 0px 30px;
 }
 @media (max-width: 870px) {
   /* Slide szélesség automatikusan 100%-ra állítva */
@@ -874,7 +876,7 @@ div .v-card-text
   max-width: 2300px;
   overflow: hidden;
   box-sizing: border-box;
-  padding: 0 80px;
+  padding: 0 30px;
   margin-left: auto;
   margin-right: auto;
   position: relative;
@@ -932,12 +934,12 @@ div .v-card-text
 }
 
 .custom-arrow.custom-left {
-  left: 60px;
+  left: 20px;
 }
 
 /* A jobb nyíl a jobb oldalon */
 .custom-arrow.custom-right {
-  right: 72px;
+  right: 20px;
 }
 
 .horizontal-scroll-container {
@@ -946,7 +948,7 @@ div .v-card-text
   overflow-y: hidden;
   display: flex;
   width: 100%;
-  max-width: 2300px;
+  max-width: 2250px;
 }
 
 .horizontal-scroll-track {
