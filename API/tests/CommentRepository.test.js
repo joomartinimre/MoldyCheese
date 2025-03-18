@@ -14,13 +14,15 @@ describe("Comment Repository Tests", () => {
         expect(testTopic.id).toBeDefined();
 
         testPlace = await db.Place.create({
+            name: "Test Place",  // HOZZÁADVA
             topic_ID: testTopic.id,
             user_rate: 0,
             critic_rate: 0,
-            added_date: new Date(),
+            createdAt: new Date(),
             visits: 0,
             location: "Test Location",
-            text: "Test Place"
+            text: "Test Place",
+            Picture: Buffer.from("test-image") // HOZZÁADVA
         });
 
         expect(testPlace).toBeDefined();
@@ -33,7 +35,6 @@ describe("Comment Repository Tests", () => {
                 user_ID: 1,
                 place_ID: testPlace.id,
                 text: "This is a test comment",
-                
             };
             
             const newComment = await commentRepository.createComment(

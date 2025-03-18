@@ -3,8 +3,11 @@
     "concurrently": "^9.1.2"
   },
   "scripts": {
-  "start:api": "cd ./API && npm start",
-  "start:vue": "cd ./Vue && npm run dev",
-  "dev": "concurrently \"npm run start:api\" \"npm run start:vue\""
-}
+    "start:api": "cd ./API && npm start",
+    "start:vue": "cd ./Vue && npm run dev",
+    "dev": "concurrently \"npm run start:api\" \"npm run start:vue\""
+  },
+  "dependencies": {
+    "multer": "^1.4.5-lts.1"
+  }
 }

@@ -8,6 +8,11 @@ const router = useRouter();
 const authStore = useAuthStore();
 const route = useRoute();
 
+const isActive = ref(false);
+const placeName = ref('');
+const description = ref('');
+const imageFile = ref<File | null>(null);
+
 const navigateTo = (path: string) => {
   router.push(path);
 };
@@ -41,29 +46,108 @@ const hideVisitor = () => {
 };
 
 interface Topic {
+  id: number
   name: string
   tags: string[]
 }
 
-const selectedTopic = ref<Topic | null>(null)
-const selectedTags = ref<string[]>([])
-
 const topics: Topic[] = [
-  { name: 'Iskola', tags: ["Gimnázium", "Egyetem", "Általános Iskola", "Technikum", "Gyakorló Gimnázium", "+Kollégium", "Gyakorló Általános Iskola", "Kísérleti Gimnázium", "Kísérleti Általános Iskola"] },
-  { name: 'Étterem', tags: ["Csárda", "Fine Dining", "Ínyenc", "Panzió", "Borozó", "Bisztro", "Olasz", "Bár"] },
-  { name: 'Vegyesbolt', tags: ["Sarki Bolt", "Kis Bolt", "Szupermarket", "Díjnyertes", "Drogéria", "Szakbolt", "Elektronikai áruház", "Dohánybolt", "Online", "Bevásárlóközpont", "Könyvesbolt"] },
-  { name: 'Játszótér', tags: ["Ctype", "0-5 Év", "6-12 Év", "Csúszda", "Mászóka", "Homokozó", "Kültéri", "Beltéri", "Multifunkcionális", "Vízi Játszótér", "Biztonságos", "Kalandpark", "Zöldterület"] },
+  {id: 1, name: 'Iskola', tags: ["Gimnázium", "Egyetem", "Általános Iskola", "Technikum", "Gyakorló Gimnázium", "+Kollégium", "Gyakorló Általános Iskola", "Kísérleti Gimnázium", "Kísérleti Általános Iskola"] },
+  {id: 2, name: 'Étterem', tags: ["Csárda", "Fine Dining", "Ínyenc", "Panzió", "Borozó", "Bisztro", "Olasz", "Bár"] },
+  {id: 3, name: 'Vegyesbolt', tags: ["Sarki Bolt", "Kis Bolt", "Szupermarket", "Díjnyertes", "Drogéria", "Szakbolt", "Elektronikai áruház", "Dohánybolt", "Online", "Bevásárlóközpont", "Könyvesbolt"] },
+  {id: 4, name: 'Játszótér', tags: ["Ctype", "0-5 Év", "6-12 Év", "Csúszda", "Mászóka", "Homokozó", "Kültéri", "Beltéri", "Multifunkcionális", "Vízi Játszótér", "Biztonságos", "Kalandpark", "Zöldterület"] },
 ]
 
-const tagItems = computed((): string[] => {
-  return selectedTopic.value ? selectedTopic.value.tags : []
-})
+const selectedTopic = ref<number | null>(null);
+const selectedTags = ref<string[]>([]);
+let realselectedTags = ref<string[]>([]);
 
-// Amikor a topic változik, reseteljük a kiválasztott tageket
-watch(selectedTopic, () => {
-  selectedTags.value = []
-})
+const tagItems = computed(() => {
+  const topic = topics.find(t => t.id === selectedTopic.value);
+  return topic ? [...topic.tags] : [];
+});
 
+const handleFileUpload = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    imageFile.value = target.files[0];
+  }
+};
+
+const uploadPlace = async () => {
+  if (!placeName.value || !description.value || !selectedTopic.value || !imageFile.value) {
+    alert('Minden mező kitöltése kötelező!');
+    return;
+  }
+  
+  const formData = new FormData();
+  formData.append('name', placeName.value);
+  formData.append('text', description.value);
+  formData.append('topic_ID', selectedTopic.value.toString());
+  formData.append('tags', JSON.stringify(realselectedTags.value));
+  formData.append('picture', imageFile.value);
+
+  console.log("🔍 Küldött FormData adatok:");
+formData.forEach((value, key) => {
+  if (key === "tags") {
+    console.log(`${key}:`, JSON.parse(value as string)); // Ha JSON string, akkor átalakítjuk
+  } else {
+    console.log(`${key}:`, value);
+  }
+});
+  try {
+    const response = await fetch('http://localhost:3000/api/place/create', {
+      method: 'POST',
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new Error('Hiba történt a feltöltés során');
+    }
+    alert('Hely sikeresen feltöltve!');
+    refresh()
+  } catch (error) {
+    alert('Hiba történt a feltöltés során.');
+    console.error(error);
+  }
+};
+
+watch(selectedTopic, (newTopic) => {
+  selectedTags.value = [];
+  if (newTopic) {
+    selectedTags.value = [...tagItems.value]; // Az alap tageket beállítja
+  }
+});
+
+const toggleTag = (tag: string, event: Event) => {
+  const isChecked = (event.target as HTMLInputElement).checked;
+  
+  console.log(`🔍 Módosított tag: ${tag}`);
+  console.log(`📌 Bejelölve? ${isChecked}`);
+  
+  if (isChecked) {
+    if (!realselectedTags.value.includes(tag)) {
+      realselectedTags.value.push(tag);
+    }
+  } else {
+    realselectedTags.value = realselectedTags.value.filter(t => t !== tag);
+  }
+
+  console.log("🛠 Frissített selectedTags:", realselectedTags.value);
+};
+const fileUploadRef = ref<InstanceType<typeof import("vuetify/components")["VFileInput"]> | null>(null);
+
+const refresh = ()=>{
+    placeName.value = "";
+  description.value = "";
+  selectedTopic.value = null;
+  selectedTags.value = [];
+  realselectedTags.value = [];
+  imageFile.value = null;
+
+  if (fileUploadRef.value) {
+    fileUploadRef.value.$forceUpdate;
+  }
+}
 </script>
 
 <template>
@@ -189,6 +273,7 @@ watch(selectedTopic, () => {
                   </v-btn>
                 </v-list-item>
                 <v-list-item>
+                  <!-- Hely feltöltő modal -->
                   <v-dialog>
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="surface-variant" variant="text">
@@ -200,30 +285,32 @@ watch(selectedTopic, () => {
                       <v-card>
                         <v-card-title>Új hely létrehozása</v-card-title>
                         <v-card-text>
-                          <v-text-field label="Adja meg a hely nevét"></v-text-field>
-                          <v-textarea label="Írjon egy leírást a helyről" variant="outlined"></v-textarea>
+                          <v-text-field v-model="placeName" label="Adja meg a hely nevét" required></v-text-field>
+                          <v-textarea v-model="description" label="Írjon egy leírást a helyről" variant="outlined" required></v-textarea>
                           <v-select
                             v-model="selectedTopic"
                             :items="topics"
                             item-title="name"
-                            return-object
+                            item-value="id"
+                            
                             label="Válassz egy topicot"
                           ></v-select>
                           <div v-if="selectedTopic">
                             <p>Válassz tageket:</p>
-                            <v-checkbox-group v-model="selectedTags">
-                              <v-checkbox
-                                v-for="tag in tagItems"
-                                :key="tag"
-                                :label="tag"
-                                :value="tag"
-                              />
-                            </v-checkbox-group>
+                            <v-checkbox-group v-model="selectedTags" >
+                            <v-checkbox
+                              v-for="tag in tagItems"
+                              :key="tag"
+                              :label="tag"
+                              :value="tag"
+                              @change="toggleTag(tag, $event)"
+                            />
+                          </v-checkbox-group>
                           </div>
                         </v-card-text>
-                        <v-file-upload clearable density="comfortable" variant="comfortable"></v-file-upload>
+                        <v-file-upload ref="fileUploadRef" @change="handleFileUpload" accept="image/*" clearable density="comfortable" variant="comfortable"></v-file-upload>
                         <v-card-actions>
-                          <v-btn variant="text">Feltöltés</v-btn>
+                          <v-btn variant="text"  @click="uploadPlace">Feltöltés</v-btn>
                           <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
                         </v-card-actions>
                       </v-card>
