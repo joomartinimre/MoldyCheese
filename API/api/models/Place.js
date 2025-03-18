@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER 
             },
             text: {
-                type: DataTypes.STRING(255)
+                type: DataTypes.STRING(2000)
             },
             tags: {
                 type: DataTypes.JSON, // MySQL esetén JSON típus
