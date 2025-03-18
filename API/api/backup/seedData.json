@@ -99,5 +99,2662 @@
       "ID": 4,
       "name": "Játszótér"
     }
+  ],
+  "Place": [
+    {
+      "ID": 1,
+      "name": "Budapesti Fazekas Mihály Gyakorló Általános Iskola és Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T16:52:15.000Z",
+      "visits": 0,
+      "text": "A Budapesti Fazekas Mihály Gyakorló Általános Iskola és Gimnázium egyetemi gyakorló iskola Józsefvárosban. Országos hírű speciális matematikatagozata, ahol több, mára elismert matematikus is végzett. Tanulói évről évre kiváló eredményeket érnek el az országos középiskolai tanulmányi versenyeken és a Nemzetközi Tudományos Diákolimpiákon különféle tantárgyakból. A továbbtanulási arány is hasonlóan magas, általában a tanulók 99%-a bekerül az általa választott felsőoktatási intézménybe. A HVG országos középiskolai tanulmányi rangsorában 2013–2018 között minden évben, megszakítás nélkül az első helyre sorolták.[1] (Az első helyet aztán a Fazekas 2020-ban és 2022-ben is megszerezte.) Az iskola jelenlegi formájának, működésének és színvonalának kialakulása viszonylag késői, az 1960-as évekhez köthető. Nevét Fazekas Mihály költő, botanikus emlékére kapta.rn",
+      "tags": [
+        "Gimnázium",
+        "Gyakorló Általános Iskola"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T16:52:15.000Z"
+    },
+    {
+      "ID": 2,
+      "name": "ELTE Radnóti Miklós Gyakorló Általános Iskola és Gyakorló Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:06:33.000Z",
+      "visits": 0,
+      "text": "Az ELTE Radnóti Miklós Gyakorló Általános Iskola és Gyakorló Gimnázium az Eötvös Loránd Tudományegyetem egyik gyakorlóiskolája Budapest XIV. kerületében. Az iskolában jelenleg 12, 8 és 1+6 osztályos képzés folyik. A HVG országos középiskolai tanulmányi rangsorában évek óta az első 3-4 gimnázium között található.rn",
+      "tags": [
+        "Gyakorló Gimnázium",
+        "Gyakorló Általános Iskola"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:06:33.000Z"
+    },
+    {
+      "ID": 3,
+      "name": "Budapest V. Kerületi Eötvös József Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:06:53.000Z",
+      "visits": 0,
+      "text": "Az Eötvös József Gimnázium Budapest egyik jó hírű gimnáziuma, amely a főváros V. kerületében, a Reáltanoda utcában található. Az iskola (és jogelődei) Budapest legrégebbi nem felekezeti iskolája, a főváros első reáliskolája (reáltanodája), valamint az ország első magyar tannyelvű főreáliskolája címet tudhatja magáénak. 2008-ban elnyerte az Oktatási és Kulturális Minisztérium által adományozott „Tehetséggondozó iskola” címet.rn",
+      "tags": [
+        "Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:06:53.000Z"
+    },
+    {
+      "ID": 4,
+      "name": "Deák Téri Evangélikus Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:08:04.000Z",
+      "visits": 0,
+      "text": "A pesti evangélikus gyülekezet 1787-ben alakult. A város belterületén helyiséget béreltek istentisztelet céljára; itt indult meg 1788-ban egyetlen teremben az oktatás a kántor vezetésével, akinek feladata az volt, hogy a kisgyermekeket az alapismeretekre oktassa és vallásos szellemben nevelje. A gyülekezet 1791-ben kapta meg a Kohlmarkt (Káposzta-piactér) melletti területet, amelyet az itt helyet kapott evangélikus intézményekről Insula Lutherana - Lutheránus Sziget néven emlegettek. 1793-ra épült fel Pollack Mihály tervei alapján az az egyemeletes épület, amelynek földszinti imatermében megindult az oktatás. 1811-ben szentelték fel az insula részét alkotó Deák téri templomot.rn",
+      "tags": [
+        "Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:08:04.000Z"
+    },
+    {
+      "ID": 5,
+      "name": "ELTE Trefort Ágoston Gyakorló Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:08:22.000Z",
+      "visits": 0,
+      "text": "Az ELTE Trefort Ágoston Gyakorlóiskola (röviden: Trefort) gimnázium Budapest VIII. kerületében, a Trefort utcában. Az Eötvös Loránd Tudományegyetem egyik gyakorlóiskolája, melyet Magyarország elit középiskolái között tartanak számon.[4] Az intézmény Trefort Ágoston nevét csak 1991-ben vette fel, de nem hivatalosan már előtte is Trefortnak vagy Trefort utcai gimnáziumnak hívták, leszámítva az 1957–91 közötti időszakot, amikor hivatalosan Ságvárinak nevezték.rn",
+      "tags": [
+        "Gyakorló Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:08:22.000Z"
+    },
+    {
+      "ID": 6,
+      "name": "ELTE Apáczai Csere János Gyakorló Gimnázium és Kollégium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:08:41.000Z",
+      "visits": 0,
+      "text": "Az ELTE Apáczai Csere János Gyakorló Gimnázium és Kollégium egy Magyarországon, Budapesten található középiskola, az ELTE gyakorlóiskolája. Az ország egyik legszínvonalasabb középiskolája: komplex természettudományi tagozatának diákjai a Nemzetközi Kémiai Diákolimpia rendszeres résztvevői, az OKTV-döntőkben évente 20-30 diákkal képviseltetik magukat – kémia mellett a legkülönfélébb tárgyakból is –, valamint egyéb országos tanulmányi versenyek döntőiben is rendkívül magas az iskola diákjainak részvételi aránya, emellett a különböző középiskolai rangsorok első 10-20 helyezettjei között szerepel az iskola immár évtizedek óta, a továbbtanulási arány igen magas. Nevét a magyar filozófusról és pedagógusról, Apáczai Csere Jánosról kapta. Jelenleg 6 és 4 osztályos egyetemi gyakorló gimnáziumként működik.rn",
+      "tags": [
+        "Gyakorló Gimnázium",
+        "+Kollégium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:08:41.000Z"
+    },
+    {
+      "ID": 7,
+      "name": "Békásmegyeri Veres Péter Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:08:54.000Z",
+      "visits": 0,
+      "text": "A gimnáziumot 1986-ban alapította a Budapest Főváros III. kerületi Tanács Végrehajtó Bizottsága.[3] Az iskola pedagógiai programja a magas szintű tudás megszerzését, az egészséges testi fejlődést és a személyiség harmonikus fejlődését hangsúlyozza. A gimnázium nagy hangsúlyt fektet a hagyományok őrzésére, ezt támasztja alá a népes néptánc szakkör. Az iskola 5–8. évfolyamain két-két, 9–12. évfolyamain három-három osztály működik.[2] Az iskola évek óta Magyarország egyik legjobb középiskolája. Az iskola 2022-re tervezett felújítása elmarad, mert a kormány a költségvetés pótlása érdekében minden meg nem kezdett beruházását felfüggesztette.[7]rn",
+      "tags": [
+        "Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:08:54.000Z"
+    },
+    {
+      "ID": 8,
+      "name": "Budapest I. Kerületi Toldy Ferenc Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:09:12.000Z",
+      "visits": 0,
+      "text": "Az iskolát 1854 decemberében Ferenc József császár alapította Budai Császári Királyi Főreáltanoda (röviden Budai Főreál) néven. A tanárok fizetését az állam, a működési költségeket és az épületet a budai tanács biztosította. Első igazgatójává Schenzl Guidó osztrák bencés szerzetest, a szomszédos Egyetemi Katolikus Főgimnázium tanárát nevezték ki. Az iskola kétemeletes neogót, sárga és vörös nyerstéglából készült épülete 1857 és 1859 között épült Petschnig János, a pesti reáliskola (a mai Eötvös József Gimnázium) rajztanárának tervei alapján a Donáti utca és a Neue Gasse (a mai Toldy Ferenc utca) között. Az iskola az 1860-as októberi diplomáig német, majd 1868-ig vegyesen magyar és német nyelven működött. 1876 óta érettségit is ad.rn",
+      "tags": [
+        "Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:09:12.000Z"
+    },
+    {
+      "ID": 9,
+      "name": "Szent István Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:09:27.000Z",
+      "visits": 0,
+      "text": "A gimnázium 1900-ban az akkoriban Barcsay utcai gimnáziumnak is nevezett Madách Imre Gimnázium részlegeként működött, mivel az anyaiskola a korabeli Erzsébetváros folyamatosan növekvő népessége miatt kicsinynek bizonyult. 1902-ben VII. kerületi Külső Magyar Királyi Állami Főgimnázium néven nyílt meg részben önálló[1] intézményként, majd 1908-ban már a jelenlegi helyén önállósult. 1921-ben felvette Szent István nevét. A gimnázium erőssége a természettudományi tárgyak oktatása, mindemellett nagy figyelmet szentelnek a humántárgyaknak is. 1960-tól speciális matematika tagozatos képzés is van, 1998-ben indult az informatikai szak.rn",
+      "tags": [
+        "Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:09:27.000Z"
+    },
+    {
+      "ID": 10,
+      "name": "Lovassy László Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:09:46.000Z",
+      "visits": 0,
+      "text": "A Lovassy László Gimnázium Veszprém tíz középfokú iskolájának egyike. A statisztikák Magyarország egyik legszínvonalasabb gimnáziumaként tartják számon.[1] Az iskolában ötosztályos nyelvi előkészítős osztály keretein belül speciális matematika, német nemzetiségi, informatika, angol tagozat, az Arany János Tehetséggondozó Program tagozata működik, valamint a 2016/2017 tanévtől megszűnő AJTP (Arany János Tehetséggondozó Program) helyett egy általános kerettantervű osztály.rn",
+      "tags": [
+        "Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:09:46.000Z"
+    },
+    {
+      "ID": 11,
+      "name": "Szegedi Radnóti Miklós Kísérleti Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:10:06.000Z",
+      "visits": 0,
+      "text": "Az iskola fő profilja a tehetséggondozás. Ennek az eredményességét mutatja, hogy 2007–2012 között az Országos Középiskolai Tanulmányi Versenyek (OKTV) döntőibe összesen 160 tanulójuk jutott be. S bár egyes tantárgyak - elsősorban a biológia, a matematika, valamint a fizika és a kémia - dominanciája nyilvánvaló, mégis valamennyi fő tantárgyból volt döntősük. Az eredmények értékét növeli, hogy döntőseik közül 40-en az első tíz hely valamelyikén végeztek ez alatt az idő alatt.rn",
+      "tags": [
+        "Kísérleti Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:10:06.000Z"
+    },
+    {
+      "ID": 12,
+      "name": "Városmajori Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:10:29.000Z",
+      "visits": 0,
+      "text": "A Városmajori Gimnázium (rövidítve VMG vagy Major) egy 1989-ben alapított középiskola Budapest XII. kerületében. Jelenlegi igazgatója dr. Szebedy Tas. A 2009/2010-es tanévtől tíz évig a Városmajori Kós Károly Általános Iskola – Kós Károly Ének-zene Emeltszintű Általános Iskola néven – a Városmajori Gimnázium és Kós Károly Általános Iskola tagintézménye volt. Az intézményben 7–12. évfolyamon gimnáziumi képzés folyik.rn",
+      "tags": [
+        "Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:10:29.000Z"
+    },
+    {
+      "ID": 13,
+      "name": "VII. Kerületi Madách Imre Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:10:49.000Z",
+      "visits": 0,
+      "text": "A Madách Imre Gimnázium Budapest egyik jóhírű középiskolája, amely a VII. kerület, Barcsay utca 5. sz. alatt található, a főváros legrégebben alapított állami középiskolája. A HVG 2023-as rangsora szerint Magyarország 9. legjobb középiskolája.[1] Állami gimnáziumként 1881-ben alapították Budapesti VII. ker. Állami Gymnásium néven, eredetileg a VII. kerület, Klauzál utca 10. alatt. Mai helyén 1892 óta működik (épületét Bobula János tervezte,[2] az épület főhomlokzati mozaikképeit Stettka Gyula festőművész alakjai után a világhírű velencei Candiani cég készítette),[3] azonban csak 1903-ban került mind a 16 osztály az intézmény saját épületébe. Nevét 1920-ban Magy. Kir. Állami Madách Imre Gimnáziumra változtatták. Ebből az iskolából vált ki 1902-ben a Szent István Gimnázium, mely már 1900-tól kezdve kihelyezett részleg volt.rn",
+      "tags": [
+        "Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:10:49.000Z"
+    },
+    {
+      "ID": 14,
+      "name": "ELTE Bolyai János Gyakorló Általános Iskola és Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:11:10.000Z",
+      "visits": 0,
+      "text": "Az ELTE Bolyai János Gyakorló Általános Iskola és Gimnázium egy általános iskola, valamint egy 4 és 8 évfolyamos gimnázium Szombathelyen. Nevét Bolyai János matematikusról kapta. Ez az oktatási intézmény a város egyik legkeresettebb iskolája, mely az Eötvös Loránd Tudományegyetem (korábban Nyugat-magyarországi Egyetem) gyakorló iskolája is egyben. A végzősök szalagavató ünnepsége rendre bekerül a helyi hírekbe.[1][2]rn",
+      "tags": [
+        "Gimnázium",
+        "Gyakorló Általános Iskola"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:11:10.000Z"
+    },
+    {
+      "ID": 15,
+      "name": "Ceglédi SZC Közgazdasági és Informatikai Technikum",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:11:35.000Z",
+      "visits": 0,
+      "text": "A Ceglédi SZC Közgazdasági és Informatikai Technikuma több mint 50 éve a város, és annak vonzáskörzetének egyik meghatározó szakképzést folytató intézménye. Az elmúlt évtizedek során a képzési szerkezetek és keretek többször változtak, ellentétben az intézmény hosszú távú céljaival. A különböző szervezeti keretek ellenére az iskola kiemelt célja mindig is a szakmájuk iránt elkötelezett fiatalok oktatása és képzése volt. Ennek köszönhetően végzett diákjaink sikeresen kapcsolódnak be a szakirányú felsőoktatási képzésekbe, illetve találják meg helyüket a munka világában. Iskolánkba közel 500 érettségire, szakmai vizsgára és továbbtanulásra készülő tanuló jár. Az oktatás a gazdálkodás és menedzsment, valamint az informatika és távközlés ágazatokon zajlik. Évfolyamonként három osztályunk van, átlagosan 30-32 fővel.rn",
+      "tags": [
+        "Technikum"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:11:35.000Z"
+    },
+    {
+      "ID": 16,
+      "name": "Óbudai Árpád Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:11:54.000Z",
+      "visits": 0,
+      "text": "Az Óbudai Árpád Gimnázium középiskola Budapest III. kerületében. Óbuda első középiskolájaként alapították. Több mint száz éves működése során számos nagynevű tanár tanított falai között, diákjai közül neves közéleti személyiségek sora került ki. Jelenleg 6 és 4 osztályos gimnáziumként működik. 1940-ben épült épülete a 20. századi modern építészet figyelemreméltó alkotása, műemlék. Az HVG 2022-es[1] és 2023-as[2] középiskolai ranglistáján is az ország 17. legjobb középiskolája volt.rn",
+      "tags": [
+        "Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:11:54.000Z"
+    },
+    {
+      "ID": 17,
+      "name": "Nyíregyházi Krúdy Gyula Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:12:14.000Z",
+      "visits": 0,
+      "text": "Ma a Krúdy Gyula Gimnázium az Epreskert u. 64. szám alatt található. Az iskola az Epreskert utca és a Sarkantyú utca sarkán fekvő saroképület, az épület előtt fákkal beültetett előkert található. A gimnázium 1969-ben alakult a Vasvári Pál Gimnázium matematika-fizika és biológia-kémia tagozatos gimnáziumi, a rádió-tv műszerész szakközépiskolai osztályainak, valamint két általános gimnáziumi osztályának kiválásával.rn",
+      "tags": [
+        "Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:12:14.000Z"
+    },
+    {
+      "ID": 18,
+      "name": "Debreceni Fazekas Mihály Gimnázium",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:12:32.000Z",
+      "visits": 0,
+      "text": "A Fazekas Mihály Gimnázium (a diákok között gyakran egyszerűen „Fazekas” vagy „Fazék”) Debrecen egyik gimnáziuma. Az intézmény 1873. november 3-án „Debrecen szabad királyi város Főreáltanodája” néven nyitotta meg kapuit. Ebben az időben még csak fiúk számára oktatta a modern nyelvek, matematika és természettudomány központú tananyagait. Az épületet Meixner Károly tervei alapján építették 1891-ben, és a diákok azt az 1893-as tanévben vehették birtokukba.rn",
+      "tags": [
+        "Gimnázium"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:12:32.000Z"
+    },
+    {
+      "ID": 19,
+      "name": "Eötvös Loránd Tudományegyetem (ELTE)",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:13:01.000Z",
+      "visits": 0,
+      "text": "Az Eötvös Loránd Tudományegyetem (rövidítve: ELTE, latin nevén: Universitas Scientiarum Budapestinensis De Rolando Eötvös Nominata) Magyarország leghosszabb ideje folyamatosan működő egyeteme, egyike az ország legnagyobb és legtekintélyesebb felsőoktatási intézményeinek. Pázmány Péter esztergomi érsek alapította 1635-ben Nagyszombatban, majd 1777-ben a négy karral működő egyetemet a jezsuita rend feloszlatása után Mária Terézia királynő áthelyezte Budára, 1784-ben, II. József uralkodása idején pedig Pestre költöztették. Egykori hittudományi karából jött létre a Pázmány Péter Katolikus Egyetem, hajdani orvosi karából pedig a Semmelweis Egyetem.rn",
+      "tags": [
+        "Egyetem"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:13:01.000Z"
+    },
+    {
+      "ID": 20,
+      "name": "Szegedi Tudományegyetem (SZTE)",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:13:20.000Z",
+      "visits": 0,
+      "text": "A Szegedi Tudományegyetem (röviden: SZTE) – Universitas Scientiarum Szegediensis / University of Szeged – Magyarországon, Szeged városában működő, közfeladatot ellátó, közérdekű vagyonkezelő alapítvány által fenntartott felsőoktatási intézmény. A korábbi szegedi József Attila Tudományegyetem (JATE), a Szent-Györgyi Albert Orvostudományi Egyetem (SZOTE), a Szegedi Élelmiszeripari Főiskola (SZÉF), a Juhász Gyula Tanárképző Főiskola (JGYTF), a Liszt Ferenc Zeneművészeti Főiskola Szegedi Konzervatóriuma és a Hódmezővásárhelyen működő Mezőgazdasági Főiskola összevonásával alakult meg 2000. január 1-jén. A Szegedi Tudományegyetem szenátusának 2007. júliusi határozata értelmében jogelődje az 1581. május 12-én Báthory István által alapított kolozsvári katolikus egyetem.[2]rn",
+      "tags": [
+        "Egyetem"
+      ],
+      "topic_ID": 1,
+      "updatedAt": "2025-03-18T17:13:20.000Z"
+    },
+    {
+      "ID": 21,
+      "name": "Erhardt Étterem – Sopron",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:25:32.000Z",
+      "visits": 0,
+      "text": "Az évek során igazi gasztro zarándokhellyé nőtte ki magát a Sopronban található Erhardt étterem. A XVIII. században épült vendéglátóhelyhez tartozik egy vadszőlős-diófás kerthelyiség is, amellyel még különlegesebbé tehetik számotokra az itt eltöltött időt. Az étlapon megtalálhatóak a tradicionális magyar konyha jellegzetes fogásai újra gondolt köntösben, valamint az ínyenc ízeket kedvelők is találhatnak maguknak harapnivalót. Az alapanyagokat helyi termelőktől szerzik be, így garantált a felejthetetlen ízélmény!rn",
+      "tags": [
+        "Ínyenc",
+        "Borozó"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:25:32.000Z"
+    },
+    {
+      "ID": 22,
+      "name": "Roxy étterem – Siófok",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:25:49.000Z",
+      "visits": 0,
+      "text": "Nem kell lemondanotok a finom falatokról a hideg időben sem, ugyanis a Siófokon található Roxy Étterem télen is várja a vendégeket. Tavasztól-őszig a tágas teraszon foglalhattok helyet, télen pedig a hangulatos belső térben fogyaszthatjátok el az ebédeteket, vagy vacsorátokat. A folyamatosan megújuló étlapon az évszaknak megfelelő fogások kapnak helyet, választhattok pazar pizzák, klasszikus magyar fogások, vagy akár vadételek közül is. Bőséges adagok, ízletes fogások – ez a Roxy étterem!rn",
+      "tags": [
+        "Panzió",
+        "Olasz"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:25:49.000Z"
+    },
+    {
+      "ID": 23,
+      "name": "Platán Bisztro – Tata",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:26:10.000Z",
+      "visits": 0,
+      "text": "Ha különleges gasztronómiai élményre vágytok, mindenképpen látogassatok el a tatai Öreg-tó partján található Platán Bisztróba. A magas színvonalú hozzávalókból készült fogások Pesti István Michelin – csillagos séf keze közül kerülnek ki, így egy szimpla ebéd vagy vacsora is felejthetetlen ízélménnyé válhat. A speciális étrendet követő vendégek is megtalálhatják a kedvükre való fogást, mindössze egy rövid egyeztetés szükséges foglalás előtt az étteremmel.rn",
+      "tags": [
+        "Ínyenc",
+        "Bisztro"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:26:10.000Z"
+    },
+    {
+      "ID": 24,
+      "name": "Anyukám Mondta Étterem – Encs",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:26:31.000Z",
+      "visits": 0,
+      "text": "Az encsi Anyukám Mondta Éttermet a Dudás testvérpár több mint egy évtizede üzemelteti. Különleges magyar és olasz fogásokkal, nemzetközi ételekkel várják a vendégeiket, és évről-évre bebizonyítják, hogy helyük van Magyarország gasztronómiai térképén. Legyen szó háztáji, magyar csirkéről, vagy eredeti, olasz pancettáról, a vérbeli vendéglátó fivérek nem tudnak hibázni!rn",
+      "tags": [
+        "Panzió",
+        "Olasz"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:26:31.000Z"
+    },
+    {
+      "ID": 25,
+      "name": "Kistücsök Étterem – Balatonszemes",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:26:50.000Z",
+      "visits": 0,
+      "text": "A Kistücsök étterem már több, mint egy évtizede üde színfoltja a hazai vendéglátásnak. Tematikus vacsoraestekkel, egyedi fogásokkal, finom borokkal várják az idelátogatókat, akik a Delikátesz nevű kis üzletből könnyen beszerezhetik a menüben szereplő hozzávalókat. A hely másik különlegessége a „Séfszoba”, ahol ti is figyelemmel kísérhetitek a fogások készítését, valamint pár szót válthattok az ügyeskezű séffel ebéd vagy vacsora közben.rn",
+      "tags": [
+        "Fine Dining",
+        "Ínyenc"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:26:50.000Z"
+    },
+    {
+      "ID": 26,
+      "name": "Sauska 48 – Villány",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:27:09.000Z",
+      "visits": 0,
+      "text": "A modern megjelenésű, letisztult belsővel, rendelkező Sauska 48 nyugodt és csendes környezetben helyezkedik el. Fedett teraszáról csodás kilátás nyílik a villányi szőlőhegyekre, amely a térség egyik különlegessége. Ételeire leginkább a hagyományos ízvilág jellemző, azonban a séfek külföldi tapasztalatainak hála egy kis csavarral szolgálják fel azokat. Érdekessége, hogy azért szerepel a 48-as szám az étterem nevében, mert a 48-as helyrajzi szám alatt található, illetve 48 fő befogadására alkalmas.rn",
+      "tags": [
+        "Panzió",
+        "Borozó"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:27:09.000Z"
+    },
+    {
+      "ID": 27,
+      "name": "Prímás Pince Étterem és Boralagút – Esztergom",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:27:25.000Z",
+      "visits": 0,
+      "text": "Az Esztergomi Bazilika mellett elhelyezkedő étteremben az ínycsiklandó fogásokon kívül mennyei süteményekkel és kávékülönlegességekkel kényeztethetitek magatokat. Hagyományos és modern ételek, kedves kiszolgálás, pazar környezet várja a vendégeket. Legyen szó egy finom pisztrángról, szűzpecsenyéről, vagy a vegetáriánus konyha valamelyik eleméről, a Prímás Pince Étterem és Boralagút menüje mindenki számára tartogat meglepetéseket. rn",
+      "tags": [
+        "Panzió",
+        "Borozó"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:27:25.000Z"
+    },
+    {
+      "ID": 28,
+      "name": "Pajta – Őriszentpéter",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:27:42.000Z",
+      "visits": 0,
+      "text": "A modern megjelenésű Pajta elnevezése inkább egy hagyományos, egyszerű épületre utal, ám nem véletlenül zsebelte be a patinás Ybl-díjat a vendéglátóhely. Ennek megfelelően az étlapon is számos kiváló különlegességet találhattok, amelyet a környékbeli, szezonális alapanyagokból állítanak össze. A Pajtában enni örök élmény minden gasztro turista számára! rn",
+      "tags": [
+        "Fine Dining",
+        "Ínyenc"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:27:42.000Z"
+    },
+    {
+      "ID": 29,
+      "name": "Sparhelt Bistro – Balatonfüred",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:28:03.000Z",
+      "visits": 0,
+      "text": "A Sparhelt Bistro modern, minimalista stílusú és minőségi ételekkel várja vendégeit Balatonfüreden. Az étterem konyhája nagy hangsúlyt fektet az alapanyagok kiválasztására és a tálalásra. Az étlap nem túl hosszú, ám annál izgalmasabb. A hozzávalókat piacról frissen szerzik be, az ételekhez finom borokat kínálnak. Az étterem 2023-ban megszerezte a legjobb ár-érték arányú éttermeknek járó, Michelin Bib Gourmand minősítést.rn",
+      "tags": [
+        "Fine Dining",
+        "Ínyenc",
+        "Bisztro"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:28:03.000Z"
+    },
+    {
+      "ID": 30,
+      "name": "Botanica – Dánszentmiklós",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:28:27.000Z",
+      "visits": 0,
+      "text": "A dánszentmikósi Hotel Botanica étterme egy ízig-vérig fine dining koncepció. A Botanicát a tulajdonosai, Zsebők Ágota és Horváth Kristóf a provance-i és a toscanai vidéki kúriák hangulatát árasztó „small luxury” hotelek mintájára hozták létre. A casual eleganciát árasztó hotel éttermének konyháját a tehetséges Munk Tamás séf jegyzi. A konyhai koncepció természetszerűleg igazodik a szálloda által támasztott igényekhez is. Az alapvetően vacsoraidőben elérhető 6 fogásos gourmet degusztációs menü jól ötvözi a haladó gondolkodású, kortárs vidéki konyhák és a magasminőségű fine dining éttermi stílus elemeit. A séf csúcsgasztronómia tapasztalata és az ezzel együtt párhuzamosan megjelenő természetközeli látásmódja igazán egyedi tányérokat eredményez.rn",
+      "tags": [
+        "Fine Dining",
+        "Ínyenc",
+        "Panzió"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:28:27.000Z"
+    },
+    {
+      "ID": 31,
+      "name": "Végállomás bistro & wine – Miskolc",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:28:47.000Z",
+      "visits": 0,
+      "text": "A Végállomás Bistro a Bükk lábánál, a lillafüredi Kisvasút egykori végállomásának épületében kapott helyet. A vendéglátóhely nappal bisztróként üzemel, ám 80 fős termének köszönhetően étteremként is remekül megállja a helyét. Naponta változó, bisztrómenüt kínálnak, amely két levesből és három főételből áll, amit vegetáriánus formában is elfogyaszthattok.rn",
+      "tags": [
+        "Borozó",
+        "Bisztro"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:28:47.000Z"
+    },
+    {
+      "ID": 32,
+      "name": "Chloe New Yorkban – Nyíregyháza",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:29:04.000Z",
+      "visits": 0,
+      "text": "New York egy kicsit Nyíregyházára költözött, legalább is, ami a Chloe New Yorkban belső terét és megjelenését illeti. A nagyvilági és a magyar konyha legjobbjai jelennek meg az étlapon, ahol megfér egymás mellett a gyros, a hamburger, a brownie, és a brassói aprópecsenye is.rn",
+      "tags": [
+        "Ínyenc"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:29:04.000Z"
+    },
+    {
+      "ID": 33,
+      "name": "Munkácsy Étterem & Bár – Békéscsaba",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:29:25.000Z",
+      "visits": 0,
+      "text": "A Széchenyi liget szomszédságában található étterem tökéletes helyszín lehet, ha egy kis kikapcsolódásra és finom falatokra vágytok. Hagyományos és nemzetközi ételek közül választhattok, amit egy összeszokott csapat tesz le az asztalra. Minőségi alapanyagok, finom borok, és minimalista elegancia vár benneteket Békéscsabán!rn",
+      "tags": [
+        "Fine Dining",
+        "Ínyenc",
+        "Bár"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:29:25.000Z"
+    },
+    {
+      "ID": 34,
+      "name": "Macok Bisztró és Borozó – Eger",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:29:41.000Z",
+      "visits": 0,
+      "text": "Az egyszerre elegáns és fiatalos Macok Bisztró kiváló helyszín lehet romantikus vacsorának, vagy akár egy nagy, családi ebédnek is. Az étterem konyhája arra törekszik, hogy a legjobb alapanyagokat szerezze be az ételeihez a környékbeli termelőktől, így az étlapon inkább a hagyományos, újra gondolt ízekkel találkozhatunk. A menü az évszaknak megfelelő fogásokat tartalmaz, legyen szó egy finom szilvásváradi pisztrángról, vagy bükki sajtkülönlegességekről.rn",
+      "tags": [
+        "Borozó",
+        "Bisztro"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:29:41.000Z"
+    },
+    {
+      "ID": 35,
+      "name": "Várkonyi Bisztró és Bár – Gyula",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:30:00.000Z",
+      "visits": 0,
+      "text": "Ha igazán házias ízekre vágytok, akkor a Várkonyi Bisztró és Bár a ti helyetek! A bisztró szakácsai a hagyományos magyar ízeket ötvözik a modern konyha elvárásaival. Legyen szó egy finom pörköltről, egy szaftos csülökről, vagy egy ínycsiklandó túrós csuszáról, itt biztosan olyan ételt kaptok, amit a vasárnapi ebéd közben is szívesen elfogyasztanátok. Gyertek kettesben, vagy a családdal, mindenki számára találtok olyan fogást, amit szívesen fogyaszt majd. rn",
+      "tags": [
+        "Bisztro",
+        "Bár"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:30:00.000Z"
+    },
+    {
+      "ID": 36,
+      "name": "Elefántos Étterem és Pizzéria – Pécs",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:30:17.000Z",
+      "visits": 0,
+      "text": "Mennyei olasz ételekkel és mediterrán hangulattal vár benneteket az Elefántos Étterem és Pizzéria Pécsen. Eredeti, itáliai ízek, több mint 23 fajta pizza, különleges tengeri halak és ínycsiklandó tészták is megtalálhatóak az étlapon, amit minden gasztro turista imádni fog. Fedezzétek fel ezt a kis olasz csodát, és merüljetek el az étterem széles kínálatában.rn",
+      "tags": [
+        "Olasz"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:30:17.000Z"
+    },
+    {
+      "ID": 37,
+      "name": "Taberna Infinito – Kisapáti",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:30:37.000Z",
+      "visits": 0,
+      "text": "A Balaton egyik legizgalmasabb tapas bárja és étterme a Szent György-hegy oldalában található Taberna Infinito. A kutyabarát étterem teraszáról bámulatos kilátás nyílik a Badacsonyra és a tanúhegyekre. Az étterem a spanyol konyha specialitásait hozza el a magyar tengerhez, a klasszikus tapas-bárok hangulatát megidézve. A vendégek szűkebb étlapról választhatnak, az ízek viszont garantáltan visszacsalogatnak a Szent György-hegy oldalába.rn",
+      "tags": [
+        "Csárda",
+        "Ínyenc"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:30:37.000Z"
+    },
+    {
+      "ID": 38,
+      "name": "Patkós Csárda – Tiszafüred",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:31:01.000Z",
+      "visits": 0,
+      "text": "A több mint 200 éve étteremként üzemelő Patkós Csárda üde színfoltja a Tisza-tó ökoszisztémájának. Házias jellegű, finom magyar fogásokat szolgálnak fel, ami az ellenállhatatlan halételektől kezdve, a finom pörköltökön át egészen az ínycsiklandó frissensültekig terjed.rn",
+      "tags": [
+        "Csárda"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:31:01.000Z"
+    },
+    {
+      "ID": 39,
+      "name": "Aranyosidombi Udvarház – Poroszló",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:31:13.000Z",
+      "visits": 0,
+      "text": "A Tisza-tó egyik legkedveltebb étterme az Aranyosidombi Udvarház, amely Poroszlón található. A kínálatban a saját gazdaságukban megtermelt hozzávalókat használják, így garantáltan ízfokozó és hozzáadott alapanyagoktól mentes ételeket fogyaszthattok. Tematikus ételekkel, szezonális fogásokkal kápráztatják el a vendégeket a szakácsok, akik nagy odafigyeléssel és hatalmas szívvel készítik el a kívánt menüsort.rn",
+      "tags": [
+        "Csárda"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:31:13.000Z"
+    },
+    {
+      "ID": 40,
+      "name": "Régi Posta Étterem – Debrecen",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:31:30.000Z",
+      "visits": 0,
+      "text": "Debrecen egyik legrégebbi épületében kapott helyet a Régi Posta Étterem, amelynek kapuját átlépve egy több évszázados történelmi utazáson vehettek részt. Hagyományos ízekkel és bőséges adagokkal várják a vendégeket, akik ebédjüket vagy vacsorájukat a mediterrán stílusú teraszon is elfogyaszthatják. A fogások hazai, minőségi alapanyagokból készülnek, így egészen biztosan nem fogtok mellé, ha ezt a vendéglátóhelyet választjátok.rn",
+      "tags": [
+        "Csárda"
+      ],
+      "topic_ID": 2,
+      "updatedAt": "2025-03-18T17:31:30.000Z"
+    },
+    {
+      "ID": 41,
+      "name": "Kiskosár Kézműves Kisbolt",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:39:05.000Z",
+      "visits": 0,
+      "text": "Az orosházi Kiskosár Kézműves Kisbolt az a hely, amely helyi és környékbeli kistermelők, kézművesek termékeit gyűjti egy csokorba, nagy hangsúlyt fektetve a hagyományok őrzésére a helyi értékek kihangsúlyozásával.rn",
+      "tags": [
+        "Sarki Bolt"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T17:39:05.000Z"
+    },
+    {
+      "ID": 42,
+      "name": "Pedró Pékség Gyártó és Kereskedelmi",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:39:20.000Z",
+      "visits": 0,
+      "text": "A Pedró Pékség Sokorópátkán finom, minőségi kenyereivel, péksüteményeivel, helyi termelők portékáival, családias légkörben szolgálja ki kedves vásárlóit.rn",
+      "tags": [
+        "Kis Bolt"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T17:39:20.000Z"
+    },
+    {
+      "ID": 43,
+      "name": "Coop Szeged",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:40:36.000Z",
+      "visits": 0,
+      "text": "Az új gondolarendszerrel jobban berendezhető lett az áruház, optikailag megnőtt az üzlet belső tere, amit a vásárlók is megjegyeztek és örömmel vettek.rn",
+      "tags": [
+        "Kis Bolt"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T17:40:36.000Z"
+    },
+    {
+      "ID": 44,
+      "name": "Tesco Express",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:41:12.000Z",
+      "visits": 0,
+      "text": "A Thaly Kálmán utcai Tesco Express a helyi közösség pontos ismerete alapján biztosított magas színvonalú, személyre szabott termékválasztékával és kiszolgálásával nyújt egyedülálló vásárlási élményt.rn",
+      "tags": [
+        "Kis Bolt"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T17:41:12.000Z"
+    },
+    {
+      "ID": 45,
+      "name": "Vörösvár",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:41:34.000Z",
+      "visits": 0,
+      "text": "A funkcionalizmus és környezettudatosság jegyében felújított, megnövelt vásárlótérrel rendelkező üzletünknek keressük koronaékszerét, amely viselését büszkén vállalja! :)rn",
+      "tags": [
+        "Szupermarket"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T17:41:34.000Z"
+    },
+    {
+      "ID": 46,
+      "name": "SPAR",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:41:49.000Z",
+      "visits": 0,
+      "text": "Az Újpest-Központtól pár percre lévő SPAR szupermarket 2023-ban teljesen új külsőt kapott és a belső tere is megújult, a modernizáláson túl kényelmi funkciókkal is bővült a vásárlók igényei szerint.rn",
+      "tags": [
+        "Szupermarket"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T17:41:49.000Z"
+    },
+    {
+      "ID": 47,
+      "name": "Városház - Centrál",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:42:09.000Z",
+      "visits": 0,
+      "text": "Elegáns Príma Szupermarket a Corvin Plazában: széles termékválaszték, kiemelkedő hús- és zöldségkínálat, friss pékáruk, változatos borválaszték, reform élelmiszerek. Környezettudatos üzlet, energiahatékony megoldások.rn",
+      "tags": [
+        "Szupermarket"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T17:42:09.000Z"
+    },
+    {
+      "ID": 48,
+      "name": "Alza",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T17:42:33.000Z",
+      "visits": 0,
+      "text": "Alza.hu Kft. az egyik legismertebb online elektronikai és háztartási termékeket kínáló bolt, modern vásárlói élményt nyújtva gyors kiszállítással és széles termékválasztékkal.rn",
+      "tags": [
+        "Elektronikai áruház",
+        "Online"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T17:42:33.000Z"
+    },
+    {
+      "ID": 49,
+      "name": "Lidl",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:02:05.000Z",
+      "visits": 0,
+      "text": "A 200. boltunk a Budaörsi úton, Budapest nyugati kapujánál, mely korábban autószalon volt, most mégis kompromisszumok nélkül biztosítja a kiemelkedő vásárlói élményt.\r\n",
+      "tags": [
+        "Szupermarket"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T18:02:05.000Z"
+    },
+    {
+      "ID": 50,
+      "name": "Dm",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:02:20.000Z",
+      "visits": 0,
+      "text": "Széles áruválaszték, modern családbarát környezet, vevőorientált munkatársak jellemzik a 434. dm üzletet, ahol a család minden tagja megtalálja, amire szüksége van legyen szó szépségápolásról, babaápolásról, a háztartásról, vagy akár az egészséges életmódról.\r\n",
+      "tags": [
+        "Drogéria"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T18:02:20.000Z"
+    },
+    {
+      "ID": 51,
+      "name": "WhiskyNet",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:02:43.000Z",
+      "visits": 0,
+      "text": "A GoodSpirit Shop Árkád hiánypótló üzlet Budapest ezen lokációjában, ahol a széles prémium italkínálat és a szakértő eladók mellett frissülő akciók, nyereményjátékok, kóstolási lehetőségek is várják a vendégeket.\r\n",
+      "tags": [
+        "Szakbolt",
+        "Online"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T18:02:43.000Z"
+    },
+    {
+      "ID": 52,
+      "name": "Vitamin Szalon",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:03:06.000Z",
+      "visits": 0,
+      "text": "Minőségi, magyar, ellenőrzött és nagyon friss! A 3+1 fő elv, mely az újszegedi Vitamin Szalon és Lipóti Pékség alapgondolata. Az idén 10 éves Vitamin Szalon Kft. tavaly mert nagyot álmodni és ötvözött két üzleti modellt, így megvalósítva a franchise a franchise-ban koncepciót.\r\n",
+      "tags": [
+        "Szakbolt"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T18:03:06.000Z"
+    },
+    {
+      "ID": 53,
+      "name": "Tibu Dohánybolt",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:03:34.000Z",
+      "visits": 0,
+      "text": "Egy üzlet, ami, más mint a többi. Ami több, mint dohánybolt.\r\n",
+      "tags": [
+        "Dohánybolt"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T18:03:34.000Z"
+    },
+    {
+      "ID": 54,
+      "name": "Rossmann",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:03:58.000Z",
+      "visits": 0,
+      "text": "Online Drogériánkban jelenleg évi 500 ezer rendelést bonyolítunk, ami évről-évre növekszik. Mi vagyunk Magyarország 16. legnagyobb webshopja, drogériák közül pedig a piacvezetők online.\r\n",
+      "tags": [
+        "Drogéria",
+        "Online",
+        "Díjnyertes"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T18:03:58.000Z"
+    },
+    {
+      "ID": 55,
+      "name": "Futureal Prime Properties One",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:04:17.000Z",
+      "visits": 0,
+      "text": "Az újgenerációs, okos és környezetbarát Etele Plaza kiemelkedő termékkínálattal, egyedülálló látványvilággal, digitális és építészeti megoldásokkal újragondolta a bevásárlás és a szórakozás élményét.\r\n",
+      "tags": [
+        "Bevásárlóközpont"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T18:04:17.000Z"
+    },
+    {
+      "ID": 56,
+      "name": "Köki",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:04:38.000Z",
+      "visits": 0,
+      "text": "KÖKI - Bringapont: 0-24 órás hiánypótló kerékpártároló a biztonság és kényelem jegyében.\r\n",
+      "tags": [
+        "Bevásárlóközpont"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T18:04:38.000Z"
+    },
+    {
+      "ID": 57,
+      "name": "MediaMarkt",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:04:59.000Z",
+      "visits": 0,
+      "text": "MediaMarkt Magyarország Kft. széles választékot kínál a legújabb elektronikai és háztartási készülékekből, modern bemutatótermekkel és versenyképes árakkal, biztosítva a vásárlók elégedettségét.\r\n",
+      "tags": [
+        "Elektronikai áruház",
+        "Online"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T18:04:59.000Z"
+    },
+    {
+      "ID": 58,
+      "name": "Libri",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:05:17.000Z",
+      "visits": 0,
+      "text": "Libri Könyvesbolt a magyar könyvpiac meghatározó szereplője, inspiráló környezetben, széles irodalmi kínálattal és modern szolgáltatásokkal várja a könyvrajongókat.\r\n",
+      "tags": [
+        "Könyvesbolt"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T18:05:17.000Z"
+    },
+    {
+      "ID": 59,
+      "name": "ALDI",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:05:39.000Z",
+      "visits": 0,
+      "text": "Az ALDI Európában is egyedülálló pékáru termékfejlesztést hajtott végre Magyarországon, továbbá számos innovációval arra törekszik, hogy vásárlói számára a legkiválóbb pékáru élményben legyen részük - az ország bármely ALDI áruházába is térjenek be.\r\n",
+      "tags": [
+        "Szupermarket",
+        "Díjnyertes"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T18:05:39.000Z"
+    },
+    {
+      "ID": 60,
+      "name": "Auchan",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:06:03.000Z",
+      "visits": 0,
+      "text": "Auchan Magyarország 24 áruházzal és országosan elérhető online kereskedelemmel várja a vásárlókat, hogy egyedi és felelős kínálatán keresztül magas minőségű, helyi és egészséges termékekkel tegye jobbá vásárlói mindennapjait.\r\n",
+      "tags": [
+        "Díjnyertes",
+        "Szupermarket"
+      ],
+      "topic_ID": 3,
+      "updatedAt": "2025-03-18T18:06:03.000Z"
+    },
+    {
+      "ID": 61,
+      "name": "Városligeti Nagyjátszótér",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:14:55.000Z",
+      "visits": 0,
+      "text": "Budapest legnagyobb, 2019-ben átadott játszótere a Városligetben egy igazi gyerekparadicsom. Nemcsak azért szeretjük, mert könnyen megközelíthető, hanem különböző korú gyerekekkel is jó választás. Ritka az olyan hely, ahol a totyogó és a kiskamasz egyaránt jól érzi magát. Központi eleme a Szinyei Merse Pál Léghajó című festménye ihlette mászóka, de találtok még többek között sebességmérős csúszdát, óriási mászókarendszert és forgójátékokat is. Nyáron lehet sarazni, homokozni is vagy a párát fújó kövek szomszédságában ücsörögni. Közvetlen szomszédságában találjátok a Léghajó KERT-et, ahol finom szendvicsek, kávék, csavart fagyi, sőt napi menü is kapható. Érdemes az idén átadott Mőcsényi Mihály botanikus kertben is sétálni egyet, felfedezni a szintén a közelben található új, madárbarát ösvényt vagy a Városligeti Sportcentrumot  – már ha a gyerekek hajlandóak lesznek a játszótérről elindulni...\r\n",
+      "tags": [
+        "Ctype",
+        "0-5 Év",
+        "Kültéri",
+        "Csúszda",
+        "Biztonságos"
+      ],
+      "topic_ID": 4,
+      "updatedAt": "2025-03-18T18:14:55.000Z"
+    },
+    {
+      "ID": 62,
+      "name": "Muzi",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:15:23.000Z",
+      "visits": 0,
+      "text": "A Múzeumkert századfordulós hangulatát idéző játszótér ránézésre is szemet gyönyörködtető. Molnár Ferenc A Pál utcai fiúk és Pásztor Árpád A Muzi című könyvének világa is visszaköszön az ASAPA Műhely által készített játékokban. Találtok itt lóvasutat, golyópályát és működő verklit, illetve gőzfűrészüzem ihlette csúszdás mászókát. 2021 nyarán pedig – szintén a Múzeumkertben – megnyílt az Auguszt cukrászda Geraldine nevű egysége, ahol érdemes egy finom fagyival megkoronázni a játszóteres napot. Ha a legmelegebb órákat inkább a hűvösben töltenétek, akkor a Magyar Nemzeti Múzeumban felfedező-hátizsák is bérelhető, amellyel bebarangolhatjátok a kiállítások hűs termeit.\r\n",
+      "tags": [
+        "6-12 Év",
+        "Mászóka",
+        "Homokozó",
+        "Zöldterület",
+        "Beltéri"
+      ],
+      "topic_ID": 4,
+      "updatedAt": "2025-03-18T18:15:23.000Z"
+    },
+    {
+      "ID": 63,
+      "name": "Gellért-hegyi csúszdapark",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:16:12.000Z",
+      "visits": 0,
+      "text": "Egy 50 éves játszótér újult meg 2017-ben a Gellért-hegyen, amely évtizedek óta gyerekzsivajjal telik meg nap mint nap. Találtok itt egyenes és kanyargós csúszdát, rövid és nagyon hosszú csúszdát, de hinták, mászótorony, kis homokozó is van. A játszótér egy kis sétával könnyen elérhető a Gellért térről. Nagyon meleg időben érdemes inkább a reggeli vagy a késő délutáni órákban felkeresni, mert a fémből készült csúszdák hamar felforrósodnak.",
+      "tags": [
+        "Ctype",
+        "0-5 Év",
+        "6-12 Év",
+        "Vízi Játszótér",
+        "Kalandpark"
+      ],
+      "topic_ID": 4,
+      "updatedAt": "2025-03-18T18:16:12.000Z"
+    },
+    {
+      "ID": 64,
+      "name": "Margitszigeti Pólós játszótér",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:16:55.000Z",
+      "visits": 0,
+      "text": "Ha a Margitszigeten jártok, a vadaspark, a japánkert, a zenélő szökőkút és a Palatinus strand mellett mindenképp próbáljátok ki a Pólós játszóteret, amelyet a 2017-es vizes vb során adtak át. A Hajós Alfréd Nemzeti Sportuszoda mellett, a fák között megbújva, egy kondipark mögött találjátok ezt a játszóteret – szuper várral, dimbes-dombos csúszdázós helyekkel, mászókákkal, rugós játékokkal és homokozóval.\r\n",
+      "tags": [
+        "Mászóka",
+        "Csúszda",
+        "Homokozó",
+        "Multifunkcionális"
+      ],
+      "topic_ID": 4,
+      "updatedAt": "2025-03-18T18:16:55.000Z"
+    },
+    {
+      "ID": 65,
+      "name": "Rumini játszótér",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:17:39.000Z",
+      "visits": 0,
+      "text": "Nincs olyan kisiskolás, aki ne hallott volna Berg Judit töretlen népszerűségnek örvendő Rumini-sorozatáról, amely már társasjáték, színházi előadás, sőt játszótér formájában is megtalálható. A Batthyány tértől a Battyhány utcán felfelé 10 percnyi sétára találjátok Egérvárost, ahol a regény szereplői és jelenetei is megelevenednek. A játszóteret az idei évben felújították, nyilvános mosdó is épült. Rumini, Balikó és Galléros Fecó (a regény hősei) pedig biztos megkóstolnák a szomszédban található Pékműhely és a Kedveskrém finomságait, éppen úgy, ahogy mi sem hagyjuk ki, ha arra járunk.\r\n",
+      "tags": [
+        "Beltéri",
+        "Kalandpark",
+        "Vízi Játszótér",
+        "Zöldterület",
+        "Biztonságos"
+      ],
+      "topic_ID": 4,
+      "updatedAt": "2025-03-18T18:17:39.000Z"
+    },
+    {
+      "ID": 66,
+      "name": "Mesejátszóterek - Vuk, Szaffi és Pom Pom",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:18:16.000Z",
+      "visits": 0,
+      "text": "Néhány évvel ezelőtt nagyon divatosak voltak a mesehősjátszóterek, sorra nyíltak a városban a klasszikus magyar rajzfilmek ihlette terek, amelyeket a mostani gyerekek is nagyon szeretnek. A Vuk játszóteret a Gellérthegyen, a Bérc utcában; a Pom Pom játszóteret a Naphegy téren, a picike pedig a budai Vár aljában, a Csónak utcában találjátok.\r\n",
+      "tags": [
+        "Ctype",
+        "0-5 Év",
+        "6-12 Év",
+        "Beltéri",
+        "Multifunkcionális",
+        "Kalandpark"
+      ],
+      "topic_ID": 4,
+      "updatedAt": "2025-03-18T18:18:16.000Z"
+    },
+    {
+      "ID": 67,
+      "name": "Benczúr-kert",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:18:41.000Z",
+      "visits": 0,
+      "text": "Kő Boldizsár szobrászművész és csapata álmodott egy mesejátszóteret az amúgy is varázslatos Benczúr-kertbe. A kert közepén álló hatalmas platánfát egy fából készült meseváros öleli körbe. A mi kedvencünk a pici faházban ücsörgő róka, nyúl és medve volt, akiknek homoksütit is készíthettek, de nagy sikert aratott a mászókarendszer, a kis dombos csúszda, a homokozó közepén található, rugós hajó és a minifocipálya is. A játszótéren mosdót is találtok.",
+      "tags": [
+        "Mászóka",
+        "0-5 Év",
+        "Beltéri",
+        "Multifunkcionális"
+      ],
+      "topic_ID": 4,
+      "updatedAt": "2025-03-18T18:18:41.000Z"
+    },
+    {
+      "ID": 68,
+      "name": "Kalózos játszótér – Csepel",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:18:57.000Z",
+      "visits": 0,
+      "text": "Melyik gyerek ne vágyna arra, hogy egy kalózhajón csatába induljon? Szerencsére a csepeli játszótéren semmilyen veszély nem fenyegeti a kis kalózokat és kalózlányokat, de van itt szuper polipos homokozó is, mászóka csúszdákkal, hinták és a csodás Duna-part hattyúkkal, kacsákkal, valamint a Kolonics György sétánnyal. A Molnár-szigetre egy menetrend szerinti komp is átmegy (3 perc sétára található a játszótértől), amely BKK-bérlettel is használható. Érdemes kipróbálni. Ha pedig inkább lovagok és hercegnők bőrébe bújnátok, érdemes a szintén csepeli Rákóczi-kertben található játszóteret is felkeresni.\r\n",
+      "tags": [
+        "6-12 Év",
+        "Csúszda",
+        "Kalandpark",
+        "Vízi Játszótér",
+        "Multifunkcionális"
+      ],
+      "topic_ID": 4,
+      "updatedAt": "2025-03-18T18:18:57.000Z"
+    },
+    {
+      "ID": 69,
+      "name": "Hűvösvölgyi játszótér",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:19:19.000Z",
+      "visits": 0,
+      "text": "A város kedvelt kirándulóhelyén, a hűvösvölgyi Nagyréten idén nyáron adták át a legújabb játszóteret, amelyet az erdő állatai ihlettek. A nagyobbak sem fognak unatkozni, mert a helyszín egy 12 elemes fitneszparkkal is gazdagodott. A játékok és a sporteszközök pedig mind illeszkednek a tájba. A közelben található gyermekvasúttal összekötve akár egy egész napos kirándulást is tervezhettek a környéken, hiszen számos rövidebb és hosszabb túraútvonalat találtok, amely a környékről indul.",
+      "tags": [
+        "Multifunkcionális",
+        "Mászóka",
+        "Zöldterület"
+      ],
+      "topic_ID": 4,
+      "updatedAt": "2025-03-18T18:19:19.000Z"
+    },
+    {
+      "ID": 70,
+      "name": "Anna-rét – Normafa",
+      "user_rate": 0,
+      "critic_rate": 0,
+      "NumberOfRate_L": 0,
+      "NumberOfRate_C": 0,
+      "Likes": 0,
+      "Picture": {
+        "type": "Buffer",
+        "data": [
+          91,
+          111,
+          98,
+          106,
+          101,
+          99,
+          116,
+          32,
+          79,
+          98,
+          106,
+          101,
+          99,
+          116,
+          93
+        ]
+      },
+      "createdAt": "2025-03-18T18:19:34.000Z",
+      "visits": 0,
+      "text": "A Normafa környékén is rengeteg fejlesztés történt az elmúlt években. Jelenleg a régi parkolót alakítják át zöldterületté a 21-es busz végállomásánál, illetve egy fák közt kanyargó lombkoronaösvény is készül. Az Anna-réten néhány éve egy szuper játszótér épült mászókákkal, csúszdákkal, dupla csúszkapályával, fát szállító vonattal, hintákkal, rugós állatokkal, sőt integrált játékelemeket is találtok a helyszínen. 20 perc sétával elérhető a János-hegy és az Erzsébet-kilátó is. Az elmúlt években megújult a Normafánál található pavilonokban vagy a Normafa Delikátban pedig sok finomság kapható, és újranyitott a Normafa Síház is.\r\n",
+      "tags": [
+        "0-5 Év",
+        "6-12 Év",
+        "Ctype",
+        "Mászóka"
+      ],
+      "topic_ID": 4,
+      "updatedAt": "2025-03-18T18:19:34.000Z"
+    }
   ]
 }

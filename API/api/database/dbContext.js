@@ -95,7 +95,20 @@ const saveDataOnExit = async () => {
         }
 
         console.log("📁 Writing data to seedData.json...");
-        fs.writeFileSync(seedDataPath, JSON.stringify(seedData, null, 2), "utf-8");
+        fs.writeFileSync(
+            seedDataPath,
+            JSON.stringify(seedData, (key, value) => {
+                if (key === "tags" && typeof value === "string") {
+                    try {
+                        return JSON.parse(value); // Ha JSON string, alakítsuk át tömbbé
+                    } catch (e) {
+                        return value; // Ha nem JSON, hagyjuk változatlanul
+                    }
+                }
+                return value;
+            }, 2),
+            "utf-8"
+        );
         console.log("✅ Data successfully saved to seedData.json");
 
     } catch (error) {

@@ -4,7 +4,7 @@ export interface User {
   id: number;
   name: string;
   email: string;
-  // Bővítsd ki a szükséges mezőkkel!
+  role: string; 
 }
 
 export interface AuthState {
@@ -19,6 +19,7 @@ export const useAuthStore = defineStore('auth', {
   }),
   getters: {
     isLoggedIn: (state: AuthState): boolean => !!state.user,
+    userRole: (state: AuthState): string | null => state.user?.role || null, 
   },
   actions: {
     login(userData: User, token: string) {
