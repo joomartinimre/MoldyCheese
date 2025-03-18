@@ -274,9 +274,9 @@ const refresh = ()=>{
                 </v-list-item>
                 <v-list-item>
                   <!-- Hely feltöltő modal -->
-                  <v-dialog>
+                  <v-dialog max-width="700px">
                     <template #activator="{ props: activatorProps }">
-                      <v-btn v-bind="activatorProps" color="surface-variant" variant="text">
+                      <v-btn v-bind="activatorProps" color="primary" variant="text">
                         Új hely létrehozása
                       </v-btn>
                     </template>
@@ -292,25 +292,25 @@ const refresh = ()=>{
                             :items="topics"
                             item-title="name"
                             item-value="id"
-                            
-                            label="Válassz egy topicot"
+                            label="Válassza ki milyen helyet szeretne létrehozni"
                           ></v-select>
                           <div v-if="selectedTopic">
-                            <p>Válassz tageket:</p>
-                            <v-checkbox-group v-model="selectedTags" >
+                            <p>Válassza ki a hely jellemzőit</p>
                             <v-checkbox
                               v-for="tag in tagItems"
                               :key="tag"
                               :label="tag"
                               :value="tag"
                               @change="toggleTag(tag, $event)"
+                              hide-details
+                              variant="elevated" color="primary"
                             />
-                          </v-checkbox-group>
                           </div>
                         </v-card-text>
-                        <v-file-upload ref="fileUploadRef" @change="handleFileUpload" accept="image/*" clearable density="comfortable" variant="comfortable"></v-file-upload>
-                        <v-card-actions>
-                          <v-btn variant="text"  @click="uploadPlace">Feltöltés</v-btn>
+                        <v-file-upload title="Kép feltöltése" ref="fileUploadRef" @change="handleFileUpload" accept="image/*" clearable density="comfortable" variant="comfortable"><template #icon><v-icon variant="elevated" color="primary"></v-icon></template></v-file-upload>
+                        <v-card-actions style="padding: 24px;">
+                          <v-btn variant="text" @click="uploadPlace">Hely feltöltése</v-btn>
+                          <v-spacer></v-spacer>
                           <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
                         </v-card-actions>
                       </v-card>
