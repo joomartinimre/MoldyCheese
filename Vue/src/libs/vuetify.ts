@@ -4,9 +4,13 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import colors from 'vuetify/util/colors'
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
+import { VFileUpload } from 'vuetify/labs/components'
 
 const vuetify = createVuetify({
-  components,
+  components: {
+    ...components,
+    VFileUpload, // Itt adod hozzá a VFileUpload komponenst
+  },
   directives,
   theme: {
     themes: {

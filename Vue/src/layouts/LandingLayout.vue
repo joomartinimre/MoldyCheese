@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
 import { useAuthStore } from '@/stores/authStore';
@@ -39,6 +39,31 @@ const showVisitor = ref(true);
 const hideVisitor = () => {
   showVisitor.value = false;
 };
+
+interface Topic {
+  name: string
+  tags: string[]
+}
+
+const selectedTopic = ref<Topic | null>(null)
+const selectedTags = ref<string[]>([])
+
+const topics: Topic[] = [
+  { name: 'Iskola', tags: ["Gimnázium", "Egyetem", "Általános Iskola", "Technikum", "Gyakorló Gimnázium", "+Kollégium", "Gyakorló Általános Iskola", "Kísérleti Gimnázium", "Kísérleti Általános Iskola"] },
+  { name: 'Étterem', tags: ["Csárda", "Fine Dining", "Ínyenc", "Panzió", "Borozó", "Bisztro", "Olasz", "Bár"] },
+  { name: 'Vegyesbolt', tags: ["Sarki Bolt", "Kis Bolt", "Szupermarket", "Díjnyertes", "Drogéria", "Szakbolt", "Elektronikai áruház", "Dohánybolt", "Online", "Bevásárlóközpont", "Könyvesbolt"] },
+  { name: 'Játszótér', tags: ["Ctype", "0-5 Év", "6-12 Év", "Csúszda", "Mászóka", "Homokozó", "Kültéri", "Beltéri", "Multifunkcionális", "Vízi Játszótér", "Biztonságos", "Kalandpark", "Zöldterület"] },
+]
+
+const tagItems = computed((): string[] => {
+  return selectedTopic.value ? selectedTopic.value.tags : []
+})
+
+// Amikor a topic változik, reseteljük a kiválasztott tageket
+watch(selectedTopic, () => {
+  selectedTags.value = []
+})
+
 </script>
 
 <template>
@@ -162,6 +187,48 @@ const hideVisitor = () => {
                   <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/profile')">
                     Profil
                   </v-btn>
+                </v-list-item>
+                <v-list-item>
+                  <v-dialog>
+                    <template #activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" color="surface-variant" variant="text">
+                        Új hely létrehozása
+                      </v-btn>
+                    </template>
+
+                    <template #default="{ isActive }">
+                      <v-card>
+                        <v-card-title>Új hely létrehozása</v-card-title>
+                        <v-card-text>
+                          <v-text-field label="Adja meg a hely nevét"></v-text-field>
+                          <v-textarea label="Írjon egy leírást a helyről" variant="outlined"></v-textarea>
+                          <v-select
+                            v-model="selectedTopic"
+                            :items="topics"
+                            item-title="name"
+                            return-object
+                            label="Válassz egy topicot"
+                          ></v-select>
+                          <div v-if="selectedTopic">
+                            <p>Válassz tageket:</p>
+                            <v-checkbox-group v-model="selectedTags">
+                              <v-checkbox
+                                v-for="tag in tagItems"
+                                :key="tag"
+                                :label="tag"
+                                :value="tag"
+                              />
+                            </v-checkbox-group>
+                          </div>
+                        </v-card-text>
+                        <v-file-upload clearable density="comfortable" variant="comfortable"></v-file-upload>
+                        <v-card-actions>
+                          <v-btn variant="text">Feltöltés</v-btn>
+                          <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </template>
+                  </v-dialog>
                 </v-list-item>
               </template>
             </v-list>
