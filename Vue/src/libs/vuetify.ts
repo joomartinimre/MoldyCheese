@@ -9,7 +9,7 @@ import { VFileUpload } from 'vuetify/labs/components'
 const vuetify = createVuetify({
   components: {
     ...components,
-    VFileUpload, // Itt adod hozzá a VFileUpload komponenst
+    VFileUpload,
   },
   directives,
   theme: {
@@ -17,8 +17,8 @@ const vuetify = createVuetify({
       light: {
         dark: false,
         colors: {
-          primary: colors.brown.darken1, // #E53935
-          secondary: colors.red.lighten4, // #FFCDD2
+          primary: colors.brown.darken1,
+          secondary: colors.red.lighten4,
           background: colors.yellow.lighten5,
           error: colors.yellow.lighten5,
           info: colors.yellow.lighten5,

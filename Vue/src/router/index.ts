@@ -1,6 +1,5 @@
 import LandingLayout from '@/layouts/LandingLayout.vue'
 import AboutUsView from '@/views/AboutUsView.vue'
-import ApplyView from '@/views/ApplyView.vue'
 import HomePage from '@/views/HomePage.vue'
 import LoginView from '@/views/LoginView.vue'
 import PlaceView from '@/views/PlaceView.vue'
@@ -34,11 +33,6 @@ const router = createRouter({
         path: '/registration',
         name: 'registration',
         component: RegistrationView,
-      },
-      {
-        path: '/apply',
-        name: 'apply',
-        component: ApplyView,
       },
       {
         path: '/playground',
