@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./api/routes/AuthRoutes");
 const commentRoutes = require("./api/routes/CommentRoutes");
 const ratingRoutes = require("./api/routes/RatingRoutes");
+const placeRoutes = require("./api/routes/PlaceRoutes");
 require("dotenv").config();
 
 
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/comment",commentRoutes)
 app.use("/api/rating", ratingRoutes);
+app.use("/api/place", placeRoutes)
 
 require("./api/database/dbContext");
 

@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER 
             },
             Picture: {
-                type: DataTypes.STRING(255),
+                type: DataTypes.BLOB("long"),
                 allowNull: false
             },
             createdAt: {

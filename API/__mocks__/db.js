@@ -19,17 +19,23 @@ db.Topic = sequelize.define("Topic", {
 }, { timestamps: false });
 
 db.Place = sequelize.define("Place", {
+    name: { type: DataTypes.STRING(255), allowNull: false },  // NÉV HOZZÁADVA
     topic_ID: { 
         type: DataTypes.INTEGER, 
         allowNull: false,
         references: { model: db.Topic, key: "id" }
     },
-    user_rate: { type: DataTypes.INTEGER },
-    critic_rate: { type: DataTypes.INTEGER },
-    createdAt: { type: DataTypes.DATE, allowNull: false },
-    visits: { type: DataTypes.INTEGER },
-    location: { type: DataTypes.STRING(255) },
-    text: { type: DataTypes.STRING(255) }
+    user_rate: { type: DataTypes.INTEGER, defaultValue: 0 },
+    critic_rate: { type: DataTypes.INTEGER, defaultValue: 0 },
+    NumberOfRate_L: { type: DataTypes.INTEGER, defaultValue: 0 },  // HOZZÁADVA
+    NumberOfRate_C: { type: DataTypes.INTEGER, defaultValue: 0 },  // HOZZÁADVA
+    Likes: { type: DataTypes.INTEGER, defaultValue: 0 },  // HOZZÁADVA
+    Picture: { type: DataTypes.BLOB("long"), allowNull: false },  // BLOB HOZZÁADVA
+    tags: { type: DataTypes.JSON, allowNull: true, defaultValue: [] },  // TAGS HOZZÁADVA
+    createdAt: { type: DataTypes.DATE, allowNull: false, defaultValue: Sequelize.NOW },
+    updatedAt: { type: DataTypes.DATE, allowNull: false, defaultValue: Sequelize.NOW },
+    visits: { type: DataTypes.INTEGER, defaultValue: 0 },  // Alapértelmezett érték megadva
+    text: { type: DataTypes.STRING(255), allowNull: false }
 }, { timestamps: true });
 
 db.Comment = sequelize.define("Comment", {
@@ -45,8 +51,30 @@ db.Place.belongsTo(db.Topic, { foreignKey: "topic_ID" });
 db.Place.hasMany(db.Comment, { foreignKey: "place_ID" });
 db.Comment.belongsTo(db.Place, { foreignKey: "place_ID" });
 
+db.Rating = sequelize.define("Rating", {
+    user_ID: { 
+        type: DataTypes.INTEGER, 
+        allowNull: false,
+        references: { model: db.User, key: "id" }
+    },
+    place_ID: { 
+        type: DataTypes.INTEGER, 
+        allowNull: false,
+        references: { model: db.Place, key: "id" }
+    },
+    rating: { 
+        type: DataTypes.INTEGER, 
+        allowNull: false 
+    }
+}, { timestamps: false });
+
+db.User.hasMany(db.Rating, { foreignKey: "user_ID" });
+db.Place.hasMany(db.Rating, { foreignKey: "place_ID" });
+db.Rating.belongsTo(db.User, { foreignKey: "user_ID" });
+db.Rating.belongsTo(db.Place, { foreignKey: "place_ID" });
+
 async function initializeMockData() {
-    await db.sequelize.sync({ force: true });3
+    await db.sequelize.sync({ force: true });  // Felesleges '3' törölve
     const defaultTopic = await db.Topic.create({ name: "Default Test Topic" });
     return defaultTopic;
 }
