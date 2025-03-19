@@ -22,12 +22,6 @@ const handleLogout = () => {
   navigateTo('/');
 };
 
-const links = [
-  { label: 'Főoldal', path: '/' },
-  { label: 'Rólunk', path: '/aboutUs' },
-  { label: 'Jelentkezz kritikusnak!', path: '/Apply' },
-];
-
 const items = [
   { title: "Iskolák", path: "/school" },
   { title: "Éttermek", path: "/restaurant" },
@@ -57,6 +51,8 @@ const topics: Topic[] = [
   {id: 3, name: 'Vegyesbolt', tags: ["Sarki Bolt", "Kis Bolt", "Szupermarket", "Díjnyertes", "Drogéria", "Szakbolt", "Elektronikai áruház", "Dohánybolt", "Online", "Bevásárlóközpont", "Könyvesbolt"] },
   {id: 4, name: 'Játszótér', tags: ["Ctype", "0-5 Év", "6-12 Év", "Csúszda", "Mászóka", "Homokozó", "Kültéri", "Beltéri", "Multifunkcionális", "Vízi Játszótér", "Biztonságos", "Kalandpark", "Zöldterület"] },
 ]
+
+const roles = ['Étterem kritikus','Játszóter szakértő','Iskológus','Vegyesbolt vegyész']
 
 const selectedTopic = ref<number | null>(null);
 const selectedTags = ref<string[]>([]);
@@ -208,6 +204,80 @@ const refresh = ()=>{
                   Profil
                 </v-btn>
               </v-list-item>
+              <v-list-item>
+                  <v-dialog max-width="700px">
+                    <template #activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" color="primary" variant="text">
+                        Jelentkezz kritikusnak!
+                      </v-btn>
+                    </template>
+
+                    <template #default="{ isActive }">
+                      <v-card>
+                        <v-card-title>Kritikus űrlap</v-card-title>
+                        <v-card-text>
+                          <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
+                          <v-select
+                            :items="roles"
+                            item-title="name"
+                            item-value="id"
+                            label="Válassza ki kritikusi szerepkörét"
+                          ></v-select>
+                        </v-card-text>
+                        <v-card-actions style="padding: 24px;">
+                          <v-btn variant="text">Űrlap elküldése</v-btn>
+                          <v-spacer></v-spacer>
+                          <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+                </v-list-item>
+                <v-list-item>
+                  <!-- Hely feltöltő modal -->
+                  <v-dialog max-width="700px">
+                    <template #activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" color="primary" variant="text">
+                        Új hely létrehozása
+                      </v-btn>
+                    </template>
+
+                    <template #default="{ isActive }">
+                      <v-card>
+                        <v-card-title>Új hely létrehozása</v-card-title>
+                        <v-card-text>
+                          <v-text-field v-model="placeName" label="Adja meg a hely nevét" required></v-text-field>
+                          <v-textarea v-model="description" label="Írjon egy leírást a helyről" variant="outlined" required></v-textarea>
+                          <v-select
+                            v-model="selectedTopic"
+                            :items="topics"
+                            item-title="name"
+                            item-value="id"
+                            label="Válassza ki milyen helyet szeretne létrehozni"
+                          ></v-select>
+                          <div v-if="selectedTopic">
+                            <p>Válassza ki a hely jellemzőit</p>
+                            <v-checkbox
+                              v-for="tag in tagItems"
+                              :key="tag"
+                              :label="tag"
+                              :value="tag"
+                              @change="toggleTag(tag, $event)"
+                              hide-details
+                              variant="elevated" color="primary"
+                            />
+                          </div>
+                        </v-card-text>
+                        <v-file-upload title="Kép feltöltése" ref="fileUploadRef" @change="handleFileUpload" accept="image/*" clearable density="comfortable" variant="comfortable"><template #icon><v-icon variant="elevated" color="primary"></v-icon></template></v-file-upload>
+                        <v-card-actions style="padding: 24px;">
+                          <v-btn variant="text" @click="uploadPlace">Hely feltöltése</v-btn>
+                          <v-spacer></v-spacer>
+                          <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+                </v-list-item>
             </template>
           </v-list>
         </v-menu>
@@ -317,6 +387,35 @@ const refresh = ()=>{
                     </template>
                   </v-dialog>
                 </v-list-item>
+                <v-list-item>
+                  <v-dialog max-width="700px">
+                    <template #activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" color="primary" variant="text">
+                        Jelentkezz kritikusnak!
+                      </v-btn>
+                    </template>
+
+                    <template #default="{ isActive }">
+                      <v-card>
+                        <v-card-title>Kritikus űrlap</v-card-title>
+                        <v-card-text>
+                          <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
+                          <v-select
+                            :items="roles"
+                            item-title="name"
+                            item-value="id"
+                            label="Válassza ki kritikusi szerepkörét"
+                          ></v-select>
+                        </v-card-text>
+                        <v-card-actions style="padding: 24px;">
+                          <v-btn variant="text">Űrlap elküldése</v-btn>
+                          <v-spacer></v-spacer>
+                          <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+                </v-list-item>
               </template>
             </v-list>
           </v-menu>
@@ -348,16 +447,35 @@ const refresh = ()=>{
     <v-navigation-drawer location="bottom" :mobile="false">
       <v-footer class="bg-yellow-darken-1">
         <v-row justify="center" no-gutters>
-          <v-btn
-            v-for="link in links"
-            :key="link.label"
-            class="mx-2"
-            color="primary"
-            variant="text"
-            @click="navigateTo(link.path)"
-          >
-            {{ link.label }}
-          </v-btn>
+          <v-btn @click="navigateTo('/')" class="mx-2" color="primary" variant="text">Főoldal</v-btn>
+          <v-btn @click="navigateTo('/aboutUs')" class="mx-2" color="primary" variant="text">Rólunk</v-btn>
+          <v-dialog max-width="700px">
+              <template #activator="{ props: activatorProps }">
+                <v-btn v-bind="activatorProps" color="primary" variant="text">
+                  Jelentkezz kritikusnak!
+                </v-btn>
+              </template>
+
+              <template #default="{ isActive }">
+                <v-card>
+                  <v-card-title>Kritikus űrlap</v-card-title>
+                  <v-card-text>
+                    <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
+                    <v-select
+                      :items="roles"
+                      item-title="name"
+                      item-value="id"
+                      label="Válassza ki kritikusi szerepkörét"
+                    ></v-select>
+                  </v-card-text>
+                  <v-card-actions style="padding: 24px;">
+                    <v-btn variant="text">Űrlap elküldése</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </template>
+            </v-dialog>
         </v-row>
       </v-footer>
     </v-navigation-drawer>
