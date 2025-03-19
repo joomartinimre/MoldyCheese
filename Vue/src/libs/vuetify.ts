@@ -22,9 +22,9 @@ const vuetify = createVuetify({
           background: colors.yellow.lighten5,
           error: colors.yellow.lighten5,
           info: colors.yellow.lighten5,
-          success: colors.yellow.lighten5,
+          success: colors.lightGreen.darken4,
           surface: colors.yellow.darken1,
-          warning: colors.yellow.lighten5
+          warning: colors.deepOrange.darken4
         }
       },
     },
