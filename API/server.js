@@ -4,6 +4,7 @@ const authRoutes = require("./api/routes/AuthRoutes");
 const commentRoutes = require("./api/routes/CommentRoutes");
 const ratingRoutes = require("./api/routes/RatingRoutes");
 const placeRoutes = require("./api/routes/PlaceRoutes");
+const RoleRequestRoutes = require("./api/routes/RoleRequestRoutes");
 require("dotenv").config();
 
 
@@ -23,6 +24,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/comment",commentRoutes)
 app.use("/api/rating", ratingRoutes);
 app.use("/api/place", placeRoutes)
+app.use("/api/request", RoleRequestRoutes)
 
 require("./api/database/dbContext");
 

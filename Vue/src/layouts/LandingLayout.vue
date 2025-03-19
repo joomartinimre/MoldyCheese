@@ -52,7 +52,7 @@ const topics: Topic[] = [
   {id: 4, name: 'Játszótér', tags: ["Ctype", "0-5 Év", "6-12 Év", "Csúszda", "Mászóka", "Homokozó", "Kültéri", "Beltéri", "Multifunkcionális", "Vízi Játszótér", "Biztonságos", "Kalandpark", "Zöldterület"] },
 ]
 
-const roles = ['Étterem kritikus','Játszóter szakértő','Iskológus','Vegyesbolt vegyész']
+const roles = ['Étterem kritikus','Játszótér szakértő','Iskológus','Vegyesbolt vegyész']
 
 const selectedTopic = ref<number | null>(null);
 const selectedTags = ref<string[]>([]);
@@ -104,6 +104,57 @@ formData.forEach((value, key) => {
   } catch (error) {
     alert('Hiba történt a feltöltés során.');
     console.error(error);
+  }
+};
+const selectedRole = ref('');
+
+const sendRoleRequest = async () => {
+  if (!description.value || !selectedRole.value) {
+    alert('Minden mező kitöltése kötelező!');
+    return;
+  }
+
+  const userId = authStore.user?.ID;
+  if (!userId) {
+    alert('Nem vagy bejelentkezve!');
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:3000/api/request/requests', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        reason: description.value,
+        requested_role: selectedRole.value,
+      }),
+    });
+
+    const responseData = await response.json();
+
+    if (!response.ok) {
+      throw new Error(responseData.error || 'Hiba történt a jelentkezés során');
+    }
+
+    alert('Sikeresen jelentkeztél kritikusként!');
+    isActive.value = false;
+    description.value = '';
+    selectedRole.value = '';
+  } catch (error) {
+    let errorMessage = 'Hiba történt a beküldés során.';
+
+    // Ellenőrizzük, hogy a hiba egy objektum-e és van-e benne "message" kulcs
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === 'object' && error !== null && 'message' in error) {
+      errorMessage = String(error.message);
+    }
+
+    alert(errorMessage);
+    console.error('Beküldési hiba:', error);
   }
 };
 
@@ -219,13 +270,14 @@ const refresh = ()=>{
                           <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
                           <v-select
                             :items="roles"
+                            v-model="selectedRole"
                             item-title="name"
                             item-value="id"
                             label="Válassza ki kritikusi szerepkörét"
                           ></v-select>
                         </v-card-text>
                         <v-card-actions style="padding: 24px;">
-                          <v-btn variant="text">Űrlap elküldése</v-btn>
+                          <v-btn variant="text" @click="sendRoleRequest">Űrlap elküldése</v-btn>
                           <v-spacer></v-spacer>
                           <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
                         </v-card-actions>
