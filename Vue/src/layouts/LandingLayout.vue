@@ -195,6 +195,49 @@ const refresh = ()=>{
     fileUploadRef.value.$forceUpdate;
   }
 }
+
+const desserts =  [
+  {
+    name: 'Frozen Yogurt',
+    calories: 159,
+  },
+  {
+    name: 'Ice cream sandwich',
+    calories: 237,
+  },
+  {
+    name: 'Eclair',
+    calories: 262,
+  },
+  {
+    name: 'Cupcake',
+    calories: 305,
+  },
+  {
+    name: 'Gingerbread',
+    calories: 356,
+  },
+  {
+    name: 'Jelly bean',
+    calories: 375,
+  },
+  {
+    name: 'Lollipop',
+    calories: 392,
+  },
+  {
+    name: 'Honeycomb',
+    calories: 408,
+  },
+  {
+    name: 'Donut',
+    calories: 452,
+  },
+  {
+    name: 'KitKat',
+    calories: 518,
+  },
+]
 </script>
 
 <template>
@@ -264,6 +307,7 @@ const refresh = ()=>{
                     </template>
 
                     <template #default="{ isActive }">
+                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
                       <v-card>
                         <v-card-title>Kritikus űrlap</v-card-title>
                         <v-card-text>
@@ -274,12 +318,11 @@ const refresh = ()=>{
                             item-title="name"
                             item-value="id"
                             label="Válassza ki kritikusi szerepkörét"
+                            hide-details
                           ></v-select>
                         </v-card-text>
-                        <v-card-actions style="padding: 24px;">
-                          <v-btn variant="text" @click="sendRoleRequest">Űrlap elküldése</v-btn>
-                          <v-spacer></v-spacer>
-                          <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
+                        <v-card-actions style="padding: 24px; justify-content: flex-start;">
+                          <v-btn variant="elevated" color="primary" class="text-surface" @click="sendRoleRequest">Űrlap elküldése</v-btn>
                         </v-card-actions>
                       </v-card>
                     </template>
@@ -295,6 +338,7 @@ const refresh = ()=>{
                     </template>
 
                     <template #default="{ isActive }">
+                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
                       <v-card>
                         <v-card-title>Új hely létrehozása</v-card-title>
                         <v-card-text>
@@ -306,9 +350,10 @@ const refresh = ()=>{
                             item-title="name"
                             item-value="id"
                             label="Válassza ki milyen helyet szeretne létrehozni"
+                            hide-details
                           ></v-select>
                           <div v-if="selectedTopic">
-                            <p>Válassza ki a hely jellemzőit</p>
+                            <h4 style="padding: 10px;">Válassza ki a hely jellemzőit</h4>
                             <v-checkbox
                               v-for="tag in tagItems"
                               :key="tag"
@@ -321,11 +366,76 @@ const refresh = ()=>{
                           </div>
                         </v-card-text>
                         <v-file-upload title="Kép feltöltése" ref="fileUploadRef" @change="handleFileUpload" accept="image/*" clearable density="comfortable" variant="comfortable"><template #icon><v-icon variant="elevated" color="primary"></v-icon></template></v-file-upload>
-                        <v-card-actions style="padding: 24px;">
-                          <v-btn variant="text" @click="uploadPlace">Hely feltöltése</v-btn>
-                          <v-spacer></v-spacer>
-                          <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
+                        <v-card-actions style="padding: 24px; justify-content: flex-start;">
+                          <v-btn variant="elevated" color="primary" class="text-surface" @click="uploadPlace">Hely feltöltése</v-btn>
                         </v-card-actions>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+                </v-list-item>
+                <v-list-item>
+                  <v-dialog max-width="700px">
+                    <template #activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" color="primary" variant="text">
+                        Jelentkezések
+                      </v-btn>
+                    </template>
+                    
+                    <template #default="{ isActive }">
+                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
+                      <v-card>
+                        <v-card-title>Kritikusi jelentkező űrlapok</v-card-title>
+                        <v-card-text>
+                          <v-table>
+                            <thead>
+                              <tr>
+                                <th class="text-left">
+                                <h3>Felhasználónév</h3>
+                                </th>
+                                <th class="text-right">
+                                  <h3>Űrlapok</h3>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="item in desserts" :key="item.name">
+                                <td>{{ item.name }}</td>
+                                <td class="text-right">
+                                  <v-dialog max-width="700px">
+                                    <template #activator="{ props: activatorProps }">
+                                      <v-btn v-bind="activatorProps" variant="elevated" color="primary" class="text-surface">
+                                        Űrlap megtekintése
+                                      </v-btn>
+                                    </template>
+                                    
+                                    <template #default="{ isActive }">
+                                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
+                                      <v-card>
+                                        <v-card-title>{{item.name}} űrlapja</v-card-title>
+                                        <v-card-text>
+                                          <div>
+                                            <h4>Indoklás</h4>
+                                            <p style="padding-left: 20px; padding-right: 20px;">leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...</p>
+                                          </div>
+                                          <br>
+                                          <div>
+                                            <h4>Szerepköre:</h4>
+                                            <p>Ételkritikus</p>
+                                          </div>
+                                        </v-card-text>
+                                        <v-card-actions style="padding: 24px; justify-content: flex-start;">
+                                          <v-btn variant="elevated" color="warning" class="text-surface">Elutasítás</v-btn>
+                                          <v-spacer></v-spacer>
+                                          <v-btn variant="elevated" color="success" class="text-surface">Elfogadás</v-btn>
+                                        </v-card-actions>
+                                      </v-card>
+                                    </template>
+                                  </v-dialog>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </v-table>
+                        </v-card-text>
                       </v-card>
                     </template>
                   </v-dialog>
@@ -404,6 +514,7 @@ const refresh = ()=>{
                     </template>
 
                     <template #default="{ isActive }">
+                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
                       <v-card>
                         <v-card-title>Új hely létrehozása</v-card-title>
                         <v-card-text>
@@ -415,9 +526,10 @@ const refresh = ()=>{
                             item-title="name"
                             item-value="id"
                             label="Válassza ki milyen helyet szeretne létrehozni"
+                            hide-details
                           ></v-select>
                           <div v-if="selectedTopic">
-                            <p>Válassza ki a hely jellemzőit</p>
+                            <h4 style="padding: 10px;">Válassza ki a hely jellemzőit</h4>
                             <v-checkbox
                               v-for="tag in tagItems"
                               :key="tag"
@@ -430,10 +542,8 @@ const refresh = ()=>{
                           </div>
                         </v-card-text>
                         <v-file-upload title="Kép feltöltése" ref="fileUploadRef" @change="handleFileUpload" accept="image/*" clearable density="comfortable" variant="comfortable"><template #icon><v-icon variant="elevated" color="primary"></v-icon></template></v-file-upload>
-                        <v-card-actions style="padding: 24px;">
-                          <v-btn variant="text" @click="uploadPlace">Hely feltöltése</v-btn>
-                          <v-spacer></v-spacer>
-                          <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
+                        <v-card-actions style="padding: 24px; justify-content: flex-start;">
+                          <v-btn variant="elevated" color="primary" class="text-surface" @click="uploadPlace">Hely feltöltése</v-btn>
                         </v-card-actions>
                       </v-card>
                     </template>
@@ -448,6 +558,7 @@ const refresh = ()=>{
                     </template>
 
                     <template #default="{ isActive }">
+                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
                       <v-card>
                         <v-card-title>Kritikus űrlap</v-card-title>
                         <v-card-text>
@@ -457,13 +568,79 @@ const refresh = ()=>{
                             item-title="name"
                             item-value="id"
                             label="Válassza ki kritikusi szerepkörét"
+                            hide-details
                           ></v-select>
                         </v-card-text>
-                        <v-card-actions style="padding: 24px;">
-                          <v-btn variant="text">Űrlap elküldése</v-btn>
-                          <v-spacer></v-spacer>
-                          <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
+                        <v-card-actions style="padding: 24px; justify-content: flex-start;">
+                          <v-btn variant="elevated" color="primary" class="text-surface" @click="sendRoleRequest">Űrlap elküldése</v-btn>
                         </v-card-actions>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+                </v-list-item>
+                <v-list-item>
+                  <v-dialog max-width="700px">
+                    <template #activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" color="primary" variant="text">
+                        Jelentkezések
+                      </v-btn>
+                    </template>
+                    
+                    <template #default="{ isActive }">
+                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
+                      <v-card>
+                        <v-card-title>Kritikusi jelentkező űrlapok</v-card-title>
+                        <v-card-text>
+                          <v-table>
+                            <thead>
+                              <tr>
+                                <th class="text-left">
+                                <h3>Felhasználónév</h3>
+                                </th>
+                                <th class="text-right">
+                                  <h3>Űrlapok</h3>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="item in desserts" :key="item.name">
+                                <td>{{ item.name }}</td>
+                                <td class="text-right">
+                                  <v-dialog max-width="700px">
+                                    <template #activator="{ props: activatorProps }">
+                                      <v-btn v-bind="activatorProps" variant="elevated" color="primary" class="text-surface">
+                                        Űrlap megtekintése
+                                      </v-btn>
+                                    </template>
+                                    
+                                    <template #default="{ isActive }">
+                                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
+                                      <v-card>
+                                        <v-card-title>{{item.name}} űrlapja</v-card-title>
+                                        <v-card-text>
+                                          <div>
+                                            <h4>Indoklás</h4>
+                                            <p style="padding-left: 20px; padding-right: 20px;">leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...</p>
+                                          </div>
+                                          <br>
+                                          <div>
+                                            <h4>Szerepköre:</h4>
+                                            <p>Ételkritikus</p>
+                                          </div>
+                                        </v-card-text>
+                                        <v-card-actions style="padding: 24px; justify-content: flex-start;">
+                                          <v-btn variant="elevated" color="warning" class="text-surface">Elutasítás</v-btn>
+                                          <v-spacer></v-spacer>
+                                          <v-btn variant="elevated" color="success" class="text-surface">Elfogadás</v-btn>
+                                        </v-card-actions>
+                                      </v-card>
+                                    </template>
+                                  </v-dialog>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </v-table>
+                        </v-card-text>
                       </v-card>
                     </template>
                   </v-dialog>
@@ -485,7 +662,7 @@ const refresh = ()=>{
     <!-- Visitor figyelmeztetés, X gombbal -->
     <v-container>
       <div class="visitor-container" v-if="showVisitor && !authStore.isLoggedIn && !['/login', '/registration'].includes(route.path)">
-        <button class="close-btn" @click="hideVisitor" aria-label="Bezárás">×</button>
+        <button class="close-btn-jelentkezzbe" @click="hideVisitor" aria-label="Bezárás">×</button>
         <div class="visitor">
           <strong>Kedves Látogató!</strong> Tudtad, hogy nem vagy bejelentkezve?
           <v-btn variant="elevated" color="primary" class="text-surface ma-1" @click="navigateTo('/login')">
@@ -502,32 +679,32 @@ const refresh = ()=>{
           <v-btn @click="navigateTo('/')" class="mx-2" color="primary" variant="text">Főoldal</v-btn>
           <v-btn @click="navigateTo('/aboutUs')" class="mx-2" color="primary" variant="text">Rólunk</v-btn>
           <v-dialog max-width="700px">
-              <template #activator="{ props: activatorProps }">
-                <v-btn v-bind="activatorProps" color="primary" variant="text">
-                  Jelentkezz kritikusnak!
-                </v-btn>
-              </template>
-
-              <template #default="{ isActive }">
-                <v-card>
-                  <v-card-title>Kritikus űrlap</v-card-title>
-                  <v-card-text>
-                    <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
-                    <v-select
-                      :items="roles"
-                      item-title="name"
-                      item-value="id"
-                      label="Válassza ki kritikusi szerepkörét"
-                    ></v-select>
-                  </v-card-text>
-                  <v-card-actions style="padding: 24px;">
-                    <v-btn variant="text">Űrlap elküldése</v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn variant="text" @click="isActive.value = false">Bezárás</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </template>
-            </v-dialog>
+            <template #activator="{ props: activatorProps }">
+              <v-btn v-bind="activatorProps" color="primary" variant="text">
+                Jelentkezz kritikusnak!
+              </v-btn>
+            </template>
+            
+            <template #default="{ isActive }">
+              <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
+              <v-card>
+                <v-card-title>Kritikus űrlap</v-card-title>
+                <v-card-text>
+                  <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
+                  <v-select
+                    :items="roles"
+                    item-title="name"
+                    item-value="id"
+                    label="Válassza ki kritikusi szerepkörét"
+                    hide-details
+                  ></v-select>
+                </v-card-text>
+                <v-card-actions style="padding: 24px; justify-content: flex-start;">
+                  <v-btn variant="elevated" color="primary" class="text-surface" @click="sendRoleRequest">Űrlap elküldése</v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
         </v-row>
       </v-footer>
     </v-navigation-drawer>
@@ -619,8 +796,7 @@ const refresh = ()=>{
   border: 1px solid rgb(109,76,65);
 }
 
-/* Bezáró X gomb stílusa */
-.close-btn {
+.close-btn-jelentkezzbe {
   position: absolute;
   top: -20px;
   right: -18px;
@@ -634,5 +810,21 @@ const refresh = ()=>{
   color: rgb(253,216,53);
   background-color: rgb(109,76,65);
   border-radius: 100%;
+}
+
+.close-btn-modal {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding-right: 10px;
+  padding-left: 10px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: rgb(109,76,65);
+  border-radius: 100%;
+  z-index: 1;
 }
 </style>
