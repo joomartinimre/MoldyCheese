@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import { useDisplay } from 'vuetify';
 import axios from 'axios';
 
@@ -182,6 +182,62 @@ function onTouchEnd(e: TouchEvent) {
 const goToSlide = (index: number) => {
   activeIndex.value = index;
 };
+
+// Custom slider logikája
+let currentIndex = 0;
+let updateCustomSlider: () => void;
+
+const initCustomSlider = () => {
+  const track = document.querySelector('.custom-slider-track') as HTMLElement;
+  const leftArrow = document.querySelector('.custom-arrow.custom-left') as HTMLButtonElement;
+  const rightArrow = document.querySelector('.custom-arrow.custom-right') as HTMLButtonElement;
+  const visibleCount = 7;
+
+  updateCustomSlider = () => {
+    const cards = document.querySelectorAll('.custom-card');
+    if (!cards.length) return;
+    const cardWidth = (cards[0] as HTMLElement).offsetWidth;
+    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+    const shift = currentIndex * (cardWidth + gap);
+    track.style.transform = `translateX(-${shift}px)`;
+
+    leftArrow.disabled = currentIndex === 0;
+    rightArrow.disabled = currentIndex >= cards.length - visibleCount;
+  };
+
+  leftArrow.addEventListener('click', () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateCustomSlider();
+    }
+  });
+
+  rightArrow.addEventListener('click', () => {
+    const cards = document.querySelectorAll('.custom-card');
+    if (currentIndex < cards.length - visibleCount) {
+      currentIndex++;
+      updateCustomSlider();
+    }
+  });
+
+  window.addEventListener('resize', updateCustomSlider);
+  updateCustomSlider();
+};
+
+// Várjuk meg, hogy a latestPlaces feltöltődjön, majd a DOM is frissüljön
+watch(latestPlaces, (newVal) => {
+  if (newVal.length) {
+    nextTick(() => {
+      currentIndex = 0; // alaphelyzetbe állítjuk az indexet
+      initCustomSlider();
+    });
+  }
+}, { immediate: true });
+
+onUnmounted(() => {
+  // Ha szükséges, itt távolítsd el az eseménykezelőket
+});
+
 </script>
 
 
