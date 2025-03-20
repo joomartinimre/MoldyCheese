@@ -4,6 +4,7 @@ import HomePage from '@/views/HomePage.vue'
 import LoginView from '@/views/LoginView.vue'
 import PlaceView from '@/views/PlaceView.vue'
 import PlayGroundView from '@/views/PlayGroundView.vue'
+import ProfileView from '@/views/ProfileView.vue'
 import RegistrationView from '@/views/RegistrationView.vue'
 import RestaurantView from '@/views/RestaurantView.vue'
 import SchoolView from '@/views/SchoolView.vue'
@@ -58,6 +59,11 @@ const router = createRouter({
         path: '/school',
         name: 'school',
         component: SchoolView,
+      },
+      {
+        path: '/profile',
+        name: 'profile',
+        component: ProfileView,
       },
       {
         path: '/place/:id',
