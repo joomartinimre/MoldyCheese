@@ -18,6 +18,16 @@ class RoleRequestRepository {
         });
         return !!request;
     }
+
+    async getPendingRequests() {
+        console.log("User associations:", db.User.associations);
+        console.log("RoleRequest associations:", db.RoleRequest.associations);
+
+        return await db.RoleRequest.findAll({
+            where: { status: "pending" },
+            include: [{ model: db.User, as: "User", attributes: ["userName"] }]
+        });
+    }
 }
 
 module.exports = new RoleRequestRepository();

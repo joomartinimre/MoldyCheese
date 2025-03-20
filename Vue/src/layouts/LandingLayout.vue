@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
 import { useAuthStore } from '@/stores/authStore';
@@ -7,6 +7,9 @@ import { useAuthStore } from '@/stores/authStore';
 const router = useRouter();
 const authStore = useAuthStore();
 const route = useRoute();
+const applyDialogOpen = ref(false);
+
+
 
 const isActive = ref(false);
 const placeName = ref('');
@@ -109,6 +112,7 @@ formData.forEach((value, key) => {
 const selectedRole = ref('');
 
 const sendRoleRequest = async () => {
+  console.log( description.value+ " és " + selectedRole.value) 
   if (!description.value || !selectedRole.value) {
     alert('Minden mező kitöltése kötelező!');
     return;
@@ -136,11 +140,12 @@ const sendRoleRequest = async () => {
     const responseData = await response.json();
 
     if (!response.ok) {
+      applyDialogOpen.value = false; 
       throw new Error(responseData.error || 'Hiba történt a jelentkezés során');
     }
 
     alert('Sikeresen jelentkeztél kritikusként!');
-    isActive.value = false;
+    applyDialogOpen.value = false; 
     description.value = '';
     selectedRole.value = '';
   } catch (error) {
@@ -196,48 +201,91 @@ const refresh = ()=>{
   }
 }
 
-const desserts =  [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-  },
-]
+
+
+const pendingRequests = ref<any[]>([]);
+const selectedRequest = ref<any | null>(null);
+const isInnerDialogOpen = ref(false);
+
+
+const fetchPendingRequests = async () => {
+  
+  try {
+    const response = await fetch('http://localhost:3000/api/request/request/pending');
+    if (!response.ok) {
+      throw new Error('Nem sikerült lekérni a függőben lévő kérelmeket.');
+    }
+    pendingRequests.value = await response.json();
+  } catch (error) {
+    console.error('Hiba a kérelmek lekérésekor:', error);
+  }
+};
+
+const openRequestModal = (request: any) => {
+  selectedRequest.value = request;
+  isInnerDialogOpen.value = true;
+};
+
+const approveRequest = async (requestId: number) => {
+  try {
+    const response = await fetch('http://localhost:3000/api/request/request/approve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ request_id: requestId, admin_id: authStore.user?.ID }),
+    });
+    if (!response.ok) {
+      throw new Error('Hiba történt a kérelem elfogadása közben.');
+    }
+    alert('A kérelem sikeresen elfogadva!');
+    fetchPendingRequests();
+    isInnerDialogOpen.value = false;
+  } catch (error) {
+    let errorMessage = 'Hiba történt a beküldés során.';
+
+    // Ellenőrizzük, hogy a hiba egy objektum-e és van-e benne "message" kulcs
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === 'object' && error !== null && 'message' in error) {
+      errorMessage = String(error.message);
+    }
+
+    alert(errorMessage);
+    console.error('Beküldési hiba:', error);
+  }
+};
+
+const denyRequest = async (requestId: number) => {
+  try {
+    const response = await fetch('http://localhost:3000/api/request/request/deny', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ request_id: requestId, admin_id: authStore.user?.ID }),
+    });
+    if (!response.ok) {
+      throw new Error('Hiba történt a kérelem elutasítása közben.');
+    }
+    alert('A kérelem elutasítva!');
+    fetchPendingRequests();
+    isInnerDialogOpen.value = false;
+  } catch (error) {
+    let errorMessage = 'Hiba történt a beküldés során.';
+
+    // Ellenőrizzük, hogy a hiba egy objektum-e és van-e benne "message" kulcs
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    } else if (typeof error === 'object' && error !== null && 'message' in error) {
+      errorMessage = String(error.message);
+    }
+
+    alert(errorMessage);
+    console.error('Beküldési hiba:', error);
+  }
+};
+
+onMounted(() => {
+  fetchPendingRequests();
+});
+
 </script>
 
 <template>
@@ -299,7 +347,7 @@ const desserts =  [
                 </v-btn>
               </v-list-item>
               <v-list-item>
-                  <v-dialog max-width="700px">
+                  <v-dialog v-model="applyDialogOpen" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
                         Jelentkezz kritikusnak!
@@ -385,8 +433,12 @@ const desserts =  [
                       <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
                       <v-card>
                         <v-card-title>Kritikusi jelentkező űrlapok</v-card-title>
-                        <v-card-text>
-                          <v-table>
+                        
+                          <v-card-text>
+                          <div v-if="pendingRequests.length === 0" class="text-center">
+                              <p>Nincs függőben lévő kérelem</p>
+                            </div>
+                          <v-table v-else>
                             <thead>
                               <tr>
                                 <th class="text-left">
@@ -398,35 +450,37 @@ const desserts =  [
                               </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="item in desserts" :key="item.name">
-                                <td>{{ item.name }}</td>
+                              <tr v-for="request in pendingRequests" :key="request.id">
+                                <td>{{ request.User ? request.User.userName : 'N/A' }}</td>
                                 <td class="text-right">
-                                  <v-dialog max-width="700px">
+                                  
+                                  <!-- Belső jelentkezési modal -->
+                                  <v-dialog  v-model="isInnerDialogOpen" max-width="700px">
                                     <template #activator="{ props: activatorProps }">
-                                      <v-btn v-bind="activatorProps" variant="elevated" color="primary" class="text-surface">
+                                      <v-btn v-bind="activatorProps" variant="elevated" color="primary"  class="text-surface" @click="openRequestModal(request)">
                                         Űrlap megtekintése
                                       </v-btn>
                                     </template>
                                     
                                     <template #default="{ isActive }">
                                       <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
-                                      <v-card>
-                                        <v-card-title>{{item.name}} űrlapja</v-card-title>
+                                      <v-card  v-if="selectedRequest">
+                                        <v-card-title>{{selectedRequest.userName}} űrlapja</v-card-title>
                                         <v-card-text>
                                           <div>
                                             <h4>Indoklás</h4>
-                                            <p style="padding-left: 20px; padding-right: 20px;">leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...</p>
+                                            <p style="padding-left: 20px; padding-right: 20px;">{{ selectedRequest.reason }}</p>
                                           </div>
                                           <br>
                                           <div>
                                             <h4>Szerepköre:</h4>
-                                            <p>Ételkritikus</p>
+                                            <p>{{ selectedRequest.requested_role }}</p>
                                           </div>
                                         </v-card-text>
                                         <v-card-actions style="padding: 24px; justify-content: flex-start;">
-                                          <v-btn variant="elevated" color="warning" class="text-surface">Elutasítás</v-btn>
+                                          <v-btn variant="elevated" color="warning" class="text-surface" @click="denyRequest(selectedRequest.id)">Elutasítás</v-btn>
                                           <v-spacer></v-spacer>
-                                          <v-btn variant="elevated" color="success" class="text-surface">Elfogadás</v-btn>
+                                          <v-btn variant="elevated" color="success" class="text-surface" @click="approveRequest(selectedRequest.id)">Elfogadás</v-btn>
                                         </v-card-actions>
                                       </v-card>
                                     </template>
@@ -550,7 +604,7 @@ const desserts =  [
                   </v-dialog>
                 </v-list-item>
                 <v-list-item>
-                  <v-dialog max-width="700px">
+                  <v-dialog v-model="applyDialogOpen" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
                         Jelentkezz kritikusnak!
@@ -567,6 +621,7 @@ const desserts =  [
                             :items="roles"
                             item-title="name"
                             item-value="id"
+                            v-model="selectedRole"
                             label="Válassza ki kritikusi szerepkörét"
                             hide-details
                           ></v-select>
@@ -591,7 +646,10 @@ const desserts =  [
                       <v-card>
                         <v-card-title>Kritikusi jelentkező űrlapok</v-card-title>
                         <v-card-text>
-                          <v-table>
+                          <div v-if="pendingRequests.length === 0" class="text-center">
+                              <p>Nincs függőben lévő kérelem</p>
+                            </div>
+                          <v-table v-else>
                             <thead>
                               <tr>
                                 <th class="text-left">
@@ -603,35 +661,37 @@ const desserts =  [
                               </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="item in desserts" :key="item.name">
-                                <td>{{ item.name }}</td>
+                              <tr v-for="request in pendingRequests" :key="request.id">
+                                <td>{{ request.User ? request.User.userName : 'N/A' }}</td>
                                 <td class="text-right">
-                                  <v-dialog max-width="700px">
+                                  
+                                  <!-- Belső jelentkezési modal -->
+                                  <v-dialog  v-model="isInnerDialogOpen" max-width="700px">
                                     <template #activator="{ props: activatorProps }">
-                                      <v-btn v-bind="activatorProps" variant="elevated" color="primary" class="text-surface">
+                                      <v-btn v-bind="activatorProps" variant="elevated" color="primary"  class="text-surface" @click="openRequestModal(request)">
                                         Űrlap megtekintése
                                       </v-btn>
                                     </template>
                                     
                                     <template #default="{ isActive }">
                                       <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
-                                      <v-card>
-                                        <v-card-title>{{item.name}} űrlapja</v-card-title>
+                                      <v-card  v-if="selectedRequest">
+                                        <v-card-title>{{selectedRequest.userName}} űrlapja</v-card-title>
                                         <v-card-text>
                                           <div>
                                             <h4>Indoklás</h4>
-                                            <p style="padding-left: 20px; padding-right: 20px;">leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...leírás...</p>
+                                            <p style="padding-left: 20px; padding-right: 20px;">{{ selectedRequest.reason }}</p>
                                           </div>
                                           <br>
                                           <div>
                                             <h4>Szerepköre:</h4>
-                                            <p>Ételkritikus</p>
+                                            <p>{{ selectedRequest.requested_role }}</p>
                                           </div>
                                         </v-card-text>
                                         <v-card-actions style="padding: 24px; justify-content: flex-start;">
-                                          <v-btn variant="elevated" color="warning" class="text-surface">Elutasítás</v-btn>
+                                          <v-btn variant="elevated" color="warning" class="text-surface" @click="denyRequest(selectedRequest.id)">Elutasítás</v-btn>
                                           <v-spacer></v-spacer>
-                                          <v-btn variant="elevated" color="success" class="text-surface">Elfogadás</v-btn>
+                                          <v-btn variant="elevated" color="success" class="text-surface" @click="approveRequest(selectedRequest.id)">Elfogadás</v-btn>
                                         </v-card-actions>
                                       </v-card>
                                     </template>
@@ -678,7 +738,7 @@ const desserts =  [
         <v-row justify="center" no-gutters>
           <v-btn @click="navigateTo('/')" class="mx-2" color="primary" variant="text">Főoldal</v-btn>
           <v-btn @click="navigateTo('/aboutUs')" class="mx-2" color="primary" variant="text">Rólunk</v-btn>
-          <v-dialog max-width="700px">
+          <v-dialog v-model="applyDialogOpen" max-width="700px">
             <template #activator="{ props: activatorProps }">
               <v-btn v-bind="activatorProps" color="primary" variant="text">
                 Jelentkezz kritikusnak!
@@ -695,6 +755,7 @@ const desserts =  [
                     :items="roles"
                     item-title="name"
                     item-value="id"
+                    v-model="selectedRole"
                     label="Válassza ki kritikusi szerepkörét"
                     hide-details
                   ></v-select>

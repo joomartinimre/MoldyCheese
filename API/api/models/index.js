@@ -23,7 +23,15 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "place_ID"
     });
 
+    User.hasMany(RoleRequest,{
+        foreignKey: "user_id"
+    })
 
+    RoleRequest.belongsTo(User,{
+        foreignKey: "user_id"
+    })
+
+   
 
 
     return { Comment, User,  Topic,  Place, Rating, RoleRequest };

@@ -2,6 +2,8 @@ const placeRepository = require("../repositories/PlaceRepository");
 
 class PlaceService {
     async createPlace({ name, text, tags, topic_ID, picture }) {
+        console.log("🔍 Mentés előtt a Picture:", typeof picture, picture?.slice(0, 100));
+
         const newPlace = {
             name,
             text,

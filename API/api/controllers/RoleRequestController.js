@@ -7,7 +7,7 @@ class RoleRequestController {
             const request = await RoleRequestService.createRequest(user_id, reason, requested_role);
             res.status(201).json(request);
         } catch (error) {
-           res.status(400).json({ error: error.message });
+            res.status(400).json({ error: error.message });
         }
     }
 
@@ -26,6 +26,15 @@ class RoleRequestController {
             const { request_id, admin_id } = req.body;
             await RoleRequestService.denyRequest(request_id, admin_id);
             res.status(200).json({ message: "Request denied" });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    async getPendingRequests(req, res) {
+        try {
+            const requests = await RoleRequestService.getPendingRequests();
+            res.status(200).json(requests);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
