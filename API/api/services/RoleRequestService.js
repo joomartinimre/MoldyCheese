@@ -28,6 +28,10 @@ class RoleRequestService {
     async denyRequest(requestId, adminId) {
         return await RoleRequestRepository.updateRequestStatus(requestId, "rejected", adminId);
     }
+
+    async getPendingRequests() {
+        return await RoleRequestRepository.getPendingRequests();
+    }
 }
 
 module.exports = new RoleRequestService();

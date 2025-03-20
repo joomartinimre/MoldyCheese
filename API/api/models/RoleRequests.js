@@ -1,7 +1,9 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-    class RoleRequest extends Model {}
+    class RoleRequest extends Model {
+
+    }
 
     RoleRequest.init(
         {

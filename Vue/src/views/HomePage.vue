@@ -1,276 +1,78 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useDisplay } from 'vuetify';
+import axios from 'axios';
 
-  const helyek = [
-    {
-      id:1,
-      url:"https://ceg-kozgazdasagi.cms.intezmeny.edir.hu/uploads/background_eb15905baa.jpg",
-      title:"Hely1",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:2,
-      url:"https://villany.hu/wp-content/gallery/vinatus-pince-es-fogado/vinatus-fogado-kivulrol.jpg",
-      title:"Hely2",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:3,
-      url:"https://kakas.hu/wp-content/uploads/2015/08/kakas_etterem.jpg",
-      title:"Hely3",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:4,
-      url:"https://upload.wikimedia.org/wikipedia/commons/6/63/Dr_Nagy_L%C3%A1szl%C3%B3_Gy%C3%B3gyped_Int_K%C5%91szeg.JPG",
-      title:"Hely4",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:5,
-      url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMQXakdFgzJOpdxmf4ClbgANdmzb9pNvTXww&s",
-      title:"Hely5",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:6,
-      url:"https://mosthir.hu/wp-content/uploads/2023/08/spar-magyarorszag-bolt-860x459.jpg",
-      title:"Hely7",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:1,
-      url:"https://ceg-kozgazdasagi.cms.intezmeny.edir.hu/uploads/background_eb15905baa.jpg",
-      title:"Hely1",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:2,
-      url:"https://villany.hu/wp-content/gallery/vinatus-pince-es-fogado/vinatus-fogado-kivulrol.jpg",
-      title:"Hely2",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:3,
-      url:"https://kakas.hu/wp-content/uploads/2015/08/kakas_etterem.jpg",
-      title:"Hely3",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:4,
-      url:"https://upload.wikimedia.org/wikipedia/commons/6/63/Dr_Nagy_L%C3%A1szl%C3%B3_Gy%C3%B3gyped_Int_K%C5%91szeg.JPG",
-      title:"Hely4",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:5,
-      url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMQXakdFgzJOpdxmf4ClbgANdmzb9pNvTXww&s",
-      title:"Hely5",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:6,
-      url:"https://mosthir.hu/wp-content/uploads/2023/08/spar-magyarorszag-bolt-860x459.jpg",
-      title:"Hely7",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:1,
-      url:"https://ceg-kozgazdasagi.cms.intezmeny.edir.hu/uploads/background_eb15905baa.jpg",
-      title:"Hely1",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:2,
-      url:"https://villany.hu/wp-content/gallery/vinatus-pince-es-fogado/vinatus-fogado-kivulrol.jpg",
-      title:"Hely2",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:3,
-      url:"https://kakas.hu/wp-content/uploads/2015/08/kakas_etterem.jpg",
-      title:"Hely3",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:4,
-      url:"https://upload.wikimedia.org/wikipedia/commons/6/63/Dr_Nagy_L%C3%A1szl%C3%B3_Gy%C3%B3gyped_Int_K%C5%91szeg.JPG",
-      title:"Hely4",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:5,
-      url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMQXakdFgzJOpdxmf4ClbgANdmzb9pNvTXww&s",
-      title:"Hely5",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:6,
-      url:"https://mosthir.hu/wp-content/uploads/2023/08/spar-magyarorszag-bolt-860x459.jpg",
-      title:"Hely7",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:1,
-      url:"https://ceg-kozgazdasagi.cms.intezmeny.edir.hu/uploads/background_eb15905baa.jpg",
-      title:"Hely1",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:2,
-      url:"https://villany.hu/wp-content/gallery/vinatus-pince-es-fogado/vinatus-fogado-kivulrol.jpg",
-      title:"Hely2",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:3,
-      url:"https://kakas.hu/wp-content/uploads/2015/08/kakas_etterem.jpg",
-      title:"Hely3",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:4,
-      url:"https://upload.wikimedia.org/wikipedia/commons/6/63/Dr_Nagy_L%C3%A1szl%C3%B3_Gy%C3%B3gyped_Int_K%C5%91szeg.JPG",
-      title:"Hely4",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:5,
-      url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMQXakdFgzJOpdxmf4ClbgANdmzb9pNvTXww&s",
-      title:"Hely5",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:6,
-      url:"https://mosthir.hu/wp-content/uploads/2023/08/spar-magyarorszag-bolt-860x459.jpg",
-      title:"Hely7",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:1,
-      url:"https://ceg-kozgazdasagi.cms.intezmeny.edir.hu/uploads/background_eb15905baa.jpg",
-      title:"Hely1",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:2,
-      url:"https://villany.hu/wp-content/gallery/vinatus-pince-es-fogado/vinatus-fogado-kivulrol.jpg",
-      title:"Hely2",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:3,
-      url:"https://kakas.hu/wp-content/uploads/2015/08/kakas_etterem.jpg",
-      title:"Hely3",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:4,
-      url:"https://upload.wikimedia.org/wikipedia/commons/6/63/Dr_Nagy_L%C3%A1szl%C3%B3_Gy%C3%B3gyped_Int_K%C5%91szeg.JPG",
-      title:"Hely4",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:5,
-      url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMQXakdFgzJOpdxmf4ClbgANdmzb9pNvTXww&s",
-      title:"Hely5",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:6,
-      url:"https://mosthir.hu/wp-content/uploads/2023/08/spar-magyarorszag-bolt-860x459.jpg",
-      title:"Hely7",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:1,
-      url:"https://ceg-kozgazdasagi.cms.intezmeny.edir.hu/uploads/background_eb15905baa.jpg",
-      title:"Hely1",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:2,
-      url:"https://villany.hu/wp-content/gallery/vinatus-pince-es-fogado/vinatus-fogado-kivulrol.jpg",
-      title:"Hely2",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:3,
-      url:"https://kakas.hu/wp-content/uploads/2015/08/kakas_etterem.jpg",
-      title:"Hely3",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:4,
-      url:"https://upload.wikimedia.org/wikipedia/commons/6/63/Dr_Nagy_L%C3%A1szl%C3%B3_Gy%C3%B3gyped_Int_K%C5%91szeg.JPG",
-      title:"Hely4",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:5,
-      url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMQXakdFgzJOpdxmf4ClbgANdmzb9pNvTXww&s",
-      title:"Hely5",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:6,
-      url:"https://mosthir.hu/wp-content/uploads/2023/08/spar-magyarorszag-bolt-860x459.jpg",
-      title:"Hely7",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
-    },
-    {
-      id:6,
-      url:"https://mosthir.hu/wp-content/uploads/2023/08/spar-magyarorszag-bolt-860x459.jpg",
-      title:"Hely7",
-      rating:4,
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id mauris tempor, vehicula nunc ut, vehicula metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis rhoncus arcu a maximus consequat. Vivamus convallis neque sit amet volutpat lobortis. Etiam sodales aliquet elit. Suspendisse mattis egestas nunc, in mollis felis porta vel. Mauris laoreet, ex nec feugiat blandit, ligula ligula lobortis diam, hendrerit lacinia nulla tortor nec diam."
+interface Place {
+  id: number;
+  url: string;
+  title: string;
+  rating: number;
+  description: string;
+}
+
+const popularPlaces = ref<Place[]>([]);
+const recentPlaces = ref<Place[]>([]);
+const latestPlaces = ref<Place[]>([]);
+const topRatedPlaces = ref<Place[]>([]);
+
+const convertBlobToUrl = (blobData: string): string => {
+  return `data:image/jpeg;base64,${blobData}`;
+};
+
+const API_BASE = "http://localhost:3000/api/main";
+
+const fetchPlaces = async () => {
+  try {
+    const popularResponse = await axios.get(`${API_BASE}/popular`);
+    console.log("POPULAR RESPONSE:", popularResponse.data); // ✅ Ellenőrzés
+
+    if (!Array.isArray(popularResponse.data)) {
+      throw new Error("A válasz nem tömb!");
     }
-  ]
 
+    popularPlaces.value = popularResponse.data.map((place: any) => ({
+      id: place.id,
+      url: place.url, // 🚀 Közvetlenül az API által adott URL-t használjuk
+      title: place.title,
+      rating: place.rating,
+      description: place.description
+    }));
+
+    const latestResponse = await axios.get(`${API_BASE}/latest`);
+    console.log("POPULAR RESPONSE:", latestResponse.data); // ✅ Ellenőrzés
+    latestPlaces.value = latestResponse.data.map((place: any) => ({
+      id: place.id,
+      url: place.url,
+      title: place.title,
+      rating: place.rating,
+      description: place.description
+    }));
+
+    const topRatedResponse = await axios.get(`${API_BASE}/top-rated`);
+    topRatedPlaces.value = topRatedResponse.data.map((place: any) => ({
+      id: place.id,
+      url: place.url,
+      title: place.title,
+      rating: place.rating,
+      description: place.description
+    }));
+
+  } catch (error) {
+    console.error("Hiba történt a helyek lekérése közben:", error);
+  }
+};
+
+onMounted(async () => {
+  await fetchPlaces();
+});
 
 const isUserInteracting = ref(false);
 let autoplayInterval: ReturnType<typeof setInterval> | null = null;
 
 const nextSlide = () => {
-  if (!isUserInteracting.value) {  // Csak akkor léptet, ha NEM húzod
-    if (activeIndex.value < helyek.length - 1) {
+  if (!isUserInteracting.value) {
+    if (activeIndex.value < latestPlaces.value.length - 1) {
       activeIndex.value++;
     } else {
       setTimeout(() => {
@@ -281,7 +83,7 @@ const nextSlide = () => {
 };
 
 const startAutoplay = () => {
-  stopAutoplay(); // Biztos ami biztos, előbb leállítjuk, hogy ne induljon többször
+  stopAutoplay();
   autoplayInterval = setInterval(nextSlide, 10000);
 };
 
@@ -292,64 +94,54 @@ const stopAutoplay = () => {
   }
 };
 
-
 onMounted(() => {
-  startAutoplay(); // Induláskor elindítjuk az autoplay-t
+  startAutoplay();
 });
 
 onUnmounted(() => {
-  stopAutoplay(); // Ha az oldal elhagyódik, leállítjuk az autoplay-t
+  stopAutoplay();
 });
 
 const { mobile } = useDisplay();
-const loading = ref(false)
-const transitionState = ref(""); // Az animáció iránya
+const loading = ref(false);
+const transitionState = ref("");
+const windowModel = ref(0);
+const displayedPlaces = ref(18);
+const totalPlaces = computed(() => latestPlaces.value.length);
 
-const windowModel = ref(0)
-
-// Állapotkezelés
-const displayedPlaces = ref(18); // Kezdetben 18 hely jelenik meg
-const totalPlaces = helyek.length; // Helyek összes száma
-
-// Függvény a további helyek betöltéséhez
 const loadMore = () => {
-  displayedPlaces.value += 18; // Még 18 helyet betöltünk
-}
+  displayedPlaces.value += 18;
+};
 
-// Az aktuális slide indexét tároljuk
-const activeIndex = ref(0)
-// Drag eseményekhez szükséges változók
-const dragStart = ref(0)
-const dragOffset = ref(0)
-const dragging = ref(false)
+const activeIndex = ref(0);
+const dragStart = ref(0);
+const dragOffset = ref(0);
+const dragging = ref(false);
 
 const sliderStyle = computed(() => ({
   transform: `translateX(calc(-${activeIndex.value * 100}% + ${dragOffset.value}px))`,
   transition: dragging.value ? 'none' : 'transform 0.3s ease'
-}))
+}));
 
-// Mouse move event
 function onMouseMove(e: MouseEvent) {
-  if (!dragging.value) return
-  dragOffset.value = e.clientX - dragStart.value
+  if (!dragging.value) return;
+  dragOffset.value = e.clientX - dragStart.value;
 }
 
-// A mouse down event
 function onMouseDown(e: MouseEvent) {
   dragging.value = true;
-  isUserInteracting.value = true; // Felhasználó húz, állítsuk le az autoplay-t
+  isUserInteracting.value = true;
   stopAutoplay();
   dragStart.value = e.clientX;
 }
 
-// Mouse up event
 function onMouseUp() {
   if (!dragging.value) return;
   dragging.value = false;
-  isUserInteracting.value = false; // Vége a húzásnak, indítsuk újra az autoplay-t
+  isUserInteracting.value = false;
   startAutoplay();
   const threshold = 50;
-  if (dragOffset.value < -threshold && activeIndex.value < helyek.length - 1) {
+  if (dragOffset.value < -threshold && activeIndex.value < latestPlaces.value.length - 1) {
     activeIndex.value++;
   } else if (dragOffset.value > threshold && activeIndex.value > 0) {
     activeIndex.value--;
@@ -357,33 +149,29 @@ function onMouseUp() {
   dragOffset.value = 0;
 }
 
-// Mouse leave event
 function onMouseLeave() {
   if (dragging.value) {
     onMouseUp();
   }
 }
 
-// Touchstart event (mobil)
 function onTouchStart(e: TouchEvent) {
   const touchStart = e.touches[0].clientX;
-  onMouseDown({ clientX: touchStart } as MouseEvent);  // Itt átalakítjuk MouseEventté
+  onMouseDown({ clientX: touchStart } as MouseEvent);
 }
 
-// Touchmove event (mobil)
 function onTouchMove(e: TouchEvent) {
   const touchMove = e.touches[0].clientX;
-  onMouseMove({ clientX: touchMove } as MouseEvent);  // Itt is átalakítjuk MouseEventté
+  onMouseMove({ clientX: touchMove } as MouseEvent);
 }
 
-// Touchend event (mobil)
 function onTouchEnd(e: TouchEvent) {
   if (!dragging.value) return;
   dragging.value = false;
   isUserInteracting.value = false;
   startAutoplay();
   const threshold = 50;
-  if (dragOffset.value < -threshold && activeIndex.value < helyek.length - 1) {
+  if (dragOffset.value < -threshold && activeIndex.value < latestPlaces.value.length - 1) {
     activeIndex.value++;
   } else if (dragOffset.value > threshold && activeIndex.value > 0) {
     activeIndex.value--;
@@ -391,68 +179,17 @@ function onTouchEnd(e: TouchEvent) {
   dragOffset.value = 0;
 }
 
-
-onMounted(() => {
-  startAutoplay(); // Induláskor elindítjuk az autoplay-t
-});
-
-onUnmounted(() => {
-  stopAutoplay(); // Ha az oldal elhagyódik, leállítjuk az autoplay-t
-});
-
-const goToSlide = (index:number) => {
-  activeIndex.value = index;  // Az aktív index módosítása
+const goToSlide = (index: number) => {
+  activeIndex.value = index;
 };
-
-onMounted(() => {
-  // A custom slider elemek kiválasztása
-  const track = document.querySelector('.custom-slider-track') as HTMLElement;
-  const cards = document.querySelectorAll('.custom-card');
-  const leftArrow = document.querySelector('.custom-arrow.custom-left') as HTMLButtonElement;
-  const rightArrow = document.querySelector('.custom-arrow.custom-right') as HTMLButtonElement;
-  const visibleCount = 7;
-  let currentIndex = 0;
-
-  function updateCustomSlider() {
-    if (!cards.length) return;
-    // Az első kártya szélességének lekérése
-    const cardWidth = (cards[0] as HTMLElement).offsetWidth;
-    // Lekérjük a gap értékét a track computed style-jából
-    const gap = parseFloat(getComputedStyle(track).gap) || 0;
-    // Egy kártya szélessége + gap alapján számoljuk az eltolást
-    const shift = currentIndex * (cardWidth + gap);
-    track.style.transform = `translateX(-${shift}px)`;
-
-    // Nyilak tiltása, ha elértük a szélét
-    leftArrow.disabled = currentIndex === 0;
-    rightArrow.disabled = currentIndex >= cards.length - visibleCount;
-  }
-
-  leftArrow.addEventListener('click', () => {
-    if (currentIndex > 0) {
-      currentIndex--;
-      updateCustomSlider();
-    }
-  });
-
-  rightArrow.addEventListener('click', () => {
-    if (currentIndex < cards.length - visibleCount) {
-      currentIndex++;
-      updateCustomSlider();
-    }
-  });
-
-  window.addEventListener('resize', updateCustomSlider);
-  updateCustomSlider();
-});
-
-
 </script>
+
+
 
 <template>
   <v-container fluid style="padding: 0px;">
     <v-window v-model="windowModel" :show-arrows="$vuetify.display.mdAndUp">
-      <v-window-item v-for="hely in helyek" :key="hely.id">
+      <v-window-item v-for="hely in latestPlaces" :key="hely.id">
         <div class="homepage-container" :style="{ backgroundImage: `url(${hely.url})` }">
           <div class="content" :class="transitionState">
             <div class="text-section">
@@ -490,7 +227,7 @@ onMounted(() => {
     <v-container class="horizontal-scroll-container" fluid>
       <v-row class="horizontal-scroll-track">
         <v-col
-        v-for="hely in helyek.slice(0, displayedPlaces)" 
+        v-for="hely in latestPlaces.slice(0, displayedPlaces)" 
         :key="hely.title">
         <v-card
           rounded="xl"
@@ -526,7 +263,7 @@ onMounted(() => {
     <h1 style="padding: 0px 30px; max-width: 2300px; margin: auto;">Legújabb helyek</h1>
     <v-row style="max-width: 2300px; margin: auto; padding: 0px 18px 0px 18px">
       <v-col
-        v-for="hely in helyek.slice(0, displayedPlaces)" 
+        v-for="hely in latestPlaces.slice(0, displayedPlaces)" 
         :key="hely.title" 
         cols="12" sm="6" md="4" lg="3" xl="2">
         <v-card
@@ -578,7 +315,7 @@ onMounted(() => {
      @touchmove="onTouchMove"    
      @touchend="onTouchEnd">
       <div class="slider-track" :style="sliderStyle">
-        <div v-for="hely in helyek" :key="hely.id" class="slide">
+        <div v-for="hely in latestPlaces" :key="hely.id" class="slide">
           <div class="homepage-container" :style="{ backgroundImage: `url(${hely.url})` }">
             <div class="content" :class="transitionState">
               <div class="text-section">
@@ -612,7 +349,7 @@ onMounted(() => {
       </div>
       <div class="bars-container">
         <div
-          v-for="(hely, index) in helyek"
+          v-for="(hely, index) in latestPlaces"
           :key="hely.id"
           class="bar"
           :class="{ active: activeIndex === index }"
@@ -628,7 +365,7 @@ onMounted(() => {
 </v-btn>
   <div class="custom-slider-wrapper">
     <div class="custom-slider-track">
-      <v-col v-for="hely in helyek" :key="hely.title" class="custom-card">
+      <v-col v-for="hely in latestPlaces" :key="hely.title" class="custom-card">
         <v-card rounded="xl" :disabled="loading" :loading="loading" class="mx-auto">
           <v-img height="250" :src="hely.url" cover></v-img>
           <v-card-item>

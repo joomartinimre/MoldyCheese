@@ -5,10 +5,9 @@ class PlaceController {
         try {
             console.log("📥 Beérkező adatok:", req.body);
             console.log("📸 Beérkező fájl:", req.file);
-
+            
             const { name, text, tags, topic_ID } = req.body;
-
-            const pictureBase64 = req.file ? req.file.buffer.toString("base64") : null;
+            const pictureBuffer = req.file ? req.file.buffer : null;
             const topic_ID_Int = parseInt(topic_ID, 10);
             const tagsArray = typeof tags === "string" ? JSON.parse(tags) : tags;
             const nameStr = typeof name === "string" ? name : JSON.stringify(name);
@@ -16,10 +15,10 @@ class PlaceController {
 
             console.log("🛠️ Debug – Átalakított értékek:");
             console.log("🔹 name:", nameStr, "🔹 text:", textStr);
-            console.log("🔹 topic_ID:", topic_ID_Int, "🔹 picture méret:", pictureBase64 ? pictureBase64.length : "nincs kép");
+            console.log("🔹 topic_ID:", topic_ID_Int, "🔹 picture méret:", pictureBuffer ? pictureBuffer.length : "nincs kép");
             console.log("🔹 tags:", tagsArray);
 
-            if (!nameStr || !textStr || !tagsArray || !topic_ID_Int || !pictureBase64) {
+            if (!nameStr || !textStr || !tagsArray || !topic_ID_Int || !pictureBuffer) {
                 console.log("⚠️ Hiányzó mező(ke)k!");
                 return res.status(400).json({ message: "Minden mező kötelező!" });
             }
@@ -29,7 +28,7 @@ class PlaceController {
                 text: textStr, 
                 tags: tagsArray, 
                 topic_ID: topic_ID_Int, 
-                picture: pictureBase64 
+                picture: pictureBuffer  
             });
 
             return res.status(201).json(place);

@@ -105,6 +105,9 @@ const saveDataOnExit = async () => {
                         return value; // Ha nem JSON, hagyjuk változatlanul
                     }
                 }
+                if (key === "Picture" && Buffer.isBuffer(value)) {
+                    return value.toString("base64"); // ✅ A bináris képadatot base64 formátumba mentjük
+                }
                 return value;
             }, 2),
             "utf-8"
@@ -183,12 +186,23 @@ const seedDatabase = async () => {
             }
 
             console.log(`📥 Seeding ${modelName}...`);
-            await db[modelName].bulkCreate(data, { ignoreDuplicates: true });
+
+            let transformedData = data;
+
+            // 🔹 Ha a `Place` modellről van szó, akkor a `Picture` mezőt visszaalakítjuk bináris formátumba
+            if (modelName === "Place") {
+                transformedData = data.map(record => ({
+                    ...record,
+                    Picture: record.Picture ? Buffer.from(record.Picture, "base64") : null // ✅ Base64-ből vissza binárisra
+                }));
+            }
+
+            await db[modelName].bulkCreate(transformedData, { ignoreDuplicates: true });
             console.log(`✅ Successfully seeded ${modelName} with ${data.length} records.`);
         }
 
         // **Most jöhetnek a függő modellek**
-        const dependentModels = ["Comment", "Rating" ,"RoleRequest"];
+        const dependentModels = ["Comment", "Rating", "RoleRequest"];
         for (const modelName of dependentModels) {
             if (!db[modelName]) {
                 console.warn(`⚠️ Model ${modelName} not found in DB context.`);
