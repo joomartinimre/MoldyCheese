@@ -6,6 +6,8 @@ const ratingRoutes = require("./api/routes/RatingRoutes");
 const placeRoutes = require("./api/routes/PlaceRoutes");
 const MainPageRoutes = require("./api/routes/MainPageRoutes");
 const RoleRequestRoutes = require("./api/routes/RoleRequestRoutes");
+const RoleRoutes = require("./api/routes/RoleRoutes");
+const PlaceViewRoutes = require("./api/routes/PlaceViewRoutes")
 require("dotenv").config();
 
 
@@ -27,6 +29,8 @@ app.use("/api/rating", ratingRoutes);
 app.use("/api/place", placeRoutes)
 app.use("/api/request", RoleRequestRoutes)
 app.use("/api/main", MainPageRoutes)
+app.use("/api/role", RoleRoutes)
+app.use("/api/placeview", PlaceViewRoutes)
 
 require("./api/database/dbContext");
 

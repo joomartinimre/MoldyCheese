@@ -206,18 +206,24 @@ const initCustomSlider = () => {
   const track = document.querySelector('.custom-slider-track') as HTMLElement;
   const leftArrow = document.querySelector('.custom-arrow.custom-left') as HTMLButtonElement;
   const rightArrow = document.querySelector('.custom-arrow.custom-right') as HTMLButtonElement;
-  const visibleCount = 7;
+  const wrapper = document.querySelector('.custom-slider-wrapper') as HTMLElement;
 
   updateCustomSlider = () => {
     const cards = document.querySelectorAll('.custom-card');
-    if (!cards.length) return;
+    if (!cards.length || !wrapper) return;
     const cardWidth = (cards[0] as HTMLElement).offsetWidth;
     const gap = parseFloat(getComputedStyle(track).gap) || 0;
-    const shift = currentIndex * (cardWidth + gap);
+    const totalCards = cards.length;
+    const totalTrackWidth = (cardWidth * totalCards) + (gap * (totalCards - 1));
+    const containerWidth = wrapper.clientWidth;
+    const maxShift = totalTrackWidth - containerWidth;
+    const desiredShift = currentIndex * (cardWidth + gap);
+    const shift = Math.min(desiredShift, maxShift);
+
     track.style.transform = `translateX(-${shift}px)`;
 
-    leftArrow.disabled = currentIndex === 0;
-    rightArrow.disabled = currentIndex >= cards.length - visibleCount;
+    leftArrow.disabled = shift === 0;
+    rightArrow.disabled = shift === maxShift;
   };
 
   leftArrow.addEventListener('click', () => {
@@ -229,7 +235,15 @@ const initCustomSlider = () => {
 
   rightArrow.addEventListener('click', () => {
     const cards = document.querySelectorAll('.custom-card');
-    if (currentIndex < cards.length - visibleCount) {
+    if (!cards.length) return;
+    const cardWidth = (cards[0] as HTMLElement).offsetWidth;
+    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+    const totalTrackWidth = (cardWidth * cards.length) + (gap * (cards.length - 1));
+    const containerWidth = wrapper.clientWidth;
+    const maxShift = totalTrackWidth - containerWidth;
+    const currentShift = Math.min(currentIndex * (cardWidth + gap), maxShift);
+
+    if (currentShift < maxShift) {
       currentIndex++;
       updateCustomSlider();
     }

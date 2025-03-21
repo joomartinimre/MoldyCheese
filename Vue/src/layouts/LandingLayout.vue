@@ -10,7 +10,13 @@ const route = useRoute();
 const applyDialogHeader = ref(false);
 const applyDialogFooter = ref(false);
 
+interface RoleUser {
+  ID: number;
+  userName: string;
+  role: string;
+}
 
+const allUsers = ref<RoleUser[]>([]);
 const isActive = ref(false);
 const placeName = ref('');
 const description = ref('');
@@ -18,6 +24,40 @@ const imageFile = ref<File | null>(null);
 
 const navigateTo = (path: string) => {
   router.push(path);
+};
+
+const fetchAllUsers = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/api/role/all');
+    if (!response.ok) throw new Error('Nem sikerült lekérni a felhasználókat.');
+    allUsers.value = await response.json();
+  } catch (error) {
+    console.error('Hiba a felhasználók lekérésekor:', error);
+  }
+};
+
+const promoteToAdmin = async (userId: number) => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/role/promote/${userId}`, {
+      method: 'POST'
+    });
+    if (!response.ok) throw new Error('Nem sikerült adminná tenni a felhasználót.');
+    await fetchAllUsers();
+  } catch (error) {
+    console.error('Hiba az admin jog adásakor:', error);
+  }
+};
+
+const demoteToUser = async (userId: number) => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/role/demote/${userId}`, {
+      method: 'POST'
+    });
+    if (!response.ok) throw new Error('Nem sikerült elvenni a jogot.');
+    await fetchAllUsers();
+  } catch (error) {
+    console.error('Hiba a jog elvételkor:', error);
+  }
 };
 
 const handleLogout = () => {
@@ -286,6 +326,7 @@ const denyRequest = async (requestId: number) => {
 
 onMounted(() => {
   fetchPendingRequests();
+  fetchAllUsers();
 });
 
 </script>
@@ -494,6 +535,7 @@ onMounted(() => {
                         </v-card-text>
                       </v-card>
                     </template>
+                    <!-- jog kezelés modal 1-->
                   </v-dialog>
                 </v-list-item>
                 <v-list-item>
@@ -509,9 +551,10 @@ onMounted(() => {
                       <v-card>
                         <v-card-title>Jogok kezelése</v-card-title>
                         <v-card-text>
-                          <div v-if="pendingRequests.length === 0" class="text-center">
-                              <p>Nincs függőben lévő kérelem</p>
-                            </div>
+                          <div v-if="allUsers.length === 0" class="text-center">
+                            <p>Nincsenek felhasználók</p>
+                          </div>
+
                           <v-table v-else>
                             <thead>
                               <tr>
@@ -527,13 +570,13 @@ onMounted(() => {
                               </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="request in pendingRequests" :key="request.id">
-                                <td class="text-left text-h6">{{ request.User ? request.User.userName : 'N/A' }}</td>
-                                <td class="text-center text-h6">Jog</td>
+                              <tr v-for="user in allUsers" :key="user.ID">
+                                <td class="text-left text-h6">{{ user.userName }}</td>
+                                <td class="text-center text-h6">{{ user.role }}</td>
                                 <td class="text-right" style="padding: 10px;">
-                                  <v-btn width="150px" variant="elevated" color="success" class="text-surface">Admin jog adás</v-btn>
+                                  <v-btn  @click="promoteToAdmin(user.ID)" width="150px" variant="elevated" color="success" class="text-surface">Admin jog adás</v-btn>
                                   <v-spacer style="margin: 10px !important;"></v-spacer>
-                                  <v-btn width="150px" variant="elevated" color="warning" class="text-surface">Jog elvétele</v-btn>
+                                  <v-btn @click="demoteToUser(user.ID)" width="150px" variant="elevated" color="warning" class="text-surface">Jog elvétele</v-btn>
                                 </td>
                               </tr>
                             </tbody>
@@ -752,6 +795,7 @@ onMounted(() => {
                         </v-card-text>
                       </v-card>
                     </template>
+                    <!-- jog kezelés modal 2-->
                   </v-dialog>
                 </v-list-item>
                 <v-list-item>
@@ -767,9 +811,10 @@ onMounted(() => {
                       <v-card>
                         <v-card-title>Jogok kezelése</v-card-title>
                         <v-card-text>
-                          <div v-if="pendingRequests.length === 0" class="text-center">
-                              <p>Nincs függőben lévő kérelem</p>
-                            </div>
+                          <div v-if="allUsers.length === 0" class="text-center">
+                            <p>Nincsenek felhasználók</p>
+                          </div>
+
                           <v-table v-else>
                             <thead>
                               <tr>
@@ -785,13 +830,13 @@ onMounted(() => {
                               </tr>
                             </thead>
                             <tbody>
-                              <tr v-for="request in pendingRequests" :key="request.id">
-                                <td class="text-left text-h6">{{ request.User ? request.User.userName : 'N/A' }}</td>
-                                <td class="text-center text-h6">Jog</td>
+                              <tr v-for="user in allUsers" :key="user.ID">
+                                <td class="text-left text-h6">{{ user.userName }}</td>
+                                <td class="text-center text-h6">{{ user.role }}</td>
                                 <td class="text-right" style="padding: 10px;">
-                                  <v-btn width="150px" variant="elevated" color="success" class="text-surface">Admin jog adás</v-btn>
+                                  <v-btn  @click="promoteToAdmin(user.ID)" width="150px" variant="elevated" color="success" class="text-surface">Admin jog adás</v-btn>
                                   <v-spacer style="margin: 10px !important;"></v-spacer>
-                                  <v-btn width="150px" variant="elevated" color="warning" class="text-surface">Jog elvétele</v-btn>
+                                  <v-btn @click="demoteToUser(user.ID)" width="150px" variant="elevated" color="warning" class="text-surface">Jog elvétele</v-btn>
                                 </td>
                               </tr>
                             </tbody>
