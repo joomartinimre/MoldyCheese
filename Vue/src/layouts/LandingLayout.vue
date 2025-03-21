@@ -7,8 +7,8 @@ import { useAuthStore } from '@/stores/authStore';
 const router = useRouter();
 const authStore = useAuthStore();
 const route = useRoute();
-const applyDialogOpen = ref(false);
-
+const applyDialogHeader = ref(false);
+const applyDialogFooter = ref(false);
 
 
 const isActive = ref(false);
@@ -140,12 +140,14 @@ const sendRoleRequest = async () => {
     const responseData = await response.json();
 
     if (!response.ok) {
-      applyDialogOpen.value = false; 
+      applyDialogHeader.value = false; 
+      applyDialogFooter.value = false; 
       throw new Error(responseData.error || 'Hiba történt a jelentkezés során');
     }
 
     alert('Sikeresen jelentkeztél kritikusként!');
-    applyDialogOpen.value = false; 
+    applyDialogHeader.value = false; 
+    applyDialogFooter.value = false; 
     description.value = '';
     selectedRole.value = '';
   } catch (error) {
@@ -347,7 +349,7 @@ onMounted(() => {
                 </v-btn>
               </v-list-item>
               <v-list-item>
-                  <v-dialog v-model="applyDialogOpen" max-width="700px">
+                  <v-dialog v-model="applyDialogHeader" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
                         Jelentkezz kritikusnak!
@@ -451,7 +453,7 @@ onMounted(() => {
                             </thead>
                             <tbody>
                               <tr v-for="request in pendingRequests" :key="request.id">
-                                <td>{{ request.User ? request.User.userName : 'N/A' }}</td>
+                                <td class="text-left">{{ request.User ? request.User.userName : 'N/A' }}</td>
                                 <td class="text-right">
                                   
                                   <!-- Belső jelentkezési modal -->
@@ -485,6 +487,53 @@ onMounted(() => {
                                       </v-card>
                                     </template>
                                   </v-dialog>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </v-table>
+                        </v-card-text>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+                </v-list-item>
+                <v-list-item>
+                  <v-dialog max-width="700px">
+                    <template #activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" color="primary" variant="text">
+                        Jogok kezelése
+                      </v-btn>
+                    </template>
+                    
+                    <template #default="{ isActive }">
+                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
+                      <v-card>
+                        <v-card-title>Jogok kezelése</v-card-title>
+                        <v-card-text>
+                          <div v-if="pendingRequests.length === 0" class="text-center">
+                              <p>Nincs függőben lévő kérelem</p>
+                            </div>
+                          <v-table v-else>
+                            <thead>
+                              <tr>
+                                <th class="text-left">
+                                <h3>Felhasználónév</h3>
+                                </th>
+                                <th class="text-center">
+                                <h3>Jog</h3>
+                                </th>
+                                <th class="text-right">
+                                  <h3>Jogok kezelése</h3>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="request in pendingRequests" :key="request.id">
+                                <td class="text-left text-h6">{{ request.User ? request.User.userName : 'N/A' }}</td>
+                                <td class="text-center text-h6">Jog</td>
+                                <td class="text-right" style="padding: 10px;">
+                                  <v-btn width="150px" variant="elevated" color="success" class="text-surface">Admin jog adás</v-btn>
+                                  <v-spacer style="margin: 10px !important;"></v-spacer>
+                                  <v-btn width="150px" variant="elevated" color="warning" class="text-surface">Jog elvétele</v-btn>
                                 </td>
                               </tr>
                             </tbody>
@@ -604,7 +653,7 @@ onMounted(() => {
                   </v-dialog>
                 </v-list-item>
                 <v-list-item>
-                  <v-dialog v-model="applyDialogOpen" max-width="700px">
+                  <v-dialog v-model="applyDialogHeader" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
                         Jelentkezz kritikusnak!
@@ -656,17 +705,17 @@ onMounted(() => {
                                 <h3>Felhasználónév</h3>
                                 </th>
                                 <th class="text-right">
-                                  <h3>Űrlapok</h3>
+                                  <h3>Űrlap</h3>
                                 </th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr v-for="request in pendingRequests" :key="request.id">
-                                <td>{{ request.User ? request.User.userName : 'N/A' }}</td>
+                                <td class="text-left">{{ request.User ? request.User.userName : 'N/A' }}</td>
                                 <td class="text-right">
                                   
                                   <!-- Belső jelentkezési modal -->
-                                  <v-dialog  v-model="isInnerDialogOpen" max-width="700px">
+                                  <v-dialog v-model="isInnerDialogOpen" max-width="700px">
                                     <template #activator="{ props: activatorProps }">
                                       <v-btn v-bind="activatorProps" variant="elevated" color="primary"  class="text-surface" @click="openRequestModal(request)">
                                         Űrlap megtekintése
@@ -696,6 +745,53 @@ onMounted(() => {
                                       </v-card>
                                     </template>
                                   </v-dialog>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </v-table>
+                        </v-card-text>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+                </v-list-item>
+                <v-list-item>
+                  <v-dialog max-width="700px">
+                    <template #activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" color="primary" variant="text">
+                        Jogok kezelése
+                      </v-btn>
+                    </template>
+                    
+                    <template #default="{ isActive }">
+                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
+                      <v-card>
+                        <v-card-title>Jogok kezelése</v-card-title>
+                        <v-card-text>
+                          <div v-if="pendingRequests.length === 0" class="text-center">
+                              <p>Nincs függőben lévő kérelem</p>
+                            </div>
+                          <v-table v-else>
+                            <thead>
+                              <tr>
+                                <th class="text-left">
+                                <h3>Felhasználónév</h3>
+                                </th>
+                                <th class="text-center">
+                                <h3>Jog</h3>
+                                </th>
+                                <th class="text-right">
+                                  <h3>Jogok kezelése</h3>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr v-for="request in pendingRequests" :key="request.id">
+                                <td class="text-left text-h6">{{ request.User ? request.User.userName : 'N/A' }}</td>
+                                <td class="text-center text-h6">Jog</td>
+                                <td class="text-right" style="padding: 10px;">
+                                  <v-btn width="150px" variant="elevated" color="success" class="text-surface">Admin jog adás</v-btn>
+                                  <v-spacer style="margin: 10px !important;"></v-spacer>
+                                  <v-btn width="150px" variant="elevated" color="warning" class="text-surface">Jog elvétele</v-btn>
                                 </td>
                               </tr>
                             </tbody>
@@ -738,7 +834,7 @@ onMounted(() => {
         <v-row justify="center" no-gutters>
           <v-btn @click="navigateTo('/')" class="mx-2" color="primary" variant="text">Főoldal</v-btn>
           <v-btn @click="navigateTo('/aboutUs')" class="mx-2" color="primary" variant="text">Rólunk</v-btn>
-          <v-dialog v-model="applyDialogOpen" max-width="700px">
+          <v-dialog v-model="applyDialogFooter" max-width="700px">
             <template #activator="{ props: activatorProps }">
               <v-btn v-bind="activatorProps" color="primary" variant="text">
                 Jelentkezz kritikusnak!

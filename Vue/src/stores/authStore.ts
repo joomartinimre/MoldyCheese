@@ -4,23 +4,25 @@ export interface User {
   ID: number;
   name: string;
   email: string;
-  role: string; 
+  role: string;
 }
 
 export interface AuthState {
   user: User | null;
   token: string | null;
+  recentPlaceIds: number[]; // új mező
 }
 
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
     user: null,
     token: null,
+    recentPlaceIds: [], // inicializálás
   }),
   getters: {
     isLoggedIn: (state: AuthState): boolean => !!state.user,
     userRole: (state: AuthState): string | null => state.user?.role || null,
-    userId: (state: AuthState): number | null => state.user ? state.user.ID : null
+    userId: (state: AuthState): number | null => state.user ? state.user.ID : null,
   },
   actions: {
     login(userData: User, token: string) {
@@ -32,16 +34,36 @@ export const useAuthStore = defineStore('auth', {
     logout() {
       this.user = null;
       this.token = null;
+      this.recentPlaceIds = [];
       localStorage.removeItem('user');
       localStorage.removeItem('token');
+      localStorage.removeItem('recentPlaceIds');
     },
     loadFromLocalStorage() {
       const storedUser = localStorage.getItem('user');
       const storedToken = localStorage.getItem('token');
+      const storedRecent = localStorage.getItem('recentPlaceIds');
+
       if (storedUser && storedToken) {
         this.user = JSON.parse(storedUser) as User;
         this.token = storedToken;
       }
+
+      if (storedRecent) {
+        this.recentPlaceIds = JSON.parse(storedRecent);
+      }
     },
+    addRecentPlace(placeId: number) {
+      // ha már benne van, töröljük a régi példányát
+      this.recentPlaceIds = this.recentPlaceIds.filter(id => id !== placeId);
+      // hozzáadjuk a végére
+      this.recentPlaceIds.push(placeId);
+      // ha több mint 12 van, az elejéről törlünk
+      if (this.recentPlaceIds.length > 12) {
+        this.recentPlaceIds.shift();
+      }
+      // mentés localStorage-be
+      localStorage.setItem('recentPlaceIds', JSON.stringify(this.recentPlaceIds));
+    }
   },
 });

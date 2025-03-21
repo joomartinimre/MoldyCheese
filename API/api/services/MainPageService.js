@@ -22,11 +22,10 @@ const getPopularPlaces = async () => {
 
     console.log("📌 Lekérdezett helyek:", places.length, "db hely");
 
-    return places.map(place => {
-        console.log("🎯 Feldolgozás alatt:", place.ID, place.name);
+    
 
         return places.map(place => formatPlace(place));
-    });
+   
 };
 
 // 20 legutóbbi megtekintett hely (felhasználónak)
@@ -35,14 +34,14 @@ const getRecentPlaces = async (userVisitedPlaceIds) => {
     const places = await Place.findAll({
         where: { ID: { [Op.in]: userVisitedPlaceIds } },
         order: [["createdAt", "DESC"]],
-        limit: 20
+        limit: 12
     });
     return places.map(place => formatPlace(place));
 };
 
 // Legújabb helyek
 const getLatestPlaces = async () => {
-    const places = await Place.findAll({ order: [["createdAt", "DESC"]], limit: 20 });
+    const places = await Place.findAll({ order: [["createdAt", "DESC"]], limit: 40 });
     return places.map(place => formatPlace(place));
 };
 
