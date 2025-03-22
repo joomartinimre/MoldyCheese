@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue';
 import axios from 'axios';
+import { useDisplay } from 'vuetify';
 
 const API_BASE = "http://localhost:3000/api/placeview";
 interface Place {
@@ -49,7 +50,8 @@ onMounted(async () => {
   
 });
 
-const tagItems = ["Gimnázium", "Egyetem", "Általános Iskola", "Technikum", "Gyakorló Gimnázium", "+Kollégium", "Gyakorló Általános Iskola", "Kísérleti Gimnázium", "Kísérleti Általános Iskola"];
+const tagItems = ["Csárda", "Fine Dining", "Ínyenc", "Panzió", "Borozó", "Bisztro", "Olasz", "Bár"];
+
 
 // Új reaktív változók a szortírozáshoz
 const sortDateAsc = ref(true);
@@ -79,9 +81,31 @@ watch(selectedTags, () => {
 const toggleSortLikes = async () => {
   await fetchPlaces("mostLiked");
 };
+
+const { mobile, width } = useDisplay();
+
+const layoutWrapperStyle = computed(() => {
+  const count = popularPlaces.value.slice(0, displayedPlaces.value).length;
+  if (count < 6 && width.value > 2068) {
+    return { minWidth: '2068px' };
+  }
+  else if (count < 6 && width.value > 1630 && width.value < 2068) {
+    return { minWidth: '1524px' };
+  }
+  return {};
+});
+
+const colProps = computed(() => {
+  const count = popularPlaces.value.slice(0, displayedPlaces.value).length;
+  if (count <= 2) {
+    return { cols: 12, sm: 12, md: 6, lg: 6, xl: 6 };
+  } else {
+    return { cols: 12, sm: 12, md: 6, lg: 4, xl: 2 };
+  }
+});
 </script>
 <template>
-<div class="layout-wrapper">
+<div class="layout-wrapper" :style="layoutWrapperStyle">
   <v-container class="custom-drawer">
     <v-card class="drawer-content">
       <v-card-title class="text-h6">Szűrj tagek alapján:</v-card-title>
@@ -102,30 +126,67 @@ const toggleSortLikes = async () => {
   <!-- Eredeti container -->
   <v-container>
     <v-card max-width="1700px" style="margin-left: auto; margin-right: auto;">
-      <v-card-title class="text-h4">Magyarország iskolái (2025)</v-card-title>
-      <v-card-text class="text-h6">Itt külön kategóriák szerint szűrhet:</v-card-text>
-      <v-card-actions>
+      <v-card-title v-if="!mobile" class="text-h4">Magyarország éttermei (2025)</v-card-title>
+      <v-card-title v-if="mobile" class="text-h5">Magyarország éttermei (2025)</v-card-title>
+      <v-card-text v-if="!mobile" class="text-h6">Itt külön kategóriák szerint szűrhet:</v-card-text>
+      <v-card-text v-if="mobile" class="text-h7">Itt külön kategóriák szerint szűrhet:</v-card-text>
+      <!-- A sort gombokat tartalmazó rész -->
+      <div v-if="!mobile">
+        <v-card-actions>
           <v-btn @click="toggleSortDate" color="primary" class="text-surface">
             Dátum 
-            <v-icon>{{ sortDateAsc ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+            <v-icon>{{ sortDateAsc ? 'mdi-arrow-up' : 'mdi-arrow-down' }}</v-icon>
           </v-btn>
           <v-btn @click="toggleSortViews" color="primary" class="text-surface">
             Megtekintések 
-            <v-icon>{{ sortViewsAsc ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+            <v-icon>{{ sortViewsAsc ? 'mdi-arrow-up' : 'mdi-arrow-down' }}</v-icon>
           </v-btn>
           <v-btn @click="toggleSortAlpha" color="primary" class="text-surface">
             {{ sortAlphaAsc ? 'A-Z' : 'Z-A' }}
           </v-btn>
-          <v-btn  @click="toggleSortLikes" color="primary" class="text-surface">
+          <v-btn @click="toggleSortLikes" color="primary" class="text-surface">
             Az embereknek legjobban tetszett
           </v-btn>
         </v-card-actions>
+      </div>
+      <div v-else>
+        <v-menu transition="scale-transition">
+          <template v-slot:activator="{ props }">
+            <v-app-bar-nav-icon v-if="mobile" color="primary" v-bind="props"></v-app-bar-nav-icon>
+          </template>
+          <v-list>
+            <v-list-item @click="toggleSortDate">
+              <v-list-item-title>
+                Dátum
+                <v-icon small>{{ sortDateAsc ? 'mdi-arrow-up' : 'mdi-arrow-down' }}</v-icon>
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="toggleSortViews">
+              <v-list-item-title>
+                Megtekintések
+                <v-icon small>{{ sortViewsAsc ? 'mdi-arrow-up' : 'mdi-arrow-down' }}</v-icon>
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="toggleSortAlpha">
+              <v-list-item-title>
+                {{ sortAlphaAsc ? 'A-Z' : 'Z-A' }}
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="toggleSortLikes">
+              <v-list-item-title>
+                Legjobban tetszett
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
+
     </v-card>
     <v-row style="max-width: 1700px; margin: auto;">
       <v-col
         v-for="hely in popularPlaces.slice(0, displayedPlaces)" 
         :key="hely.title" 
-        cols="12" sm="6" md="4" lg="3" xl="2"
+        v-bind:colProps
       >
         <v-card rounded="xl" :disabled="loading" :loading="loading" class="md-10">
           <v-img height="250" :src="hely.url" cover></v-img>
@@ -169,6 +230,7 @@ const toggleSortLikes = async () => {
 .layout-wrapper {
   display: flex;
   padding: 20px;
+  min-height: 1300px;
 }
 
 </style>
