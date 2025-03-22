@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path');
 const bodyParser = require("body-parser");
 const authRoutes = require("./api/routes/AuthRoutes");
 const commentRoutes = require("./api/routes/CommentRoutes");
@@ -9,6 +10,7 @@ const RoleRequestRoutes = require("./api/routes/RoleRequestRoutes");
 const RoleRoutes = require("./api/routes/RoleRoutes");
 const PlaceViewRoutes = require("./api/routes/PlaceViewRoutes")
 const PlaceDetailRoutes = require("./api/routes/PlaceDetailRoutes")
+const SearchRoutes = require("./api/routes/SearchRoutes")
 require("dotenv").config();
 
 
@@ -23,6 +25,18 @@ app.use(cors({
     credentials: true, // Ha szükségesek a hitelesítési adatok (pl. cookie-k)
 }));
 
+app.use('/api/user/image', express.static(path.join(__dirname, 'api', 'uploads')));
+
+app.get('/api/user/image/:id', async (req, res) => {
+    const user = await db.User.findByPk(req.params.id);
+    if (!user || !user.ProfilePicture) {
+      return res.redirect('/api/user/image/defaultPP.jpg');
+    }
+  
+    res.set('Content-Type', 'image/jpeg'); // vagy png, ha az
+    res.send(user.ProfilePicture);
+  });
+
 app.use(bodyParser.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/comment",commentRoutes)
@@ -33,6 +47,7 @@ app.use("/api/main", MainPageRoutes)
 app.use("/api/role", RoleRoutes)
 app.use("/api/placeview", PlaceViewRoutes)
 app.use("/api/placedetail", PlaceDetailRoutes)
+app.use("/api/search", SearchRoutes)
 
 require("./api/database/dbContext");
 

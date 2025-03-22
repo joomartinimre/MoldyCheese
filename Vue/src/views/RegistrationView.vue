@@ -54,6 +54,30 @@ const registerUser = async () => {
   showErrors.value = true;
   showConfirmPasswordError.value = true;
   console.log("Elindítottam a regit")
+
+  if (v$.value.$invalid) {
+    console.error("❌ Hibás adatok!", v$.value.$errors);
+    const errorMessages = v$.value.$errors.map((err) => {
+    // Ha van custom message
+    if (err.$message) return err.$message;
+    // Ha nincs, akkor kulcs alapján írunk valamit
+    switch (err.$property) {
+      case 'userName':
+        return "A felhasználónév nem megfelelő.";
+      case 'email':
+        return "Hibás e-mail cím.";
+      case 'password':
+        return "Hibás jelszó.";
+      case 'confirmPassword':
+        return "A jelszavak nem egyeznek.";
+      default:
+        return "Ismeretlen hiba.";
+    }
+  });
+
+  alert("Kérlek javítsd a következő hibákat:\n\n" + errorMessages.join("\n"));
+    return;
+  }
   try {
     const response = await fetch('http://localhost:3000/api/auth/register', {
       method: 'POST',
@@ -79,10 +103,7 @@ const registerUser = async () => {
     console.error('Hiba történt a regisztráció során:', err);
     alert('Nem sikerült csatlakozni a szerverhez.');
   }
-  if (v$.value.$invalid) {
-    console.error("❌ Hibás adatok!", v$.value.$errors);
-    return;
-  }
+  
   
   console.log("🎉 Sikeres regisztrációs adatok:", form);
   registrationSuccess.value = true;

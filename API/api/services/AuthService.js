@@ -29,11 +29,11 @@ class AuthService {
         }
 
         // **Alapértelmezett profilkép beolvasása BLOB formátumban**
-        const defaultProfilePath = path.join(__dirname, "..", "uploads", "defaultPP.jpg");
-        const defaultProfilePicture = fs.readFileSync(defaultProfilePath); // Bináris adatként olvassuk be
+        const defaultProfilePictureUrl = `http://localhost:3000/api/user/image/defaultPP.jpg`;
+
 
         // **Létrehozzuk az új user-t az alapértelmezett képpel**
-        return await UserRepository.createUser(userName, password, email, role, Buffer.from(defaultProfilePicture));
+        return await UserRepository.createUser(userName, password, email, role, defaultProfilePictureUrl);
     }
 
     async login(email, password) {

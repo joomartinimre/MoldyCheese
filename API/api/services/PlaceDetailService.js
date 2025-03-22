@@ -1,6 +1,7 @@
 const db = require("../database/dbContext");
 const Place = db.Place;
 const Comment = db.Comment;
+const defaultProfilePictureUrl = "http://localhost:3000/api/user/image/defaultPP.jpg";
 
 const calculateTotalRating = (user_rate, critic_rate, NumberOfRate_L, NumberOfRate_C) => {
   if ((NumberOfRate_L + NumberOfRate_C) === 0) return 0; // Ha nincs értékelés

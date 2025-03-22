@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { ref, reactive, computed, onMounted, Comment } from 'vue'
+import { ref, reactive, computed, onMounted, Comment, watch } from 'vue'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -56,9 +56,9 @@ const fetchPlace = async () => {
         author: c.User?.userName || "Ismeretlen",
         role: c.User?.role || "Ismeretlen",
         time: new Date(c.createdAt).toLocaleString("hu-HU"),
-        avatar: c.User?.ProfilePicture
-          ? `data:image/png;base64,${c.User.ProfilePicture}`
-          : "https://via.placeholder.com/50",
+        avatar: c.User?.ID
+        ? `http://localhost:3000/api/user/image/${c.User.ID}`
+        : "http://localhost:3000/api/user/image/defaultPP.jpg",
         content: c.text
       }));
     } catch (error) {
@@ -71,7 +71,10 @@ onMounted(() => {
   fetchPlace();
   console.log(placeData)
   console.log(comments)
+  
 })
+
+
 
 // Dropdown opciók
 const items1 = ref([
@@ -120,6 +123,7 @@ const userID = computed(() => authStore.user?.id || (authStore.user as any)?.ID)
 
 // Komment beküldését végző függvény
 const submitComment = async () => {
+  
   if (form.place_ID === null) {
     alert("Hiba: Nem található érvényes hely ID.");
     return;
@@ -156,7 +160,9 @@ const submitComment = async () => {
   }
 };
 
-
+watch(() => route.params.id, () => {
+  fetchPlace()
+})
 
 // Értékelés beküldését végző függvény
 const createRating = async () => {
@@ -211,6 +217,8 @@ const handleRatingSelection = (ratingTitle: string) => {
   selected2.value = ratingTitle;
   createRating();
 };
+
+
 </script>
 
 <template>

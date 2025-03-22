@@ -3,6 +3,9 @@ import { computed, ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
 import { useAuthStore } from '@/stores/authStore';
+import axios from 'axios';
+
+axios.defaults.baseURL = "http://localhost:3000"
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -328,50 +331,26 @@ onMounted(() => {
 });
 
 const search = ref('')
-  const keresesek = [
-    {
-      id:1,
-      name: 'a',
-      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
-      topicname: 'topic',
-    },
-    {
-      id:2,
-      name: 'ab',
-      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
-      topicname: 'topic',
-    },
-    {
-      id:3,
-      name: 'abc',
-      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
-      topicname: 'topic',
-    },
-    {
-      id:4,
-      name: 'abcd',
-      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
-      topicname: 'topic',
-    },
-    {
-      id:5,
-      name: 'abcde',
-      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
-      topicname: 'topic',
-    },
-    {
-      id:6,
-      name: 'abcde',
-      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
-      topicname: 'topic',
-    },
-    {
-      id:7,
-      name: 'abcde',
-      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
-      topicname: 'topic',
-    },
-  ]
+const searchResults = ref<any[]>([]);
+
+watch(search, async (newSearch) => {
+  if (newSearch.length >= 2) {
+    try {
+      const response = await axios.get(`/api/search/${newSearch}`);
+      console.log("🔍 Keresési találatok:", response.data); // 💥 EZ KELL
+      searchResults.value = response.data;
+    } catch (error) {
+      console.error("❌ Hiba a keresés közben:", error);
+    }
+  } else {
+    searchResults.value = [];
+  }
+});
+
+const goToPlace = (id: number) => {
+  console.log(id)
+  router.push(`/place/${id}`);
+};
 
 </script>
 
@@ -394,6 +373,7 @@ const search = ref('')
             flat
             hide-details
             single-line
+            max-width="500"
           ></v-text-field>
         </div>
       </template>
@@ -899,30 +879,38 @@ const search = ref('')
       </nav>
     </v-app-bar>
 
-    <div class="search-overlay" v-if="search">
-      <v-card>
-        <v-card-text>
-          <v-data-table
-            hide-default-footer
-            hide-default-header
-            v-model:search="search"
-            :items="keresesek"
+
+
+    <div class="search-overlay" v-if="searchResults.length > 0">
+  <v-card>
+    <v-card-text>
+      <v-data-table
+        hide-default-footer
+        hide-default-header
+        :items="searchResults"
+        class="search-table"
+      >
+        <template v-slot:item="{ item }">
+          <v-card
+            class="d-flex search-item"
+            hover
+            
+            @click="search = '', goToPlace(item.id)"
           >
-            <template v-slot:item="{ item }">
-              <v-card class="d-flex" hover style="margin: 3px;" :to="`/place/${item.id}`" @click="search = ''">
-                <div style="width: 70px;">
-                  <v-img :src="item.image"></v-img>
-                </div>
-                <v-spacer></v-spacer>
-                <v-card-item class="text-h6">{{ item.name }}</v-card-item>
-                <v-spacer></v-spacer>
-                <v-card-item>{{ item.topicname }}</v-card-item>
-              </v-card>
-            </template>
-          </v-data-table>
-        </v-card-text>
-      </v-card>
-    </div>
+            <div class="search-image" style="width: 100px; height: 100px;">
+              <v-img :src="item.picture" cover></v-img>
+            </div>
+            <v-spacer></v-spacer>
+            <v-card-item class="text-h6">{{ item.name }}</v-card-item>
+            <v-spacer></v-spacer>
+            <v-card-item>{{ item.category }}</v-card-item>
+          </v-card>
+        </template>
+      </v-data-table>
+    </v-card-text>
+  </v-card>
+</div>
+
 
     <!-- FŐ TARTALOM -->
     <div class="page-content">
@@ -1101,5 +1089,46 @@ const search = ref('')
   z-index: 1100;
   margin: 0 auto;
 }
+
+.search-item {
+  margin: 3px;
+  /* opcionális: alapértelmezett betűméret */
+  font-size: 1rem;
+}
+
+.search-image {
+  width: 70px;   /* alapértelmezett kép méret */
+  height: 70px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* Győződjünk meg róla, hogy a v-img kitölti a konténert */
+.search-image .v-image__image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+/* 1279px alatt kisebb méretek */
+@media (max-width: 1279px) {
+  .search-item {
+    margin: 1px;
+    font-size: 0.7rem; /* opcionális: kisebb betűméret */
+  }
+  .search-image {
+    width: 30px;
+    height: 30px;
+  }
+  .search-overlay {
+  position: fixed;
+  top: 80px; /* az app-bar magassága */
+  left: 70px;
+  z-index: 1100;
+  margin: 0 auto;
+  width: 200px;
+  }
+}
+
 
 </style>
