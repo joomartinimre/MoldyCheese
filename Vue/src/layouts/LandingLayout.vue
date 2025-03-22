@@ -65,7 +65,7 @@ const handleLogout = () => {
   navigateTo('/');
 };
 
-const items = [
+const helyek = [
   { title: "Iskolák", path: "/school" },
   { title: "Éttermek", path: "/restaurant" },
   { title: "Vegyesboltok", path: "/shop" },
@@ -73,8 +73,6 @@ const items = [
 ];
 
 const { mobile } = useDisplay();
-
-const search = ref(''); // Keresősáv értéke
 
 // Visitor figyelmeztetés láthatóságának vezérlése
 const showVisitor = ref(true);
@@ -329,6 +327,52 @@ onMounted(() => {
   fetchAllUsers();
 });
 
+const search = ref('')
+  const keresesek = [
+    {
+      id:1,
+      name: 'a',
+      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
+      topicname: 'topic',
+    },
+    {
+      id:2,
+      name: 'ab',
+      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
+      topicname: 'topic',
+    },
+    {
+      id:3,
+      name: 'abc',
+      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
+      topicname: 'topic',
+    },
+    {
+      id:4,
+      name: 'abcd',
+      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
+      topicname: 'topic',
+    },
+    {
+      id:5,
+      name: 'abcde',
+      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
+      topicname: 'topic',
+    },
+    {
+      id:6,
+      name: 'abcde',
+      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
+      topicname: 'topic',
+    },
+    {
+      id:7,
+      name: 'abcde',
+      image: 'https://listonic.com/phimageproxy/listonic/products/apples.webp',
+      topicname: 'topic',
+    },
+  ]
+
 </script>
 
 <template>
@@ -340,14 +384,16 @@ onMounted(() => {
           <button style="font-size: 25px;" @click="navigateTo('/')">
             🧀 <span v-if="!mobile">Moldy Cheese</span>
           </button>
+          <!-- Csak a keresőmező -->
           <v-text-field
             v-model="search"
-            placeholder="Keresés..."
-            variant="outlined"
-            dense
-            class="search-bar"
+            density="compact"
+            label="Search"
+            prepend-inner-icon="mdi-magnify"
+            variant="solo-filled"
+            flat
             hide-details
-            clearable
+            single-line
           ></v-text-field>
         </div>
       </template>
@@ -404,7 +450,7 @@ onMounted(() => {
                         <v-card-text>
                           <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
                           <v-select
-                            :items="roles"
+                            :helyek="roles"
                             v-model="selectedRole"
                             item-title="name"
                             item-value="id"
@@ -437,7 +483,7 @@ onMounted(() => {
                           <v-textarea v-model="description" label="Írjon egy leírást a helyről" variant="outlined" required></v-textarea>
                           <v-select
                             v-model="selectedTopic"
-                            :items="topics"
+                            :helyek="topics"
                             item-title="name"
                             item-value="id"
                             label="Válassza ki milyen helyet szeretne létrehozni"
@@ -596,7 +642,7 @@ onMounted(() => {
             <v-app-bar-nav-icon v-if="mobile" color="primary" v-bind="props"></v-app-bar-nav-icon>
           </template>
           <v-list>
-            <v-list-item v-for="(item, i) in items" :key="i">
+            <v-list-item v-for="(item, i) in helyek" :key="i">
               <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo(item.path)">
                 {{ item.title }}
               </v-btn>
@@ -668,7 +714,7 @@ onMounted(() => {
                           <v-textarea v-model="description" label="Írjon egy leírást a helyről" variant="outlined" required></v-textarea>
                           <v-select
                             v-model="selectedTopic"
-                            :items="topics"
+                            :helyek="topics"
                             item-title="name"
                             item-value="id"
                             label="Válassza ki milyen helyet szeretne létrehozni"
@@ -710,7 +756,7 @@ onMounted(() => {
                         <v-card-text>
                           <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
                           <v-select
-                            :items="roles"
+                            :helyek="roles"
                             item-title="name"
                             item-value="id"
                             v-model="selectedRole"
@@ -853,9 +899,35 @@ onMounted(() => {
       </nav>
     </v-app-bar>
 
-    <!-- 📌 A FŐ TARTALOM KÖZÉPRE IGAZÍTVA -->
+    <div class="search-overlay" v-if="search">
+      <v-card>
+        <v-card-text>
+          <v-data-table
+            hide-default-footer
+            hide-default-header
+            v-model:search="search"
+            :items="keresesek"
+          >
+            <template v-slot:item="{ item }">
+              <v-card class="d-flex" hover style="margin: 3px;" :to="`/place/${item.id}`" @click="search = ''">
+                <div style="width: 70px;">
+                  <v-img :src="item.image"></v-img>
+                </div>
+                <v-spacer></v-spacer>
+                <v-card-item class="text-h6">{{ item.name }}</v-card-item>
+                <v-spacer></v-spacer>
+                <v-card-item>{{ item.topicname }}</v-card-item>
+              </v-card>
+            </template>
+          </v-data-table>
+        </v-card-text>
+      </v-card>
+    </div>
+
+    <!-- FŐ TARTALOM -->
     <div class="page-content">
       <v-container fluid class="main-container">
+        <!-- Egyéb tartalom, például a router-view -->
         <router-view />
       </v-container>
     </div>
@@ -893,7 +965,7 @@ onMounted(() => {
                 <v-card-text>
                   <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
                   <v-select
-                    :items="roles"
+                    :helyek="roles"
                     item-title="name"
                     item-value="id"
                     v-model="selectedRole"
@@ -951,15 +1023,6 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 20px;
-}
-
-.search-bar {
-  max-width: 600px;
-  width: 100%;
-}
-
-::v-deep(.search-bar .v-field__input) {
-  font-size: 18px !important;
 }
 
 .v-btn--size-default {
@@ -1029,4 +1092,14 @@ onMounted(() => {
   border-radius: 100%;
   z-index: 1;
 }
+
+/* Az app-bar már fixált, így a keresési eredményeket abszolút pozícionáljuk az app-bar alatt */
+.search-overlay {
+  position: fixed;
+  top: 80px; /* az app-bar magassága */
+  left: 240px;
+  z-index: 1100;
+  margin: 0 auto;
+}
+
 </style>

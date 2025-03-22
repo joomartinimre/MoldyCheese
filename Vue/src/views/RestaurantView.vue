@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import axios from 'axios';
 
 const API_BASE = "http://localhost:3000/api/placeview";
@@ -10,25 +10,31 @@ interface Place {
   rating: number;
 }
 
+const selectedTags = ref<string[]>([]);
+
 const popularPlaces = ref<Place[]>([]);
 
-const fetchPlaces = async () => {
+const fetchPlaces = async (sort = "visits") => {
   try {
-    
+    let tagParams = "";
+    if (selectedTags.value.length > 0) {
+      tagParams = selectedTags.value.map(tag => `tag=${encodeURIComponent(tag)}`).join("&");
+    }
 
-    const popularResponse = await axios.get(`${API_BASE}/restaurant`);
-    console.log("POPULAR RESPONSE:", popularResponse.data);
+    const popularResponse = await axios.get(`${API_BASE}/restaurant?sort=${sort}&${tagParams}`);
+
     popularPlaces.value = popularResponse.data.map((place: any) => ({
       id: place.id,
       url: place.url,
       title: place.title,
       rating: place.rating
     }));
-
   } catch (error) {
     console.error("Hiba történt a helyek lekérése közben:", error);
   }
 };
+
+
 
 
   const loading = ref(false)
@@ -51,16 +57,27 @@ const sortViewsAsc = ref(true);
 const sortAlphaAsc = ref(true);
 
 // Függvények a gombok állapotának váltásához
-const toggleSortDate = () => {
+const toggleSortDate = async () => {
   sortDateAsc.value = !sortDateAsc.value;
+  await fetchPlaces(sortDateAsc.value ? "oldest" : "latest");
 };
 
-const toggleSortViews = () => {
+const toggleSortViews = async () => {
   sortViewsAsc.value = !sortViewsAsc.value;
+  await fetchPlaces(sortViewsAsc.value ? "visitsAsc" : "visits");
 };
 
-const toggleSortAlpha = () => {
+const toggleSortAlpha = async () => {
   sortAlphaAsc.value = !sortAlphaAsc.value;
+  await fetchPlaces(sortAlphaAsc.value ? "abc" : "abcReverse");
+};
+
+watch(selectedTags, () => {
+  fetchPlaces(); // újrahívás automatikusan, ha változik a szűrő
+});
+
+const toggleSortLikes = async () => {
+  await fetchPlaces("mostLiked");
 };
 </script>
 <template>
@@ -69,14 +86,16 @@ const toggleSortAlpha = () => {
     <v-card class="drawer-content">
       <v-card-title class="text-h6">Szűrj tagek alapján:</v-card-title>
       <v-divider></v-divider>
-        <v-checkbox
+          <v-checkbox
             v-for="tag in tagItems"
             :key="tag"
             :label="tag"
             :value="tag"
+            v-model="selectedTags"
             hide-details
-            variant="elevated" color="primary"
-        />
+            variant="elevated"
+            color="primary"
+          />
     </v-card>
   </v-container>
 
@@ -97,7 +116,7 @@ const toggleSortAlpha = () => {
           <v-btn @click="toggleSortAlpha" color="primary" class="text-surface">
             {{ sortAlphaAsc ? 'A-Z' : 'Z-A' }}
           </v-btn>
-          <v-btn color="primary" class="text-surface">
+          <v-btn  @click="toggleSortLikes" color="primary" class="text-surface">
             Az embereknek legjobban tetszett
           </v-btn>
         </v-card-actions>

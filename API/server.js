@@ -8,6 +8,7 @@ const MainPageRoutes = require("./api/routes/MainPageRoutes");
 const RoleRequestRoutes = require("./api/routes/RoleRequestRoutes");
 const RoleRoutes = require("./api/routes/RoleRoutes");
 const PlaceViewRoutes = require("./api/routes/PlaceViewRoutes")
+const PlaceDetailRoutes = require("./api/routes/PlaceDetailRoutes")
 require("dotenv").config();
 
 
@@ -31,6 +32,7 @@ app.use("/api/request", RoleRequestRoutes)
 app.use("/api/main", MainPageRoutes)
 app.use("/api/role", RoleRoutes)
 app.use("/api/placeview", PlaceViewRoutes)
+app.use("/api/placedetail", PlaceDetailRoutes)
 
 require("./api/database/dbContext");
 

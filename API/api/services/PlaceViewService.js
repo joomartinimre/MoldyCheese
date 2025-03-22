@@ -9,27 +9,45 @@ const topicMap = {
   playground: 4,
 };
 
-const getPlacesByTopic = async (topicSlug, sort = "visits") => {
+const getPlacesByTopic = async (topicSlug, sort = "visits", tagFilter = null) => {
   const topicId = topicMap[topicSlug];
   if (!topicId) throw new Error("Érvénytelen kategória!");
 
   const orderMap = {
     visits: [["visits", "DESC"]],
-    rating: [
-      Sequelize.literal(`
-        CASE 
-          WHEN (NumberOfRate_L + NumberOfRate_C) = 0 THEN 0 
-          ELSE ((user_rate * NumberOfRate_L + critic_rate * NumberOfRate_C) / (NumberOfRate_L + NumberOfRate_C)) 
-        END
-      `), "DESC"
-    ],
+    rating: [Sequelize.literal(`
+      CASE 
+        WHEN (NumberOfRate_L + NumberOfRate_C) = 0 THEN 0 
+        ELSE ((user_rate * NumberOfRate_L + critic_rate * NumberOfRate_C) / (NumberOfRate_L + NumberOfRate_C)) 
+      END
+    `), "DESC"],
+    visitsAsc: [["visits", "ASC"]],
     latest: [["createdAt", "DESC"]],
+    oldest: [["createdAt", "ASC"]],
+    abc: [["name", "ASC"]],
+    abcReverse: [["name", "DESC"]],
+    mostLiked: [["likes", "DESC"]],
   };
 
   const order = orderMap[sort] || orderMap.visits;
 
+  const where = { topic_ID: topicId };
+
+if (tagFilter) {
+  const tags = Array.isArray(tagFilter) ? tagFilter : [tagFilter];
+
+  const tagConditions = tags.map(tag =>
+    Sequelize.where(
+      Sequelize.literal(`JSON_CONTAINS(tags, '["${tag}"]')`),
+      true
+    )
+  );
+
+  where[Op.and] = { [Op.or]: tagConditions };
+}
+
   const places = await Place.findAll({
-    where: { topic_ID: topicId },
+    where,
     order,
     limit: 50,
   });
@@ -41,6 +59,7 @@ const getPlacesByTopic = async (topicSlug, sort = "visits") => {
     rating: calculateRating(place)
   }));
 };
+
 
 const calculateRating = (place) => {
   const { user_rate, critic_rate, NumberOfRate_L, NumberOfRate_C } = place;

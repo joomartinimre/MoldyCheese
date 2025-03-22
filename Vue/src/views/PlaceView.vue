@@ -1,12 +1,77 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted, Comment } from 'vue'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 
 axios.defaults.baseURL = "http://localhost:3000"
 
 const authStore = useAuthStore()
+
+interface Comment {
+  author: string;
+  role: string;
+  time: string;
+  avatar: string;
+  content: string;
+}
+
+interface Place {
+  id: number;
+  name: string;
+  description: string;
+  tags: string[];
+  Picture: string | null;
+  rating: number;
+  Comments: any[];
+}
+const comments = ref<Comment[]>([]);
+
+const placeData = ref<any>(null);
+
+const fetchPlace = async () => {
+  if (placeID.value !== null) {
+    try {
+      const response = await axios.get(`/api/placedetail/${placeID.value}`);
+      const data = response.data;
+
+      placeData.value = {
+        id: data.id,
+        name: data.name,
+        description: data.description ?? "Nincs leírás megadva.",
+        tags: (() => {
+          try {
+            const parsed = JSON.parse(data.tags);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch {
+            return [];
+          }
+        })(),
+        Picture: data.url, // ez most már egy teljes URL, nem base64
+        rating: data.rating ?? 0,
+        Comments: data.Comments
+      };
+
+      comments.value = data.Comments.map((c: any) => ({
+        author: c.User?.userName || "Ismeretlen",
+        role: c.User?.role || "Ismeretlen",
+        time: new Date(c.createdAt).toLocaleString("hu-HU"),
+        avatar: c.User?.ProfilePicture
+          ? `data:image/png;base64,${c.User.ProfilePicture}`
+          : "https://via.placeholder.com/50",
+        content: c.text
+      }));
+    } catch (error) {
+      console.error("Hiba a hely betöltésekor:", error);
+    }
+  }
+}
+
+onMounted(() => {
+  fetchPlace();
+  console.log(placeData)
+  console.log(comments)
+})
 
 // Dropdown opciók
 const items1 = ref([
@@ -29,6 +94,8 @@ const items3 = ref([
   { title: 'Option 3C' }
 ])
 
+
+
 const selected1 = ref(items1.value[0]?.title || 'Dropdown 1')
 const selected2 = ref(items2.value[0]?.title || 'Dropdown 2')
 const selected3 = ref(items3.value[0]?.title || 'Dropdown 3')
@@ -37,28 +104,10 @@ const route = useRoute()
 const placeID = computed(() => route.params?.id ? Number(route.params.id) : null)
 
 // Példa helyek
-const helyek = ref([
-  {
-    id: 1,
-    url: "https://ceg-kozgazdasagi.cms.intezmeny.edir.hu/uploads/background_eb15905baa.jpg",
-    title: "Hely1",
-    rating: 4,
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    types: ["Általános iskola", "1-8", "Alap ismeretek"]
-  },
-  {
-    id: 2,
-    url: "https://via.placeholder.com/600",
-    title: "Hely2",
-    rating: 5,
-    description: "Ez egy másik hely leírása.",
-    types: ["Típus1", "Típus2", "Típus3"]
-  }
-])
 
-const selectedPlace = computed(() => {
-  return placeID.value !== null ? helyek.value.find(hely => hely.id === placeID.value) : null
-})
+
+const selectedPlace = computed(() => placeData.value);
+
 
 const form = reactive({
   place_ID: placeID.value,
@@ -68,25 +117,9 @@ const form = reactive({
 const userID = computed(() => authStore.user?.id || (authStore.user as any)?.ID)
 
 // Kommentek tömbje – kezdetben statikus lista
-const comments = ref([
-  {
-    author: "Felhasználónév",
-    time: "2025.01.30 14:10:27",
-    avatar: "https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/369807815_3611893209131278_1119172429369100096_n.jpg",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-  },
-  {
-    author: "Felhasználónév",
-    time: "2025.01.30 14:10:27",
-    avatar: "https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/369807815_3611893209131278_1119172429369100096_n.jpg",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-  }
-])
 
 // Komment beküldését végző függvény
 const submitComment = async () => {
-  console.log("Elindult a komment beküldése:", form, userID.value);
-  
   if (form.place_ID === null) {
     alert("Hiba: Nem található érvényes hely ID.");
     return;
@@ -95,7 +128,7 @@ const submitComment = async () => {
     alert("Kérlek, jelentkezz be a kommenteléshez!");
     return;
   }
-  
+
   try {
     const response = await fetch('http://localhost:3000/api/comment/comment', {
       method: 'POST',
@@ -115,19 +148,15 @@ const submitComment = async () => {
       return;
     }
 
-    const data = await response.json();
-    console.log(`Sikeres komment létrehozás: ${data.message}`);
-    
-    if (data.comment) {
-      comments.value.push(data.comment);
-    }
-    
     form.text = "";
+    await fetchPlace(); // friss komment lista lekérdezése
   } catch (err) {
     console.error('Hiba történt a komment beküldése során:', err);
     alert('Nem sikerült csatlakozni a szerverhez.');
   }
 };
+
+
 
 // Értékelés beküldését végző függvény
 const createRating = async () => {
@@ -185,17 +214,17 @@ const handleRatingSelection = (ratingTitle: string) => {
 </script>
 
 <template>
-  <v-container fluid v-if="selectedPlace">
-    <div class="homepage-container" :style="{ backgroundImage: `url(${selectedPlace.url})` }">
+  <v-container fluid v-if="placeData">
+    <div class="homepage-container" :style="{ backgroundImage: `url(${placeData.Picture})` }">
       <div class="content">
         <div class="image-section">
-          <img :src="selectedPlace.url" alt="Hely képe" />
+          <img :src="placeData.Picture" alt="Hely képe" />
         </div>
         <div class="text-section">
           <div class="title-rating">
-            <h1>{{ selectedPlace.title }}</h1>
+            <h1>{{ placeData.name }}</h1>
             <div class="place-types">
-              <span v-for="(type, index) in selectedPlace.types" :key="index" class="type-box">
+              <span v-for="(type, index) in placeData.tags" :key="index" class="type-box">
                 {{ type }}
               </span>
             </div>
@@ -248,7 +277,7 @@ const handleRatingSelection = (ratingTitle: string) => {
             </v-card-text>
           </div>
           <div class="description-container">
-            <p>{{ selectedPlace.description }}</p>
+            <p>{{ placeData.description }}</p>
           </div>
         </div>
       </div>
@@ -262,7 +291,10 @@ const handleRatingSelection = (ratingTitle: string) => {
           <img :src="comment.avatar" alt="Profilkép" class="comment-avatar">
           <div class="comment-bubble">
             <div class="bubble-header">
-              <span class="comment-author">{{ comment.author }}</span>
+              <span class="comment-author">
+                {{ comment.author }}
+                <small style="color: gray;">({{ comment.role }})</small>
+              </span>
               <span class="comment-time">{{ comment.time }}</span>
             </div>
             <div class="bubble-content">

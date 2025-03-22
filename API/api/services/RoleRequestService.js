@@ -1,4 +1,5 @@
 const RoleRequestRepository = require("../repositories/RoleRequestRepository");
+const db = require("../database/dbContext");
 
 const VALID_ROLES = [
     "Étterem kritikus",
@@ -22,7 +23,22 @@ class RoleRequestService {
     }
 
     async approveRequest(requestId, adminId) {
-        return await RoleRequestRepository.updateRequestStatus(requestId, "approved", adminId);
+        // Lekérjük a requestet
+        const request = await db.RoleRequest.findByPk(requestId);
+        if (!request) {
+            throw new Error("Request not found");
+        }
+    
+        // Frissítjük a request státuszát
+        await RoleRequestRepository.updateRequestStatus(requestId, "approved", adminId);
+    
+        // Frissítjük a felhasználó szerepkörét
+        await db.User.update(
+            { role: request.requested_role },
+            { where: { ID: request.user_id } }
+        );
+    
+        return { message: "Request approved and user role updated." };
     }
 
     async denyRequest(requestId, adminId) {
