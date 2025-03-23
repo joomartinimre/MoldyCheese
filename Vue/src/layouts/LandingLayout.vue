@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref, watch, onMounted } from 'vue';
+import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
 import { useAuthStore } from '@/stores/authStore';
@@ -352,6 +352,22 @@ const goToPlace = (id: number) => {
   router.push(`/place/${id}`);
 };
 
+const searchContainer = ref<HTMLElement | null>(null);
+
+const handleClickOutside = (event: MouseEvent) => {
+  if (searchContainer.value && !searchContainer.value.contains(event.target as Node)) {
+    searchResults.value = [];
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
+
 </script>
 
 <template>
@@ -415,7 +431,7 @@ const goToPlace = (id: number) => {
                   Profil
                 </v-btn>
               </v-list-item>
-              <v-list-item>
+              <v-list-item v-if="authStore.userRole == 'User'">
                   <v-dialog v-model="applyDialogHeader" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
@@ -430,8 +446,8 @@ const goToPlace = (id: number) => {
                         <v-card-text>
                           <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
                           <v-select
-                            :helyek="roles"
                             v-model="selectedRole"
+                            :items="roles"
                             item-title="name"
                             item-value="id"
                             label="Válassza ki kritikusi szerepkörét"
@@ -445,7 +461,7 @@ const goToPlace = (id: number) => {
                     </template>
                   </v-dialog>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item v-if="authStore.userRole == 'Admin'">
                   <!-- Hely feltöltő modal -->
                   <v-dialog max-width="700px">
                     <template #activator="{ props: activatorProps }">
@@ -463,7 +479,7 @@ const goToPlace = (id: number) => {
                           <v-textarea v-model="description" label="Írjon egy leírást a helyről" variant="outlined" required></v-textarea>
                           <v-select
                             v-model="selectedTopic"
-                            :helyek="topics"
+                            :items="topics"
                             item-title="name"
                             item-value="id"
                             label="Válassza ki milyen helyet szeretne létrehozni"
@@ -490,9 +506,10 @@ const goToPlace = (id: number) => {
                     </template>
                   </v-dialog>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item v-if="authStore.userRole == 'Admin'">
                   <v-dialog max-width="700px">
                     <template #activator="{ props: activatorProps }">
+                      <div class="jelentkezesek">{{ pendingRequests.length }}</div>
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
                         Jelentkezések
                       </v-btn>
@@ -534,7 +551,7 @@ const goToPlace = (id: number) => {
                                     <template #default="{ isActive }">
                                       <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
                                       <v-card  v-if="selectedRequest">
-                                        <v-card-title>{{selectedRequest.userName}} űrlapja</v-card-title>
+                                        <v-card-title>{{selectedRequest.User.userName}} űrlapja</v-card-title>
                                         <v-card-text>
                                           <div>
                                             <h4>Indoklás</h4>
@@ -564,7 +581,7 @@ const goToPlace = (id: number) => {
                     <!-- jog kezelés modal 1-->
                   </v-dialog>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item v-if="authStore.userRole == 'Admin'">
                   <v-dialog max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
@@ -622,9 +639,9 @@ const goToPlace = (id: number) => {
             <v-app-bar-nav-icon v-if="mobile" color="primary" v-bind="props"></v-app-bar-nav-icon>
           </template>
           <v-list>
-            <v-list-item v-for="(item, i) in helyek" :key="i">
-              <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo(item.path)">
-                {{ item.title }}
+            <v-list-item v-for="(hely, i) in helyek" :key="i">
+              <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo(hely.path)">
+                {{ hely.title }}
               </v-btn>
             </v-list-item>
           </v-list>
@@ -667,93 +684,14 @@ const goToPlace = (id: number) => {
               </template>
               <template v-else>
                 <v-list-item>
-                  <v-btn variant="text" color="primary" class="ma-1" @click="handleLogout">
-                    Kijelentkezés
-                  </v-btn>
-                </v-list-item>
-                <v-list-item>
                   <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/profile')">
                     Profil
                   </v-btn>
                 </v-list-item>
-                <v-list-item>
-                  <!-- Hely feltöltő modal -->
+                <v-list-item v-if="authStore.userRole == 'Admin'">
                   <v-dialog max-width="700px">
                     <template #activator="{ props: activatorProps }">
-                      <v-btn v-bind="activatorProps" color="primary" variant="text">
-                        Új hely létrehozása
-                      </v-btn>
-                    </template>
-
-                    <template #default="{ isActive }">
-                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
-                      <v-card>
-                        <v-card-title>Új hely létrehozása</v-card-title>
-                        <v-card-text>
-                          <v-text-field v-model="placeName" label="Adja meg a hely nevét" required></v-text-field>
-                          <v-textarea v-model="description" label="Írjon egy leírást a helyről" variant="outlined" required></v-textarea>
-                          <v-select
-                            v-model="selectedTopic"
-                            :helyek="topics"
-                            item-title="name"
-                            item-value="id"
-                            label="Válassza ki milyen helyet szeretne létrehozni"
-                            hide-details
-                          ></v-select>
-                          <div v-if="selectedTopic">
-                            <h4 style="padding: 10px;">Válassza ki a hely jellemzőit</h4>
-                            <v-checkbox
-                              v-for="tag in tagItems"
-                              :key="tag"
-                              :label="tag"
-                              :value="tag"
-                              @change="toggleTag(tag, $event)"
-                              hide-details
-                              variant="elevated" color="primary"
-                            />
-                          </div>
-                        </v-card-text>
-                        <v-file-upload title="Kép feltöltése" ref="fileUploadRef" @change="handleFileUpload" accept="image/*" clearable density="comfortable" variant="comfortable"><template #icon><v-icon variant="elevated" color="primary"></v-icon></template></v-file-upload>
-                        <v-card-actions style="padding: 24px; justify-content: flex-start;">
-                          <v-btn variant="elevated" color="primary" class="text-surface" @click="uploadPlace">Hely feltöltése</v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </template>
-                  </v-dialog>
-                </v-list-item>
-                <v-list-item>
-                  <v-dialog v-model="applyDialogHeader" max-width="700px">
-                    <template #activator="{ props: activatorProps }">
-                      <v-btn v-bind="activatorProps" color="primary" variant="text">
-                        Jelentkezz kritikusnak!
-                      </v-btn>
-                    </template>
-
-                    <template #default="{ isActive }">
-                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
-                      <v-card>
-                        <v-card-title>Kritikus űrlap</v-card-title>
-                        <v-card-text>
-                          <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
-                          <v-select
-                            :helyek="roles"
-                            item-title="name"
-                            item-value="id"
-                            v-model="selectedRole"
-                            label="Válassza ki kritikusi szerepkörét"
-                            hide-details
-                          ></v-select>
-                        </v-card-text>
-                        <v-card-actions style="padding: 24px; justify-content: flex-start;">
-                          <v-btn variant="elevated" color="primary" class="text-surface" @click="sendRoleRequest">Űrlap elküldése</v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </template>
-                  </v-dialog>
-                </v-list-item>
-                <v-list-item>
-                  <v-dialog max-width="700px">
-                    <template #activator="{ props: activatorProps }">
+                      <div class="jelentkezesek">{{ pendingRequests.length }}</div>
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
                         Jelentkezések
                       </v-btn>
@@ -794,7 +732,7 @@ const goToPlace = (id: number) => {
                                     <template #default="{ isActive }">
                                       <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
                                       <v-card  v-if="selectedRequest">
-                                        <v-card-title>{{selectedRequest.userName}} űrlapja</v-card-title>
+                                        <v-card-title>{{selectedRequest.User.userName}} űrlapja</v-card-title>
                                         <v-card-text>
                                           <div>
                                             <h4>Indoklás</h4>
@@ -824,7 +762,82 @@ const goToPlace = (id: number) => {
                     <!-- jog kezelés modal 2-->
                   </v-dialog>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item v-if="authStore.userRole == 'Admin'">
+                  <!-- Hely feltöltő modal -->
+                  <v-dialog max-width="700px">
+                    <template #activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" color="primary" variant="text">
+                        Új hely létrehozása
+                      </v-btn>
+                    </template>
+
+                    <template #default="{ isActive }">
+                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
+                      <v-card>
+                        <v-card-title>Új hely létrehozása</v-card-title>
+                        <v-card-text>
+                          <v-text-field v-model="placeName" label="Adja meg a hely nevét" required></v-text-field>
+                          <v-textarea v-model="description" label="Írjon egy leírást a helyről" variant="outlined" required></v-textarea>
+                          <v-select
+                            v-model="selectedTopic"
+                            :items="topics"
+                            item-title="name"
+                            item-value="id"
+                            label="Válassza ki milyen helyet szeretne létrehozni"
+                            hide-details
+                          ></v-select>
+                          <div v-if="selectedTopic">
+                            <h4 style="padding: 10px;">Válassza ki a hely jellemzőit</h4>
+                            <v-checkbox
+                              v-for="tag in tagItems"
+                              :key="tag"
+                              :label="tag"
+                              :value="tag"
+                              @change="toggleTag(tag, $event)"
+                              hide-details
+                              variant="elevated" color="primary"
+                            />
+                          </div>
+                        </v-card-text>
+                        <v-file-upload title="Kép feltöltése" ref="fileUploadRef" @change="handleFileUpload" accept="image/*" clearable density="comfortable" variant="comfortable"><template #icon><v-icon variant="elevated" color="primary"></v-icon></template></v-file-upload>
+                        <v-card-actions style="padding: 24px; justify-content: flex-start;">
+                          <v-btn variant="elevated" color="primary" class="text-surface" @click="uploadPlace">Hely feltöltése</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+                </v-list-item>
+                <v-list-item v-if="authStore.userRole == 'User'">
+                  <v-dialog v-model="applyDialogHeader" max-width="700px">
+                    <template #activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" color="primary" variant="text">
+                        Jelentkezz kritikusnak!
+                      </v-btn>
+                    </template>
+
+                    <template #default="{ isActive }">
+                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
+                      <v-card>
+                        <v-card-title>Kritikus űrlap</v-card-title>
+                        <v-card-text>
+                          <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
+                          <v-select
+                            :items="roles"
+                            item-title="name"
+                            item-value="id"
+                            v-model="selectedRole"
+                            label="Válassza ki kritikusi szerepkörét"
+                            hide-details
+                          ></v-select>
+                        </v-card-text>
+                        <v-card-actions style="padding: 24px; justify-content: flex-start;">
+                          <v-btn variant="elevated" color="primary" class="text-surface" @click="sendRoleRequest">Űrlap elküldése</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+                </v-list-item>
+                <v-list-item v-if="authStore.userRole == 'Admin'">
                   <v-dialog max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
@@ -872,6 +885,11 @@ const goToPlace = (id: number) => {
                     </template>
                   </v-dialog>
                 </v-list-item>
+                <v-list-item>
+                  <v-btn variant="text" color="primary" class="ma-1" @click="handleLogout">
+                    Kijelentkezés
+                  </v-btn>
+                </v-list-item>
               </template>
             </v-list>
           </v-menu>
@@ -879,38 +897,36 @@ const goToPlace = (id: number) => {
       </nav>
     </v-app-bar>
 
-
-
-    <div class="search-overlay" v-if="searchResults.length > 0">
-  <v-card>
-    <v-card-text>
-      <v-data-table
-        hide-default-footer
-        hide-default-header
-        :items="searchResults"
-        class="search-table"
-      >
-        <template v-slot:item="{ item }">
-          <v-card
-            class="d-flex search-item"
-            hover
-            
-            @click="search = '', goToPlace(item.id)"
+    <!-- Searchbar itemek -->
+    <div class="search-overlay" v-if="searchResults.length > 0" ref="searchContainer">
+      <v-card>
+        <v-card-text>
+          <v-data-table
+            hide-default-footer
+            hide-default-header
+            :items="searchResults"
+            class="search-table"
           >
-            <div class="search-image" style="width: 100px; height: 100px;">
-              <v-img :src="item.picture" cover></v-img>
-            </div>
-            <v-spacer></v-spacer>
-            <v-card-item class="text-h6">{{ item.name }}</v-card-item>
-            <v-spacer></v-spacer>
-            <v-card-item>{{ item.category }}</v-card-item>
-          </v-card>
-        </template>
-      </v-data-table>
-    </v-card-text>
-  </v-card>
-</div>
-
+            <template v-slot:item="{ item }">
+              <v-card
+                class="d-flex search-item"
+                hover
+                
+                @click="search = '', goToPlace(item.id)"
+              >
+                <div v-if="!mobile" class="search-image">
+                  <v-img :src="item.picture" height="100" width="100" cover></v-img>
+                </div>
+                <v-spacer></v-spacer>
+                <v-card-item style="font-size: 13px;">{{ item.name }}</v-card-item>
+                <v-spacer></v-spacer>
+                <v-card-item v-if="!mobile" style="font-size: 13px;">{{ item.category }}</v-card-item>
+              </v-card>
+            </template>
+          </v-data-table>
+        </v-card-text>
+      </v-card>
+    </div>
 
     <!-- FŐ TARTALOM -->
     <div class="page-content">
@@ -939,7 +955,7 @@ const goToPlace = (id: number) => {
         <v-row justify="center" no-gutters>
           <v-btn @click="navigateTo('/')" class="mx-2" color="primary" variant="text">Főoldal</v-btn>
           <v-btn @click="navigateTo('/aboutUs')" class="mx-2" color="primary" variant="text">Rólunk</v-btn>
-          <v-dialog v-model="applyDialogFooter" max-width="700px">
+          <v-dialog v-if="authStore.userRole == 'User'" v-model="applyDialogFooter" max-width="700px">
             <template #activator="{ props: activatorProps }">
               <v-btn v-bind="activatorProps" color="primary" variant="text">
                 Jelentkezz kritikusnak!
@@ -953,7 +969,7 @@ const goToPlace = (id: number) => {
                 <v-card-text>
                   <v-textarea v-model="description" label="Írja le miért lenne jó kritikus" variant="outlined" required></v-textarea>
                   <v-select
-                    :helyek="roles"
+                    :items="roles"
                     item-title="name"
                     item-value="id"
                     v-model="selectedRole"
@@ -966,6 +982,77 @@ const goToPlace = (id: number) => {
                 </v-card-actions>
               </v-card>
             </template>
+          </v-dialog>
+          <v-dialog v-if="authStore.userRole == 'Admin'" max-width="700px">
+            <template #activator="{ props: activatorProps }">
+              <v-btn v-bind="activatorProps" color="primary" variant="text">
+                Jelentkezések
+              </v-btn>
+            </template>
+            
+            <template #default="{ isActive }">
+              <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
+              <v-card>
+                <v-card-title>Kritikusi jelentkező űrlapok</v-card-title>
+                <v-card-text>
+                  <div v-if="pendingRequests.length === 0" class="text-center">
+                      <p>Nincs függőben lévő kérelem</p>
+                    </div>
+                  <v-table v-else>
+                    <thead>
+                      <tr>
+                        <th class="text-left">
+                        <h3>Felhasználónév</h3>
+                        </th>
+                        <th class="text-right">
+                          <h3>Űrlap</h3>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="request in pendingRequests" :key="request.id">
+                        <td class="text-left">{{ request.User ? request.User.userName : 'N/A' }}</td>
+                        <td class="text-right">
+                          
+                          <!-- Belső jelentkezési modal -->
+                          <v-dialog v-model="isInnerDialogOpen" max-width="700px">
+                            <template #activator="{ props: activatorProps }">
+                              <v-btn v-bind="activatorProps" variant="elevated" color="primary"  class="text-surface" @click="openRequestModal(request)">
+                                Űrlap megtekintése
+                              </v-btn>
+                            </template>
+                            
+                            <template #default="{ isActive }">
+                              <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
+                              <v-card v-if="selectedRequest">
+                                <v-card-title>{{selectedRequest.User.userName}} űrlapja</v-card-title>
+                                <v-card-text>
+                                  <div>
+                                    <h4>Indoklás</h4>
+                                    <p style="padding-left: 20px; padding-right: 20px;">{{ selectedRequest.reason }}</p>
+                                  </div>
+                                  <br>
+                                  <div>
+                                    <h4>Szerepköre:</h4>
+                                    <p>{{ selectedRequest.requested_role }}</p>
+                                  </div>
+                                </v-card-text>
+                                <v-card-actions style="padding: 24px; justify-content: flex-start;">
+                                  <v-btn variant="elevated" color="warning" class="text-surface" @click="denyRequest(selectedRequest.id)">Elutasítás</v-btn>
+                                  <v-spacer></v-spacer>
+                                  <v-btn variant="elevated" color="success" class="text-surface" @click="approveRequest(selectedRequest.id)">Elfogadás</v-btn>
+                                </v-card-actions>
+                              </v-card>
+                            </template>
+                          </v-dialog>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
+                </v-card-text>
+              </v-card>
+            </template>
+            <!-- jog kezelés modal 2-->
           </v-dialog>
         </v-row>
       </v-footer>
@@ -1065,6 +1152,22 @@ const goToPlace = (id: number) => {
   border-radius: 100%;
 }
 
+.jelentkezesek {
+  position: absolute;
+  top: -15px;
+  right: 50px;
+  padding-right: 10px;
+  padding-left: 10px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  font-size: 1.3rem;
+  color: rgb(253,216,53);
+  background-color: rgb(109,76,65);
+  border-radius: 100%;
+  height: 30px;
+}
+
 .close-btn-modal {
   position: absolute;
   top: 0px;
@@ -1097,36 +1200,26 @@ const goToPlace = (id: number) => {
 }
 
 .search-image {
-  width: 70px;   /* alapértelmezett kép méret */
-  height: 70px;
-  flex-shrink: 0;
+  width: 100px;
+  height: 65px;
   overflow: hidden;
 }
 
-/* Győződjünk meg róla, hogy a v-img kitölti a konténert */
 .search-image .v-image__image {
-  object-fit: cover;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* 1279px alatt kisebb méretek */
 @media (max-width: 1279px) {
-  .search-item {
-    margin: 1px;
-    font-size: 0.7rem; /* opcionális: kisebb betűméret */
-  }
-  .search-image {
-    width: 30px;
-    height: 30px;
-  }
   .search-overlay {
-  position: fixed;
+    position: fixed;
   top: 80px; /* az app-bar magassága */
   left: 70px;
   z-index: 1100;
   margin: 0 auto;
-  width: 200px;
   }
 }
 

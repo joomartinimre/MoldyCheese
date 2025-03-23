@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const dialog = ref(false)
+const dialog1 = ref(false)
+const dialog2 = ref(false)
 </script>
 
 <template>
@@ -92,23 +93,42 @@ const dialog = ref(false)
         style="bottom: 25%; left: 80%; transform: rotate(7deg);"
       />
     </div>
-    <div>
+    <div style="display: flex; gap: 20px;">
     <!-- Kattintható szöveg -->
     <p 
-      @click="dialog = true" 
-      style="cursor: pointer; color: blue; text-decoration: underline;"
+      @click="dialog1 = true" 
+      style="cursor: pointer;"
     >
       --------------------
     </p>
 
     <!-- Popup dialog -->
-    <v-dialog v-model="dialog" max-width="1500px">
+    <v-dialog v-model="dialog1" max-width="1500px">
       <v-card>
         <v-card-title style="font-size: 30px;">Ha azt hiszed hogy igénytelen az oldalunk, akkor még nem láttad az asztalunkat:</v-card-title>
         <v-img src="/finalboss.png"></v-img>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="dialog = false">Bezár</v-btn>
+          <v-btn color="primary" @click="dialog1 = false">Bezár</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <p 
+      @click="dialog2 = true" 
+      style="cursor: pointer; margin-left: auto;"
+    >
+      --------------------
+    </p>
+
+    <!-- Popup dialog -->
+    <v-dialog v-model="dialog2" max-width="800px">
+      <v-card>
+        <v-card-title style="font-size: 30px;">A kutyánk:</v-card-title>
+        <v-img src="/gizsgugya.png"></v-img>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="dialog2 = false">Bezár</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
