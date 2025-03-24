@@ -12,6 +12,40 @@ const authStore = useAuthStore();
 const route = useRoute();
 const applyDialogHeader = ref(false);
 const applyDialogFooter = ref(false);
+const isInnerDialogOpen = ref(false);
+const newPlaceDialog = ref(false);
+const roleManagerDialog = ref(false);
+const applicationsDialogHeader = ref(false);
+const applicationsDialogFooter = ref(false);
+
+const resetAllDialogData = () => {
+  description.value = '';
+  selectedRole.value = '';
+  placeName.value = '';
+  selectedTopic.value = null;
+  selectedTags.value = [];
+  realselectedTags.value = [];
+  imageFile.value = null;
+};
+
+const dialogRefs = [
+  applyDialogHeader,
+  applyDialogFooter,
+  isInnerDialogOpen,
+  newPlaceDialog,
+  roleManagerDialog,
+  applicationsDialogFooter,
+  applicationsDialogHeader,
+];
+
+dialogRefs.forEach(dialogRef => {
+  watch(dialogRef, (newVal, oldVal) => {
+    if (oldVal === true && newVal === false) {
+      resetAllDialogData();
+    }
+  });
+});
+
 
 interface RoleUser {
   ID: number;
@@ -248,8 +282,6 @@ const refresh = ()=>{
 
 const pendingRequests = ref<any[]>([]);
 const selectedRequest = ref<any | null>(null);
-const isInnerDialogOpen = ref(false);
-
 
 const fetchPendingRequests = async () => {
   
@@ -463,7 +495,7 @@ onBeforeUnmount(() => {
                 </v-list-item>
                 <v-list-item v-if="authStore.userRole == 'Admin'">
                   <!-- Hely feltöltő modal -->
-                  <v-dialog max-width="700px">
+                  <v-dialog v-model="newPlaceDialog" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
                         Új hely létrehozása
@@ -507,7 +539,7 @@ onBeforeUnmount(() => {
                   </v-dialog>
                 </v-list-item>
                 <v-list-item v-if="authStore.userRole == 'Admin'">
-                  <v-dialog max-width="700px">
+                  <v-dialog v-model="applicationsDialogHeader" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <div class="jelentkezesek">{{ pendingRequests.length }}</div>
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
@@ -582,7 +614,7 @@ onBeforeUnmount(() => {
                   </v-dialog>
                 </v-list-item>
                 <v-list-item v-if="authStore.userRole == 'Admin'">
-                  <v-dialog max-width="700px">
+                  <v-dialog v-model="roleManagerDialog" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
                         Jogok kezelése
@@ -689,7 +721,7 @@ onBeforeUnmount(() => {
                   </v-btn>
                 </v-list-item>
                 <v-list-item v-if="authStore.userRole == 'Admin'">
-                  <v-dialog max-width="700px">
+                  <v-dialog v-model="applicationsDialogHeader" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <div class="jelentkezesek">{{ pendingRequests.length }}</div>
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
@@ -764,7 +796,7 @@ onBeforeUnmount(() => {
                 </v-list-item>
                 <v-list-item v-if="authStore.userRole == 'Admin'">
                   <!-- Hely feltöltő modal -->
-                  <v-dialog max-width="700px">
+                  <v-dialog v-model="newPlaceDialog" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
                         Új hely létrehozása
@@ -838,7 +870,7 @@ onBeforeUnmount(() => {
                   </v-dialog>
                 </v-list-item>
                 <v-list-item v-if="authStore.userRole == 'Admin'">
-                  <v-dialog max-width="700px">
+                  <v-dialog v-model="roleManagerDialog" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
                         Jogok kezelése
@@ -983,7 +1015,7 @@ onBeforeUnmount(() => {
               </v-card>
             </template>
           </v-dialog>
-          <v-dialog v-if="authStore.userRole == 'Admin'" max-width="700px">
+          <v-dialog v-if="authStore.userRole == 'Admin'" max-width="700px" v-model="applicationsDialogFooter">
             <template #activator="{ props: activatorProps }">
               <v-btn v-bind="activatorProps" color="primary" variant="text">
                 Jelentkezések
