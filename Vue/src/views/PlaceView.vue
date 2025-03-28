@@ -117,7 +117,7 @@ const form = reactive({
   text: ""
 })
 
-const userID = computed(() => authStore.user?.id || (authStore.user as any)?.ID)
+const userID = computed(() => authStore.user?.ID || (authStore.user as any)?.ID)
 
 // Kommentek tömbje – kezdetben statikus lista
 
