@@ -266,6 +266,9 @@ const fetchPendingRequests = async () => {
 
 const openRequestModal = (request: any) => {
   selectedRequest.value = request;
+  console.log(selectedRequest.value)
+  console.log(selectedRequest.value.User.userName)
+  
   isInnerDialogOpen.value = true;
 };
 
@@ -326,6 +329,7 @@ const denyRequest = async (requestId: number) => {
 };
 
 onMounted(() => {
+  console.log(topics)
   fetchPendingRequests();
   fetchAllUsers();
 });
@@ -463,7 +467,7 @@ const goToPlace = (id: number) => {
                           <v-textarea v-model="description" label="Írjon egy leírást a helyről" variant="outlined" required></v-textarea>
                           <v-select
                             v-model="selectedTopic"
-                            :helyek="topics"
+                            :items="topics"
                             item-title="name"
                             item-value="id"
                             label="Válassza ki milyen helyet szeretne létrehozni"
@@ -534,7 +538,7 @@ const goToPlace = (id: number) => {
                                     <template #default="{ isActive }">
                                       <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
                                       <v-card  v-if="selectedRequest">
-                                        <v-card-title>{{selectedRequest.userName}} űrlapja</v-card-title>
+                                        <v-card-title>{{selectedRequest.User.userName}} űrlapja</v-card-title>
                                         <v-card-text>
                                           <div>
                                             <h4>Indoklás</h4>
@@ -794,7 +798,7 @@ const goToPlace = (id: number) => {
                                     <template #default="{ isActive }">
                                       <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
                                       <v-card  v-if="selectedRequest">
-                                        <v-card-title>{{selectedRequest.userName}} űrlapja</v-card-title>
+                                        <v-card-title>{{selectedRequest.User.userName}} űrlapja</v-card-title>
                                         <v-card-text>
                                           <div>
                                             <h4>Indoklás</h4>

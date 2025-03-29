@@ -18,7 +18,7 @@ const searchPlacesByName = async (searchTerm) => {
         [Op.like]: `%${searchTerm}%`
       }
     },
-    limit: 10
+    limit: 5
   });
 
   return places.map(place => ({
