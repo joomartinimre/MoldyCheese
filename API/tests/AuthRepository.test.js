@@ -24,6 +24,32 @@ describe("AuthService", () => {
             expect(newUser).toHaveProperty("role", "user");
         });
 
+        test("Should throw error if required fields are missing", async () => {
+            await expect(authService.register("", "password123", "email@email.com"))
+                .rejects
+                .toThrow("All fields (username, password, email) are required");
+
+            await expect(authService.register("User", "", "email@email.com"))
+                .rejects
+                .toThrow("All fields (username, password, email) are required");
+
+            await expect(authService.register("User", "password123", ""))
+                .rejects
+                .toThrow("All fields (username, password, email) are required");
+        });
+
+        test("Should throw error if password is less than 6 characters", async () => {
+            await expect(authService.register("User", "123", "email2@email.com"))
+                .rejects
+                .toThrow("Password must be at least 6 characters long");
+        });
+
+        test("Should throw error if email format is invalid", async () => {
+            await expect(authService.register("User", "password123", "invalid-email"))
+                .rejects
+                .toThrow("Invalid email format");
+        });
+
         test("Should not allow duplicate email registration", async () => {
             const userData = {
                 userName: "AnotherUser",

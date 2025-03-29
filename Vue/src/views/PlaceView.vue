@@ -69,7 +69,9 @@ const fetchPlace = async () => {
 
 onMounted(() => {
   fetchPlace();
-  console.log(placeData)
+  authStore.addRecentPlace(Number(placeID.value))
+  console.log(placeID.value)
+ 
   console.log(comments)
   
 })
@@ -117,7 +119,7 @@ const form = reactive({
   text: ""
 })
 
-const userID = computed(() => authStore.user?.id || (authStore.user as any)?.ID)
+const userID = computed(() => authStore.user?.ID || (authStore.user as any)?.ID)
 
 // Kommentek tömbje – kezdetben statikus lista
 

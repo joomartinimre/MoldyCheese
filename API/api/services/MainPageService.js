@@ -31,12 +31,20 @@ const getPopularPlaces = async () => {
 // 20 legutóbbi megtekintett hely (felhasználónak)
 const getRecentPlaces = async (userVisitedPlaceIds) => {
     if (!userVisitedPlaceIds || userVisitedPlaceIds.length === 0) return [];
+
     const places = await Place.findAll({
-        where: { ID: { [Op.in]: userVisitedPlaceIds } },
-        order: [["createdAt", "DESC"]],
-        limit: 12
+        where: { ID: { [Op.in]: userVisitedPlaceIds } }
     });
-    return places.map(place => formatPlace(place));
+
+    // Kézi rendezés a küldött sorrend alapján (például FIFO vagy LIFO szerint)
+    const placeMap = new Map(places.map(place => [place.ID, place]));
+    
+    return userVisitedPlaceIds
+        .slice() // hogy ne módosítsd az eredetit
+        .reverse()
+        .map(id => placeMap.get(id))
+        .filter(Boolean)
+        .map(place => formatPlace(place));
 };
 
 // Legújabb helyek

@@ -30,6 +30,8 @@ const getPlaceWithComments = async (placeId) => {
   console.log("✅ Betöltött hely:", place.tags);
   if (!place) throw new Error("Nem található a hely.");
   
+  await place.increment("visits", { by: 1 });
+
   return {
     id: place.ID,
     name: place.name,

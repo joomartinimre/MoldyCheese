@@ -49,6 +49,22 @@ describe("Comment Repository Tests", () => {
         });
     });
 
+    describe("Find Comment By ID", () => {
+        test("Should return the correct comment by ID", async () => {
+            const createdComment = await commentRepository.createComment(
+                1,
+                testPlace.id,
+                "Find this comment"
+            );
+
+            const foundComment = await commentRepository.findCommentByID(createdComment.id);
+
+            expect(foundComment).toBeDefined();
+            expect(foundComment.text).toBe("Find this comment");
+            expect(foundComment.id).toBe(createdComment.id);
+        });
+    });
+
     describe("Retrieve Comments", () => {
         test("Should retrieve comments by place_ID", async () => {
             expect(testPlace.id).toBeDefined();

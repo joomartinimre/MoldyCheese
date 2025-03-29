@@ -42,10 +42,11 @@ router.get("/popular", async (req, res) => {
 });
 
 // 20 legutóbbi megtekintett hely (csak bejelentkezett felhasználónak)
-router.get("/recent", async (req, res) => {
+router.post("/recent", async (req, res) => {
     try {
-        const userVisitedPlaceIds = req.user?.visitedPlaces || [];
+        const userVisitedPlaceIds = req.body.placeIds || [];
         if (userVisitedPlaceIds.length === 0) {
+            console.log("jancsi")
             return res.json([]);
         }
         const places = await getRecentPlaces(userVisitedPlaceIds);
