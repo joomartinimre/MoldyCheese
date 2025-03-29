@@ -11,7 +11,7 @@ const dialog2 = ref(false)
     <header>
       <h1 color="primary">MoldyCheese - A helyértékelés forradalma</h1>
       <p>- "Minél több hely, minél több vélemény, minél egyszerűbb értékelés!"</p>
-      <!-- Véletlenszerűen elhelyezett dekorációs kép a fejléc bal felső sarkában -->
+      <!-- Véletlenszerűen elhelyezett dekorációs kép a fejléc bal felső sarkában asd-->
       <img
         class="floating-image header-deco"
         src="https://www.tasteofhome.com/wp-content/uploads/2022/09/GettyImages-470340853.jpg"
