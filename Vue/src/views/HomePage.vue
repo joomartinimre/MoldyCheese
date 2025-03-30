@@ -263,24 +263,68 @@ watch(topRatedPlaces, (newVal) => {
   }
 }, { immediate: true });
 
-onUnmounted(() => {
-  // Ha szükséges, itt távolítsd el az eseménykezelőket
+let windowAutoplayInterval: ReturnType<typeof setInterval> | null = null;
+
+// Flag, hogy megkülönböztesd az automatikus slide váltást a manuálistól
+const isAutoChanging = ref(false);
+
+// Módosított automatikus slide váltás
+const nextWindowSlide = () => {
+  isAutoChanging.value = true;
+  if (windowModel.value < popularPlaces.value.length - 1) {
+    windowModel.value++;
+  } else {
+    windowModel.value = 0;
+  }
+  // A flag visszaállítása a következő tick-ben, hogy a watch már manuális változásként kezelje a későbbi módosításokat
+  nextTick(() => {
+    isAutoChanging.value = false;
+  });
+};
+
+const startWindowAutoplay = () => {
+  stopWindowAutoplay(); // Biztos, hogy ne legyen több futó intervallum
+  windowAutoplayInterval = setInterval(nextWindowSlide, 10000);
+};
+
+const stopWindowAutoplay = () => {
+  if (windowAutoplayInterval) {
+    clearInterval(windowAutoplayInterval);
+    windowAutoplayInterval = null;
+  }
+};
+
+onMounted(() => {
+  startWindowAutoplay();
 });
+
+onUnmounted(() => {
+  stopWindowAutoplay();
+});
+
+// Watch, amely figyeli a windowModel változását
+watch(windowModel, () => {
+  // Ha a flag nincs beállítva, az azt jelenti, hogy manuális változás történt
+  if (!isAutoChanging.value) {
+    stopWindowAutoplay();
+    startWindowAutoplay();
+  }
+});
+
 
 </script>
 
 
 
 <template>
-  
-      <!-- Popular-->
+  <!-- Popular-->
   <v-container fluid style="padding: 0px;">
     <v-window v-model="windowModel" :show-arrows="$vuetify.display.mdAndUp">
       <v-window-item v-for="hely in popularPlaces" :key="hely.id">
         <div class="homepage-container" :style="{ backgroundImage: `url(${hely.url})` }">
           <div class="content" :class="transitionState">
             <div class="text-section">
-              <h1>{{ hely.title }}</h1>
+              <h1 style="padding-bottom: 20px;">{{ hely.title }}</h1>
               <div class="description-container">
                 <p>{{ hely.description }}</p>
               </div>
@@ -309,7 +353,7 @@ onUnmounted(() => {
         </div>
       </v-window-item>
     </v-window>
-      <!-- Recent-->
+    <!-- Recent-->
        
     <h1 v-if="recentPlaces.length > 0" style="padding: 0px 30px; max-width: 2300px; margin: auto;">Korábban megtekintve</h1>
     <v-container v-if="recentPlaces.length > 0" class="horizontal-scroll-container" fluid>
@@ -485,12 +529,6 @@ onUnmounted(() => {
 
 <style scoped>
 
-.text-section h1{
-  font-size: 40px;
-  padding-bottom: 40px;
-  text-align: left;
-}
-
 .text-section p{
   font-size: 20px;
   text-align: left;
@@ -536,7 +574,6 @@ onUnmounted(() => {
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
   z-index: 1;
-  pointer-events: none; /* Így nem akadályozza a kattintásokat */
 }
 
 /* Szöveges rész */
@@ -544,7 +581,6 @@ onUnmounted(() => {
   flex: 1;
   color: white;
   text-align: left;
-  margin: 0 20px;
 }
 
 .image-section {

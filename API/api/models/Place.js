@@ -16,10 +16,10 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false
             },
             user_rate: {
-                type: DataTypes.INTEGER 
+                type: DataTypes.FLOAT 
             },
             critic_rate: {
-                type: DataTypes.INTEGER 
+                type: DataTypes.FLOAT 
             },
             NumberOfRate_L: {
                 type: DataTypes.INTEGER 

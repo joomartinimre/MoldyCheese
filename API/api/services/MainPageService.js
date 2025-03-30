@@ -30,7 +30,7 @@ const getPopularPlaces = async () => {
 
 // 20 legutóbbi megtekintett hely (felhasználónak)
 const getRecentPlaces = async (userVisitedPlaceIds) => {
-    if (!userVisitedPlaceIds || userVisitedPlaceIds.length === 0) return [];
+    if (!userVisitedPlaceIds || userVisitedPlaceIds.length < 7) return [];
 
     const places = await Place.findAll({
         where: { ID: { [Op.in]: userVisitedPlaceIds } }

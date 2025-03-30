@@ -39,6 +39,11 @@ const getPlaceWithComments = async (placeId) => {
     tags: place.tags,
     url: place.Picture ? `http://localhost:3000/api/main/image/${place.ID}` : null,
     rating: calculateTotalRating(place.user_rate, place.critic_rate, place.NumberOfRate_L, place.NumberOfRate_C),
+    user_rate: place.NumberOfRate_L > 0 ? place.user_rate / place.NumberOfRate_L : 0,
+    critic_rate: place.NumberOfRate_C > 0 ? place.critic_rate / place.NumberOfRate_C : 0,
+    createdAt: place.createdAt.toISOString().split('T')[0],
+    visits: place.visits,
+    likes: place.Likes,
     Comments: place.Comments
   };
 }

@@ -11,6 +11,16 @@ class CommentRepository {
         });
     }
 
+    async updateCommentText(commentID, newText) {
+        const comment = await db.Comment.findOne({ where: { ID: commentID } });
+        if (!comment) return null;
+
+        comment.text = newText;
+        await comment.save();
+
+        return comment;
+    }
+
     async findCommentsByPlace(place_ID) {
         return await db.Comment.findAll({ where: { place_ID } });
     }

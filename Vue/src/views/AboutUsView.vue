@@ -11,7 +11,7 @@ const dialog2 = ref(false)
     <header>
       <h1 color="primary">MoldyCheese - A helyértékelés forradalma</h1>
       <p>- "Minél több hely, minél több vélemény, minél egyszerűbb értékelés!"</p>
-      <!-- Véletlenszerűen elhelyezett dekorációs kép a fejléc bal felső sarkában asd-->
+      <!-- Véletlenszerűen elhelyezett dekorációs kép a fejléc bal felső sarkában-->
       <img
         class="floating-image header-deco"
         src="https://www.tasteofhome.com/wp-content/uploads/2022/09/GettyImages-470340853.jpg"
@@ -96,6 +96,7 @@ const dialog2 = ref(false)
     <div style="display: flex; gap: 20px;">
     <!-- Kattintható szöveg -->
     <p 
+      id="bal"
       @click="dialog1 = true" 
       style="cursor: pointer;"
     >
@@ -114,7 +115,8 @@ const dialog2 = ref(false)
       </v-card>
     </v-dialog>
 
-    <p 
+    <p
+      id="jobb"
       @click="dialog2 = true" 
       style="cursor: pointer; margin-left: auto;"
     >
@@ -185,10 +187,42 @@ h2 {
   margin-bottom: 30px;
   font-size: 2.2em;
 }
-p {
+
+.container p {
   margin-bottom: 30px;
   font-size: 1.1em;
   text-align: justify;
+}
+
+p {
+  font-size: 1.1em;
+  text-align: justify;
+}
+
+@media (max-width: 1280px) {
+  #jobb {
+    position: absolute;
+    right: 0px;
+    bottom: 30px;
+  }
+  #bal {
+    position: absolute;
+    left: 0px;
+    bottom: 30px;
+  }
+}
+
+@media (max-width: 465px) {
+  #jobb {
+    position: absolute;
+    right: 0px;
+    bottom: 70px;
+  }
+  #bal {
+    position: absolute;
+    left: 0px;
+    bottom: 70px;
+  }
 }
 
 /* Galéria */

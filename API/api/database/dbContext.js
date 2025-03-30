@@ -83,16 +83,29 @@ const saveDataOnExit = async () => {
         }
 
         // **Végül a FK függő táblák (User & Place után)**
-        const dependentModels = ["Comment", "Rating", "RoleRequest"];
-        for (const modelName of dependentModels) {
-            if (db[modelName] && db[modelName].findAll) {
-                console.log(`🔍 Fetching data from ${modelName}...`);
-                const records = await db[modelName].findAll({ raw: true });
-                if (records.length > 0) {
-                    seedData[modelName] = records.map(record => formatDates(record, db[modelName]));
-                }
-            }
-        }
+        const phase1Models = ["Comment", "Rating", "RoleRequest"];
+        const phase2Models = ["PlaceLike", "CommentLike"];
+
+        for (const modelName of phase1Models) {
+            if (!db[modelName]) continue;
+            const data = seedData[modelName];
+            if (!Array.isArray(data) || data.length === 0) continue;
+          
+            console.log(`📥 Seeding ${modelName}...`);
+            await db[modelName].bulkCreate(data, { ignoreDuplicates: true });
+            console.log(`✅ Seeded ${modelName}`);
+          }
+          
+          // PHASE 2 – Like táblák, csak az előzők után
+          for (const modelName of phase2Models) {
+            if (!db[modelName]) continue;
+            const data = seedData[modelName];
+            if (!Array.isArray(data) || data.length === 0) continue;
+          
+            console.log(`📥 Seeding ${modelName}...`);
+            await db[modelName].bulkCreate(data, { ignoreDuplicates: true });
+            console.log(`✅ Seeded ${modelName}`);
+          }
 
         console.log("📁 Writing data to seedData.json...");
         fs.writeFileSync(
@@ -202,25 +215,30 @@ const seedDatabase = async () => {
         }
 
         // **Most jöhetnek a függő modellek**
-        const dependentModels = ["Comment", "Rating", "RoleRequest"];
-        for (const modelName of dependentModels) {
-            if (!db[modelName]) {
-                console.warn(`⚠️ Model ${modelName} not found in DB context.`);
-                continue;
-            }
+        const phase1Models = ["Comment", "Rating", "RoleRequest"];
+        const phase2Models = ["PlaceLike", "CommentLike"];
 
+
+        for (const modelName of phase1Models) {
+            if (!db[modelName]) continue;
             const data = seedData[modelName];
-
-            if (!Array.isArray(data) || data.length === 0) {
-                console.log(`⚠️ No data found for ${modelName}, skipping.`);
-                continue;
-            }
-
+            if (!Array.isArray(data) || data.length === 0) continue;
+          
             console.log(`📥 Seeding ${modelName}...`);
             await db[modelName].bulkCreate(data, { ignoreDuplicates: true });
-            console.log(`✅ Successfully seeded ${modelName} with ${data.length} records.`);
-        }
-
+            console.log(`✅ Seeded ${modelName}`);
+          }
+          
+          // PHASE 2 – Like táblák, csak az előzők után
+          for (const modelName of phase2Models) {
+            if (!db[modelName]) continue;
+            const data = seedData[modelName];
+            if (!Array.isArray(data) || data.length === 0) continue;
+          
+            console.log(`📥 Seeding ${modelName}...`);
+            await db[modelName].bulkCreate(data, { ignoreDuplicates: true });
+            console.log(`✅ Seeded ${modelName}`);
+          }
         console.log("✅ Database successfully restored from backup!");
     } catch (error) {
         console.error("❌ Failed to restore seed data:", error.message);

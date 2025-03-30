@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         allowNull: false,
         references: {
-          model: 'Users', // feltételezzük, hogy a felhasználók táblájának neve 'Users'
+          model: 'Users', 
           key: 'id'
         }
       },
@@ -14,21 +14,20 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         allowNull: false,
         references: {
-          model: 'Places', // feltételezzük, hogy a helyek táblájának neve 'Places'
+          model: 'Places', 
           key: 'id'
         }
       },
       rating: {
-        type: DataTypes.INTEGER, // itt megadhatod, milyen típusú az értékelés (pl. 1-5 skála esetén INTEGER)
+        type: DataTypes.FLOAT, 
         allowNull: false
       }
     }, {
-      tableName: 'Ratings', // a táblanév
+      tableName: 'Ratings', 
       timestamps: false
     });
   
     Rating.associate = (models) => {
-      // Kapcsolatok beállítása
       Rating.belongsTo(models.User, { foreignKey: 'user_id' });
       Rating.belongsTo(models.Place, { foreignKey: 'place_id' });
     };

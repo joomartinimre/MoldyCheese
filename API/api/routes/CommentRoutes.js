@@ -8,4 +8,6 @@ router.get("/comments/:place_ID", CommentController.getCommentsByPlace);
 
 router.delete("/comment/:id", CommentController.deleteComment);
 
+router.put('/comment/update/:id', CommentController.updateComment);
+
 module.exports = router;

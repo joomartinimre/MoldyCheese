@@ -298,9 +298,6 @@ const fetchPendingRequests = async () => {
 
 const openRequestModal = (request: any) => {
   selectedRequest.value = request;
-  console.log(selectedRequest.value)
-  console.log(selectedRequest.value.User.userName)
-  
   isInnerDialogOpen.value = true;
 };
 
@@ -361,7 +358,6 @@ const denyRequest = async (requestId: number) => {
 };
 
 onMounted(() => {
-  console.log(topics)
   fetchPendingRequests();
   fetchAllUsers();
 });
@@ -409,7 +405,7 @@ onBeforeUnmount(() => {
 <template>
   <v-layout class="rounded rounded-md">
     <!-- 📌 FIXÁLT FEJLÉC -->
-    <v-app-bar height="80" app class="sticky-header">
+    <v-app-bar height="80" style="position: fixed !important;">
       <template v-slot:title>
         <div class="header-container">
           <button style="font-size: 25px;" @click="navigateTo('/')">
@@ -686,13 +682,13 @@ onBeforeUnmount(() => {
 
       <!-- Asztali nézet: navigáció és account menü -->
       <nav v-if="!mobile" class="desktop-nav">
-        <div class="desktop-nav-items">
+        <div>
           <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/school')">Iskolák</v-btn>
           <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/restaurant')">Éttermek</v-btn>
           <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/shop')">Vegyesboltok</v-btn>
           <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/playground')">Játszóterek</v-btn>
         </div>
-        <div class="desktop-nav-account">
+        <div>
           <v-menu transition="scale-transition">
             <template v-slot:activator="{ props }">
               <v-app-bar-nav-icon
@@ -969,6 +965,8 @@ onBeforeUnmount(() => {
       <v-container fluid class="main-container">
         <!-- Egyéb tartalom, például a router-view -->
         <router-view />
+        <br>
+        <br v-if="mobile">
       </v-container>
     </div>
 
@@ -1097,17 +1095,6 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.sticky-header {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  background: rgba(0, 0, 0, 0.9);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
 
 .page-content {
   padding-top: 64px;
