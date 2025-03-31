@@ -65,7 +65,6 @@ const fetchPlace = async () => {
       createdAt: data.createdAt ?? null,
       Comments: data.Comments
 };
-
       
       comments.value = data.Comments.map((c: any) => ({
         
@@ -97,9 +96,6 @@ const checkIfUserLikedPlace = async () => {
     console.error("Hiba a place-like lekérdezésnél:", error);
   }
 };
-
-
-
 
 
 
@@ -211,6 +207,7 @@ const createRating = async () => {
     }
 
     const data = await response.json();
+    await fetchPlace();
     console.log(`Sikeres értékelés beküldés: ${data.message}`);
   } catch (err) {
     console.error('Hiba történt az értékelés beküldése során:', err);
@@ -388,6 +385,32 @@ onMounted(async () => {
             <v-icon size="small">mdi-eye</v-icon>  {{placeData.visits}} |
             <v-btn variant="text" size="small" :icon="globalLiked ? 'mdi-thumb-up' : 'mdi-thumb-up-outline'" @click="toggleGlobalLike" style="width: 20px;"></v-btn>
             {{ globalLikes }}
+          </div>
+          <div style="display: flex;">
+            <div style="display: flex;">
+              <div style="padding-left: 10px;">
+                <v-icon class="text-grey" :size="45">mdi-account</v-icon>
+              </div>
+              <div style="padding-left: 10px;">
+                <p style="font-size: x-large;"> {{ placeData.user_rate * 10 }}%</p>
+                <p style="font-size: small;"> Laikusok <br> {{ placeData.user_ratenumberL }} Értékelés</p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div style="padding-left: 10px;">
+                <v-icon class="text-blue-grey" v-if="placeData.topic_id == 1" :size="45">mdi-school</v-icon>
+                <v-icon class="text-surface" v-if="placeData.topic_id == 2" :size="45">mdi-silverware-variant</v-icon>
+                <v-icon class="text-cyan" v-if="placeData.topic_id == 3" :size="45">mdi-cart-variant</v-icon>
+                <v-icon class="text-green" v-if="placeData.topic_id == 4" :size="45">mdi-seesaw</v-icon>
+              </div>
+              <div style="padding-left: 10px;">
+                <p style="font-size: x-large;"> {{ placeData.critic_rate * 10 }}% </p>
+                <p v-if="placeData.topic_id == 1" style="font-size: small;"> Iskológusok <br> {{ placeData.user_ratenumberC }} Értékelés</p>
+                <p v-if="placeData.topic_id == 2" style="font-size: small;"> Étterem Kritikusok <br> {{ placeData.user_ratenumberC }} Értékelés</p>
+                <p v-if="placeData.topic_id == 3" style="font-size: small;"> Vegyesbolt Vegyészek <br> {{ placeData.user_ratenumberC }} Értékelés</p>
+                <p v-if="placeData.topic_id == 4" style="font-size: small;"> Játszótér Szakértők <br> {{ placeData.user_ratenumberC }} Értékelés</p>
+              </div>
+            </div>
           </div>
           <v-card-text style="text-align: left;">
             <v-rating v-if="!mobile"
@@ -571,6 +594,7 @@ onMounted(async () => {
 .image-section {
   flex: 1;
   display: flex;
+  max-height: 830px;
   justify-content: flex-start;
 }
 

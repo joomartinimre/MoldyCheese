@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require('path');
+const db = require("./api/database/dbContext");
 const bodyParser = require("body-parser");
 const authRoutes = require("./api/routes/AuthRoutes");
 const commentRoutes = require("./api/routes/CommentRoutes");
@@ -13,6 +14,7 @@ const PlaceDetailRoutes = require("./api/routes/PlaceDetailRoutes")
 const SearchRoutes = require("./api/routes/SearchRoutes")
 const PlaceLikeRoutes = require("./api/routes/placeLikeRoutes")
 const CommentLikeRoutes = require("./api/routes/commentLikeRoutes")
+const ProfilePageRoutes = require("./api/routes/ProfilePageRoutes")
 require("dotenv").config();
 
 
@@ -52,6 +54,7 @@ app.use("/api/placedetail", PlaceDetailRoutes)
 app.use("/api/search", SearchRoutes)
 app.use("/api/c", CommentLikeRoutes)
 app.use("/api/p", PlaceLikeRoutes)
+app.use("/api/profile", ProfilePageRoutes)
 
 require("./api/database/dbContext");
 

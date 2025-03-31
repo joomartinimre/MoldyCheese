@@ -1,6 +1,80 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, onMounted  } from 'vue';
+import { useAuthStore } from '@/stores/authStore'
+import axios from 'axios'
 const keptoltes = ref(true);
+const defaultProfilePictureUrl = `http://localhost:3000/api/user/image/defaultPP.jpg`;
+const profilePictureUrl = ref(defaultProfilePictureUrl);
+
+const authStore = useAuthStore();
+
+const fetchProfileData = async () => {
+  try {
+    const { data } = await axios.get(`/api/profile/${authStore.user?.ID}`);
+    userName.value = data.userName;
+    console.log("👉 Betöltött userName:", data.userName);
+
+    profileInfo.value[0].value = userName.value;
+    profileInfo.value[1].value = data.email;
+    profileInfo.value[2].value = data.role;
+    profileInfo.value[3].value = data.commentCount;
+    profileInfo.value[4].value = data.ratingCount;
+    profileInfo.value[5].value = data.totalCommentLikes;
+    profilePictureUrl.value = data.profilePictureUrl || defaultProfilePictureUrl;
+
+    topComments.value = data.topComments.map((c: any) => ({
+      author: c.User.userName,
+      role: c.User.role,
+      time: new Date(c.createdAt).toLocaleString("hu-HU"),
+      avatar: c.User?.ID
+        ? `http://localhost:3000/api/user/image/${c.User.ID}`
+        : defaultProfilePictureUrl,
+      content: c.text,
+      liked: false,
+      likeCount: c.likeCount,
+      isEditing: false
+    }));
+  } catch (err) {
+    console.error("❌ Hiba a profiladatok lekérésekor:", err);
+  }
+};
+
+onMounted(() => {
+  fetchProfileData();
+});
+
+
+
+const profileImageFile = ref<File | null>(null);
+
+const handleProfilePictureUpload = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    profileImageFile.value = target.files[0];
+  }
+};
+
+const uploadProfilePicture = async () => {
+  if (!profileImageFile.value) {
+    alert("Kérlek, válassz ki egy képet!");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("picture", profileImageFile.value);
+  formData.append("user_ID", String(authStore.user?.ID));
+
+  try {
+    await axios.post("/api/profile/picture", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+    alert("✅ Profilkép frissítve!");
+    fetchProfileData(); 
+  } catch (error) {
+    console.error("❌ Hiba a profilkép frissítésénél:", error);
+  }
+};
+
 
 const kepNezet = () => {
   keptoltes.value = true;
@@ -10,7 +84,6 @@ const topNezet = () => {
   keptoltes.value = false;
 }
 
-// Feltételezzük, hogy a Comment interfész már definiálva van így:
 interface Comment {
   author: string;
   role: string;
@@ -22,39 +95,9 @@ interface Comment {
   isEditing: boolean;
 }
 
-// Statikus komment tömb a top 3 részhez
-const defaultProfilePictureUrl = `http://localhost:3000/api/user/image/defaultPP.jpg`;
+
 const topComments = ref<Comment[]>([
-  {
-    author: "UserOne",
-    role: "Admin",
-    time: "2025.03.20 15:30",
-    avatar: defaultProfilePictureUrl,
-    content: "Ez az első statikus komment szöveg.",
-    liked: false,
-    likeCount: 10,
-    isEditing: false,
-  },
-  {
-    author: "UserTwo",
-    role: "Moderator",
-    time: "2025.03.19 11:45",
-    avatar: defaultProfilePictureUrl,
-    content: "Ez a második statikus komment szöveg.",
-    liked: false,
-    likeCount: 5,
-    isEditing: false,
-  },
-  {
-    author: "UserThree",
-    role: "User",
-    time: "2025.03.18 09:20",
-    avatar: defaultProfilePictureUrl,
-    content: "Ez a harmadik statikus komment szöveg.",
-    liked: false,
-    likeCount: 2,
-    isEditing: false,
-  }
+ 
 ]);
 
 const atnevezie = ref(false);
@@ -76,10 +119,30 @@ const userNameUpdate = () => {
   atnevezie.value = true;
 };
 
-const userNameSave = () => {
-  userName.value = userNameEdit.value;
-  atnevezie.value = false;
+const userNameSave = async () => {
+  console.log(userNameEdit.value) 
+  try {
+    if(userNameEdit.value.length > 6){
+
+    
+    await axios.put('/api/profile/username', {
+      user_ID: authStore.user?.ID,
+      newUserName: userNameEdit.value
+    });
+    userName.value = userNameEdit.value;
+    profileInfo.value[0].value = userName.value;
+    atnevezie.value = false;
+  }
+  else{
+    alert("A felhasználónév legalább legyen 7 karakter hosszú!")
+  }
+  } catch (err) {
+    console.error("❌ Hiba a név módosításakor:", err);
+  }
+  
 };
+
+
 
 const userNameCancel = () => {
   userNameEdit.value = userName.value;
@@ -92,16 +155,14 @@ const userNameCancel = () => {
   <v-container fluid class="pa-0" style="max-width: 1300px; margin: 50px;">
     <v-card class="mx-auto pa-4" outlined>
       <v-row>
-        <!-- Profil kép -->
         <v-col cols="12" sm="4" class="d-flex justify-center" style="align-items: center; object-fit: cover;">
           <v-img
-            src="https://wallpapers.com/images/hd/peppa-pig-meme-with-junk-food-76nuhhs5jrc1g81i.jpg"
+            :src="profilePictureUrl"
             width="320"
             height="320"
             class="rounded"
           ></v-img>
         </v-col>
-        <!-- Profil adatok -->
         <v-col cols="12" sm="8">
           <v-card-title class="text-h4">Üdvözöllek, {{ userName }}!</v-card-title>
           <v-card-text>
@@ -132,7 +193,6 @@ const userNameCancel = () => {
         </v-col>
       </v-row>
     </v-card>
-    <!-- Gombok sor -->
     <v-row justify="center" dense>
       <v-col cols="auto" class="text-center">
         <v-btn variant="elevated" color="primary" class="text-surface ma-2" @click="kepNezet">Profilkép módosítása</v-btn>
@@ -140,18 +200,26 @@ const userNameCancel = () => {
       </v-col>
     </v-row>
 
-    <!-- Kép feltöltés -->
     <v-card v-if="keptoltes" class="mx-auto pa-4" outlined>
       <v-card-title class="text-h5">Itt töltsd fel a profilképed:</v-card-title>
       <div style="max-width: 350px; margin-left: auto; margin-right: auto;">
-        <v-file-upload title="Profilkép feltöltése" ref="fileUploadRef" accept="image/*" clearable density="comfortable" variant="comfortable"><template #icon><v-icon variant="elevated" color="primary"></v-icon></template></v-file-upload>
-      </div>
+        <v-file-upload
+        ref="fileUploadRef"
+        @change="handleProfilePictureUpload" 
+        accept="image/*"
+        clearable
+        density="comfortable"
+        variant="comfortable"
+      >
+        <template #icon>
+          <v-icon variant="elevated" color="primary"></v-icon>
+        </template>
+      </v-file-upload>     </div>
         <v-card-actions style="justify-content: flex-start;">
-          <v-btn variant="elevated" color="primary" class="text-surface">Feltöltés</v-btn>
+          <v-btn variant="elevated" color="primary" class="text-surface"  @click="uploadProfilePicture">Feltöltés</v-btn>
         </v-card-actions>
     </v-card>
 
-    <!-- Top 3 -->
     <v-card v-if="!keptoltes" class="mx-auto pa-4 bg-transparent" outlined>
       <v-card-title class="text-h5">A legtöbbet likeolt 3 hozzászólásod:</v-card-title>
       <div class="comments-list">
@@ -170,6 +238,10 @@ const userNameCancel = () => {
             <div class="bubble-content">
               <p>{{ comment.content }}</p>
             </div>
+            <div style="display: flex; align-items: center;">
+              <v-btn style="width: 30px;" variant="text" size="small" icon='mdi-thumb-up'></v-btn>
+              <p>{{ comment.likeCount  }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -184,7 +256,6 @@ const userNameCancel = () => {
   box-sizing: border-box;
 }
 
-/* Komment item: avatar és szövegbuborék */
 .comment-item {
   display: flex;
   align-items: flex-start;
@@ -196,13 +267,12 @@ const userNameCancel = () => {
 }
 
 .comment-avatar {
-  width: 50px; /* kicsit nagyobb, mint korábban */
+  width: 50px; 
   height: 50px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-/* Szövegbuborék stílus */
 .comment-bubble {
   border-radius: 10px;
   padding: 10px;
@@ -211,7 +281,6 @@ const userNameCancel = () => {
   flex: 1;
 }
 
-/* Buborék kis nyíl */
 .comment-bubble::before {
   content: "";
   position: absolute;
@@ -222,7 +291,6 @@ const userNameCancel = () => {
   border-color: transparent #fff59d transparent transparent;
 }
 
-/* Buborék fejléc: felhasználónév és dátum */
 .bubble-header {
   display: flex;
   justify-content: space-between;

@@ -42,7 +42,7 @@ const getPlaceWithComments = async (placeId) => {
     user_rate: place.NumberOfRate_L > 0 ? place.user_rate / place.NumberOfRate_L : 0,
     user_ratenumberL : place.NumberOfRate_L,
     user_ratenumberC : place.NumberOfRate_C,
-    topic_id: place.topic_id,
+    topic_id: place.topic_ID,
     critic_rate: place.NumberOfRate_C > 0 ? place.critic_rate / place.NumberOfRate_C : 0,
     createdAt: place.createdAt.toISOString().split('T')[0],
     visits: place.visits,
