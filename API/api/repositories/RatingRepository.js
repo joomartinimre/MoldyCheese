@@ -10,7 +10,6 @@ class RatingRepository {
   }
 
   async updateRating(user_ID, place_ID, ratingValue) {
-    // Frissítjük a meglévő értékelést
     const [affectedRows] = await db.Rating.update(
       { rating: ratingValue },
       { where: { user_ID: user_ID, place_ID: place_ID } }

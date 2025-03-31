@@ -4,8 +4,8 @@ import useVuelidate from '@vuelidate/core';
 import { required, minLength, email, sameAs, helpers } from '@vuelidate/validators';
 import { useRouter } from 'vue-router';
 
-//ötletek/teendők: dinamikus Adatbázis. Bodával megbeszélni az API hívását (egyszerre lefuttatása, összekötés). Egyszeri API hívás, adatok lementése. Regi design (Márk). Elfelejtett jelszó, Emailes megerősítés. Login/Regi mükődés
-//Profile page: username email, role, number of comments. top 3 most liked comments, profile picture, smtp server (google smtp mair trap(test) )
+
+
 
 const router = useRouter();
 
@@ -58,9 +58,9 @@ const registerUser = async () => {
   if (v$.value.$invalid) {
     console.error("❌ Hibás adatok!", v$.value.$errors);
     const errorMessages = v$.value.$errors.map((err) => {
-    // Ha van custom message
+    
     if (err.$message) return err.$message;
-    // Ha nincs, akkor kulcs alapján írunk valamit
+    
     switch (err.$property) {
       case 'userName':
         return "A felhasználónév nem megfelelő.";

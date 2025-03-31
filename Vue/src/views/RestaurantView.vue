@@ -53,12 +53,12 @@ onMounted(async () => {
 const tagItems = ["Csárda", "Fine Dining", "Ínyenc", "Panzió", "Borozó", "Bisztro", "Olasz", "Bár"];
 
 
-// Új reaktív változók a szortírozáshoz
+
 const sortDateAsc = ref(true);
 const sortViewsAsc = ref(true);
 const sortAlphaAsc = ref(true);
 
-// Függvények a gombok állapotának váltásához
+
 const toggleSortDate = async () => {
   sortDateAsc.value = !sortDateAsc.value;
   await fetchPlaces(sortDateAsc.value ? "oldest" : "latest");
@@ -75,7 +75,7 @@ const toggleSortAlpha = async () => {
 };
 
 watch(selectedTags, () => {
-  fetchPlaces(); // újrahívás automatikusan, ha változik a szűrő
+  fetchPlaces(); 
 });
 
 const toggleSortLikes = async () => {

@@ -20,13 +20,13 @@ require("dotenv").config();
 
 const cors = require('cors');
 
-// Alapértelmezett CORS szabályok engedélyezése
+
 
 const app = require("./app");
 app.use(cors({
-    origin: 'http://localhost:5173', // A frontend címe
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Engedélyezett HTTP-módszerek
-    credentials: true, // Ha szükségesek a hitelesítési adatok (pl. cookie-k)
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+    credentials: true, 
 }));
 
 app.use('/api/user/image', express.static(path.join(__dirname, 'api', 'uploads')));
@@ -37,7 +37,7 @@ app.get('/api/user/image/:id', async (req, res) => {
       return res.redirect('/api/user/image/defaultPP.jpg');
     }
   
-    res.set('Content-Type', 'image/jpeg'); // vagy png, ha az
+    res.set('Content-Type', 'image/jpeg'); 
     res.send(user.ProfilePicture);
   });
 

@@ -111,7 +111,7 @@ const helyek = [
 
 const { mobile } = useDisplay();
 
-// Visitor figyelmeztetés láthatóságának vezérlése
+
 const showVisitor = ref(true);
 const hideVisitor = () => {
   showVisitor.value = false;
@@ -164,7 +164,7 @@ const uploadPlace = async () => {
   console.log("🔍 Küldött FormData adatok:");
 formData.forEach((value, key) => {
   if (key === "tags") {
-    console.log(`${key}:`, JSON.parse(value as string)); // Ha JSON string, akkor átalakítjuk
+    console.log(`${key}:`, JSON.parse(value as string)); 
   } else {
     console.log(`${key}:`, value);
   }
@@ -228,7 +228,7 @@ const sendRoleRequest = async () => {
   } catch (error) {
     let errorMessage = 'Hiba történt a beküldés során.';
 
-    // Ellenőrizzük, hogy a hiba egy objektum-e és van-e benne "message" kulcs
+    
     if (error instanceof Error) {
       errorMessage = error.message;
     } else if (typeof error === 'object' && error !== null && 'message' in error) {
@@ -243,7 +243,7 @@ const sendRoleRequest = async () => {
 watch(selectedTopic, (newTopic) => {
   selectedTags.value = [];
   if (newTopic) {
-    selectedTags.value = [...tagItems.value]; // Az alap tageket beállítja
+    selectedTags.value = [...tagItems.value]; 
   }
 });
 
@@ -317,7 +317,7 @@ const approveRequest = async (requestId: number) => {
   } catch (error) {
     let errorMessage = 'Hiba történt a beküldés során.';
 
-    // Ellenőrizzük, hogy a hiba egy objektum-e és van-e benne "message" kulcs
+    
     if (error instanceof Error) {
       errorMessage = error.message;
     } else if (typeof error === 'object' && error !== null && 'message' in error) {
@@ -345,7 +345,7 @@ const denyRequest = async (requestId: number) => {
   } catch (error) {
     let errorMessage = 'Hiba történt a beküldés során.';
 
-    // Ellenőrizzük, hogy a hiba egy objektum-e és van-e benne "message" kulcs
+    
     if (error instanceof Error) {
       errorMessage = error.message;
     } else if (typeof error === 'object' && error !== null && 'message' in error) {
@@ -369,7 +369,7 @@ watch(search, async (newSearch) => {
   if (newSearch.length >= 2) {
     try {
       const response = await axios.get(`/api/search/${newSearch}`);
-      console.log("🔍 Keresési találatok:", response.data); // 💥 EZ KELL
+      console.log("🔍 Keresési találatok:", response.data); 
       searchResults.value = response.data;
     } catch (error) {
       console.error("❌ Hiba a keresés közben:", error);
@@ -1138,7 +1138,7 @@ onBeforeUnmount(() => {
   height: auto !important;
 }
 
-/* Visitor üzenet konténer és stílusok */
+
 .visitor-container {
   position: fixed;
   bottom: 70px;
@@ -1207,10 +1207,10 @@ onBeforeUnmount(() => {
   z-index: 1;
 }
 
-/* Az app-bar már fixált, így a keresési eredményeket abszolút pozícionáljuk az app-bar alatt */
+
 .search-overlay {
   position: fixed;
-  top: 80px; /* az app-bar magassága */
+  top: 80px; 
   left: 240px;
   z-index: 1100;
   margin: 0 auto;
@@ -1218,7 +1218,7 @@ onBeforeUnmount(() => {
 
 .search-item {
   margin: 3px;
-  /* opcionális: alapértelmezett betűméret */
+  
   font-size: 1rem;
 }
 
@@ -1235,11 +1235,11 @@ onBeforeUnmount(() => {
   object-position: center;
 }
 
-/* 1279px alatt kisebb méretek */
+
 @media (max-width: 1279px) {
   .search-overlay {
     position: fixed;
-  top: 80px; /* az app-bar magassága */
+  top: 80px; 
   left: 70px;
   z-index: 1100;
   margin: 0 auto;

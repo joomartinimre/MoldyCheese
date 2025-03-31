@@ -52,12 +52,12 @@ onMounted(async () => {
 
 const tagItems = ["Ctype", "0-5 Év", "6-12 Év", "Csúszda", "Mászóka", "Homokozó", "Kültéri", "Beltéri", "Multifunkcionális", "Vízi Játszótér", "Biztonságos", "Kalandpark", "Zöldterület"];
 
-// Új reaktív változók a szortírozáshoz
+
 const sortDateAsc = ref(true);
 const sortViewsAsc = ref(true);
 const sortAlphaAsc = ref(true);
 
-// Függvények a gombok állapotának váltásához
+
 const toggleSortDate = async () => {
   sortDateAsc.value = !sortDateAsc.value;
   await fetchPlaces(sortDateAsc.value ? "oldest" : "latest");
@@ -74,7 +74,7 @@ const toggleSortAlpha = async () => {
 };
 
 watch(selectedTags, () => {
-  fetchPlaces(); // újrahívás automatikusan, ha változik a szűrő
+  fetchPlaces(); 
 });
 
 const toggleSortLikes = async () => {

@@ -10,14 +10,14 @@ export interface User {
 export interface AuthState {
   user: User | null;
   token: string | null;
-  recentPlaceIds: number[]; // új mező
+  recentPlaceIds: number[]; 
 }
 
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
     user: null,
     token: null,
-    recentPlaceIds: [], // inicializálás
+    recentPlaceIds: [], 
   }),
   getters: {
     isLoggedIn: (state: AuthState): boolean => !!state.user,
@@ -54,15 +54,15 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     addRecentPlace(placeId: number) {
-      // ha már benne van, töröljük a régi példányát
+      
       this.recentPlaceIds = this.recentPlaceIds.filter(id => id !== placeId);
-      // hozzáadjuk a végére
+      
       this.recentPlaceIds.push(placeId);
-      // ha több mint 12 van, az elejéről törlünk
+      
       if (this.recentPlaceIds.length > 12) {
         this.recentPlaceIds.shift();
       }
-      // mentés localStorage-be
+      
       localStorage.setItem('recentPlaceIds', JSON.stringify(this.recentPlaceIds));
     }
   },

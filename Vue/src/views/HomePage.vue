@@ -55,7 +55,7 @@ const fetchPlaces = async () => {
       description: place.description
     }));
 
-    // 🆕 Negyedik: recent helyek lekérése az authstore alapján
+    
     if (authStore.recentPlaceIds.length > 0) {
       const recentResponse = await axios.post(`${API_BASE}/recent`, {
         placeIds: authStore.recentPlaceIds,
@@ -198,7 +198,7 @@ const goToSlide = (index: number) => {
   activeIndex.value = index;
 };
 
-// Custom slider logikája
+
 let currentIndex = 0;
 let updateCustomSlider: () => void;
 
@@ -253,11 +253,11 @@ const initCustomSlider = () => {
   updateCustomSlider();
 };
 
-// Várjuk meg, hogy a latestPlaces feltöltődjön, majd a DOM is frissüljön
+
 watch(topRatedPlaces, (newVal) => {
   if (newVal.length) {
     nextTick(() => {
-      currentIndex = 0; // alaphelyzetbe állítjuk az indexet
+      currentIndex = 0; 
       initCustomSlider();
     });
   }
@@ -265,10 +265,10 @@ watch(topRatedPlaces, (newVal) => {
 
 let windowAutoplayInterval: ReturnType<typeof setInterval> | null = null;
 
-// Flag, hogy megkülönböztesd az automatikus slide váltást a manuálistól
+
 const isAutoChanging = ref(false);
 
-// Módosított automatikus slide váltás
+
 const nextWindowSlide = () => {
   isAutoChanging.value = true;
   if (windowModel.value < popularPlaces.value.length - 1) {
@@ -276,14 +276,14 @@ const nextWindowSlide = () => {
   } else {
     windowModel.value = 0;
   }
-  // A flag visszaállítása a következő tick-ben, hogy a watch már manuális változásként kezelje a későbbi módosításokat
+  
   nextTick(() => {
     isAutoChanging.value = false;
   });
 };
 
 const startWindowAutoplay = () => {
-  stopWindowAutoplay(); // Biztos, hogy ne legyen több futó intervallum
+  stopWindowAutoplay(); 
   windowAutoplayInterval = setInterval(nextWindowSlide, 10000);
 };
 
@@ -302,9 +302,9 @@ onUnmounted(() => {
   stopWindowAutoplay();
 });
 
-// Watch, amely figyeli a windowModel változását
+
 watch(windowModel, () => {
-  // Ha a flag nincs beállítva, az azt jelenti, hogy manuális változás történt
+  
   if (!isAutoChanging.value) {
     stopWindowAutoplay();
     startWindowAutoplay();
@@ -330,6 +330,7 @@ watch(windowModel, () => {
               </div>
               <v-card-text style="text-align: left;">
                 <v-rating v-if="!mobile"
+                  half-increments
                   readonly
                   :model-value="hely.rating"
                   :length="10"
@@ -337,6 +338,7 @@ watch(windowModel, () => {
                   active-color="elevated text-surface"
                 ></v-rating>
                 <v-rating v-if="mobile"
+                  half-increments
                   readonly
                   :model-value="hely.rating"
                   :length="10"
@@ -379,6 +381,7 @@ watch(windowModel, () => {
 
           <v-card-text>
             <v-rating
+              half-increments
               readonly
               :model-value="hely.rating"
               :length="10"
@@ -417,6 +420,7 @@ watch(windowModel, () => {
 
           <v-card-text>
             <v-rating
+              half-increments
               readonly
               :model-value="hely.rating"
               :length="10"
@@ -460,6 +464,7 @@ watch(windowModel, () => {
                 </div>
                 <v-card-text style="text-align: left;">
                   <v-rating v-if="!mobile"
+                    half-increments
                     readonly
                     :model-value="hely.rating"
                     :length="10"
@@ -467,6 +472,7 @@ watch(windowModel, () => {
                     active-color="elevated text-surface"
                   ></v-rating>
                   <v-rating v-if="mobile"
+                    half-increments
                     readonly
                     :model-value="hely.rating"
                     :length="10"
@@ -509,7 +515,7 @@ watch(windowModel, () => {
             <v-card-title>{{ hely.title }}</v-card-title>
           </v-card-item>
           <v-card-text>
-            <v-rating readonly :model-value="hely.rating" :length="10" size="" active-color="primary"></v-rating>
+            <v-rating half-increments readonly :model-value="hely.rating" :length="10" size="" active-color="primary"></v-rating>
           </v-card-text>
           <v-btn :to="`/place/${hely.id}`" color="primary" class="text-surface" style="margin: 15px;">
             Adatlap
@@ -542,7 +548,7 @@ watch(windowModel, () => {
   max-width: 2300px;
   padding: 80px;
   border-radius: 10px;
-  flex-wrap: wrap; /* Engedélyezi a sorok törését */
+  flex-wrap: wrap; 
   z-index: 2;
   box-sizing: border-box;
   margin-left: auto;
@@ -552,7 +558,7 @@ watch(windowModel, () => {
 
 .homepage-container {
   width: 100%;
-  min-height: 100%; /* A tartalom magasságához igazodik */
+  min-height: 100%; 
   height: 94vh;
   background-size: cover;
   background-position: center;
@@ -561,7 +567,7 @@ watch(windowModel, () => {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding-bottom: 20px; /* Alsó padding a biztonság kedvéért */
+  padding-bottom: 20px; 
   z-index: 0;
 }
 
@@ -576,7 +582,7 @@ watch(windowModel, () => {
   z-index: 1;
 }
 
-/* Szöveges rész */
+
 .text-section {
   flex: 1;
   color: white;
@@ -596,25 +602,25 @@ watch(windowModel, () => {
 
 @media (max-width: 1300px) {
   .content {
-    flex-direction: column; /* Oszlopos elrendezés */
-    align-items: center; /* Középre igazítás */
-    min-height: fit-content; /* Dinamikus magasság a tartalom alapján */
+    flex-direction: column; 
+    align-items: center; 
+    min-height: fit-content; 
   }
 
   .image-section {
-    order: -1; /* A kép kerül előre */
+    order: -1; 
     justify-content: center;
-    width: 100%; /* Kép teljes szélességet kitölt */
+    width: 100%; 
   }
 
   .image-section img {
-    margin-bottom: 20px; /* Hézag a kép alján */
-    width: 100%; /* Kép méretének csökkentése kisebb képernyőn */
+    margin-bottom: 20px; 
+    width: 100%; 
   }
 
   .text-section {
-    margin: 0; /* Margók eltávolítása */
-    width: 100%; /* Szöveg a teljes szélességhez igazodik */
+    margin: 0; 
+    width: 100%; 
   }
 
   .homepage-container
@@ -643,7 +649,7 @@ div .v-card-text
   color: white;
 }
 
-/* Slider konténer */
+
 .slider-container {
   width: 100%;
   overflow: hidden;
@@ -654,64 +660,64 @@ div .v-card-text
 
 }
 
-/* A slider-track flexbox elrendezéssel egymás mellé helyezi a slide-okat */
+
 .slider-track {
   display: flex;
   width: 100%;
 }
 
-/* Minden slide 100% szélességet kap */
+
 .slide {
   flex: 0 0 100%;
   padding: 0px 30px;
 }
 @media (max-width: 870px) {
-  /* Slide szélesség automatikusan 100%-ra állítva */
+  
   .slide {
-    flex: 0 0 100%;  /* Minden slide 100%-os szélességet kap */
-    max-width: 100%; /* Biztosítjuk, hogy a szélesség nem haladja meg a szülő szélességét */
+    flex: 0 0 100%;  
+    max-width: 100%; 
   }
 
-  /* A slide tartalma is igazodik a slide szélességéhez */
+  
   .slide .content {
-    flex-direction: column; /* Oszlopos elrendezés, ha kisebb a képernyő */
-    align-items: center; /* Középre igazítjuk a tartalmat */
-    width: 100%; /* A tartalom szélessége 100% */
-    padding: 20px; /* Hézag a tartalom körül */
+    flex-direction: column; 
+    align-items: center; 
+    width: 100%; 
+    padding: 20px; 
   }
 
   .slide .text-section {
-    width: 100%; /* A szöveges rész szélessége 100% */
-    padding: 10px; /* Hézag hozzáadása */
+    width: 100%; 
+    padding: 10px; 
   }
 
   .slide .image-section {
-    width: 100%; /* Kép szélessége 100% */
+    width: 100%; 
     display: flex;
-    justify-content: center; /* Kép középre igazítása */
+    justify-content: center; 
   }
 
   .slide .image-section img {
-    width: 100%; /* Kép automatikusan kitölti a szülő szélességét */
-    max-width: 300px; /* Kép ne legyen túl nagy */
-    margin-bottom: 20px; /* Hézag a kép alján */
+    width: 100%; 
+    max-width: 300px; 
+    margin-bottom: 20px; 
   }
 
   .slide .description-container {
-    max-height: 200px; /* A leírás dobozának maximális magassága */
-    overflow-y: auto; /* Ha túl hosszú, görgethető lesz */
+    max-height: 200px; 
+    overflow-y: auto; 
     padding: 10px;
   }
 }
 
-/* Fogó kurzor, amikor lenyomod az egeret */
+
 .slider-container:active {
-  cursor: grab;  /* Amikor megfogod */
+  cursor: grab;  
 }
 
 .bars-container {
   position: absolute;
-  bottom: 20px; /* A slider alján */
+  bottom: 20px; 
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -719,17 +725,17 @@ div .v-card-text
   justify-content: center;
 }
 
-/* Csíkok (bars) alap stílusai */
+
 .bar {
-  width: 30px; /* A csíkok szélessége */
-  height: 5px; /* A csíkok magassága */
+  width: 30px; 
+  height: 5px; 
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-/* Aktív csík kiemelése */
+
 .bar.active {
   background-color: white;
 }
@@ -748,21 +754,21 @@ div .v-card-text
   position: relative;
 }
 
-/* Fix szélességű wrapper, hogy 7 kártya jelenjen meg */
+
 .custom-slider-wrapper {
   overflow: hidden;
 }
 
-/* A track-nek nem kell a calc, mert a wrapper fix */
+
 .custom-slider-track {
   display: flex;
   gap: 9px;
   transition: transform 0.3s ease;
 }
 
-/* A kártyák fix szélessége */
+
 .custom-card {
-  /* Szélesség: a konténer teljes szélessége mínusz a 6 gap, osztva 7-tel */
+  
   width: calc((100% - 6 * 10px) / 7);
   flex: 0 0 auto;
   box-sizing: border-box;
@@ -794,23 +800,23 @@ div .v-card-text
 
 .custom-arrow {
   position: absolute;
-  top: 50%;                  /* Függőleges középre helyezés */
-  transform: translateY(-50%); /* A gombokat középre igazítjuk */
-  z-index: 10;               /* Legyenek a slider elemei felett */
+  top: 50%;                  
+  transform: translateY(-50%); 
+  z-index: 10;               
 }
 
 .custom-arrow.custom-left {
   left: 20px;
 }
 
-/* A jobb nyíl a jobb oldalon */
+
 .custom-arrow.custom-right {
   right: 20px;
 }
 
 .horizontal-scroll-container {
   overflow-x: auto;
-  /* Opcionális: elrejti a függőleges scrollt, ha van */
+  
   overflow-y: hidden;
   display: flex;
   width: 100%;
@@ -819,7 +825,7 @@ div .v-card-text
 
 .horizontal-scroll-track {
   display: flex;
-  /* Ha szeretnéd, hogy a kártyák ne törjenek új sorba */
+  
   flex-wrap: nowrap;
 }
 

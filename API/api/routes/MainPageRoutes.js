@@ -24,13 +24,13 @@ router.get("/image/:id", async (req, res) => {
 
         res.setHeader("Content-Type", "image/jpeg");
         res.setHeader("Content-Length", place.Picture.length);
-        res.status(200).end(place.Picture); // ✅ Így biztosítjuk, hogy tényleg bináris adat legyen
+        res.status(200).end(place.Picture);
     } catch (error) {
         console.error("❌ Hiba a kép lekérésekor:", error);
         res.status(500).json({ error: "Hiba történt a kép lekérése közben." });
     }
 });
-// 7 leglátogatottabb hely
+
 router.get("/popular", async (req, res) => {
     try {
         const places = await getPopularPlaces();
@@ -41,7 +41,6 @@ router.get("/popular", async (req, res) => {
     }
 });
 
-// 20 legutóbbi megtekintett hely (csak bejelentkezett felhasználónak)
 router.post("/recent", async (req, res) => {
     try {
         const userVisitedPlaceIds = req.body.placeIds || [];
@@ -57,7 +56,6 @@ router.post("/recent", async (req, res) => {
     }
 });
 
-// Legújabb helyek
 router.get("/latest", async (req, res) => {
     try {
         const places = await getLatestPlaces();
@@ -68,7 +66,6 @@ router.get("/latest", async (req, res) => {
     }
 });
 
-// 10 legjobban értékelt hely
 router.get("/top-rated", async (req, res) => {
     try {
         const places = await getTopRatedPlaces();

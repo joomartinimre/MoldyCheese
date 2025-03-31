@@ -35,7 +35,7 @@ const loginUser = async () => {
 
     const data = await response.json();
 
-    // Feltételezzük, hogy a backend visszaadja a user adatokat és a tokent
+    
     authStore.login(data.user, data.token);
     
     errorMessage.value = '';

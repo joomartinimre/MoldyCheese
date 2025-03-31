@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { searchPlacesByName } = require("../services/SearchService");
 
-// GET /api/places/search/:term
 router.get("/:term", async (req, res) => {
   try {
     const results = await searchPlacesByName(req.params.term);

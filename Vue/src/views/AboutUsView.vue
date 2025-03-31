@@ -139,7 +139,7 @@ const dialog2 = ref(false)
 </template>
 
 <style scoped>
-/* Általános stílusok */
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -149,7 +149,7 @@ body {
   line-height: 1.8;
 }
 
-/* Fejléc */
+
 header {
   position: relative;
   background: url('https://img.freepik.com/premium-vector/yellow-cheese-with-holes-panoramic-texture-background-vector_532963-5988.jpg') no-repeat center center/cover;
@@ -166,7 +166,7 @@ header p {
   margin-top: 20px;
 }
 
-/* Tartalom konténer */
+
 .container {
   position: relative;
   max-width: 1200px;
@@ -176,7 +176,7 @@ header p {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Szekciók */
+
 section {
   margin-bottom: 60px;
 }
@@ -225,7 +225,7 @@ p {
   }
 }
 
-/* Galéria */
+
 .gallery {
   display: flex;
   flex-wrap: wrap;
@@ -249,7 +249,7 @@ p {
   }
 }
 
-/* Inline kép a szövegben */
+
 .inline-img {
   max-width: 300px;
   margin: 20px;
@@ -257,7 +257,7 @@ p {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-/* Véletlenszerűen elhelyezett képek */
+
 .floating-image {
   position: absolute;
   max-width: 150px;

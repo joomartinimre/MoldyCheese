@@ -3,9 +3,8 @@ const router = express.Router();
 const ProfilePageService = require("../services/ProfilePageService");
 const multer = require("multer");
 
-const upload = multer(); // profilkép feltöltéshez
+const upload = multer();
 
-// 1. Felhasználói statisztikák lekérése
 router.get("/:user_ID", async (req, res) => {
   try {
     const { user_ID } = req.params;
@@ -17,7 +16,6 @@ router.get("/:user_ID", async (req, res) => {
   }
 });
 
-// 2. Profilkép frissítése
 router.post("/picture", upload.single("picture"), async (req, res) => {
   try {
     console.log("📸 Beérkező fájl:", req.file);
@@ -33,7 +31,6 @@ router.post("/picture", upload.single("picture"), async (req, res) => {
   }
 });
 
-// 3. Felhasználónév módosítása
 router.put("/username", async (req, res) => {
   try {
     const { user_ID, newUserName } = req.body;

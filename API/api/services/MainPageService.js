@@ -1,23 +1,23 @@
 const { Op, Sequelize } = require("sequelize");
-const db = require("../database/dbContext"); // ✅ Az adatbáziskapcsolat betöltése
+const db = require("../database/dbContext"); 
 const Place = db.Place; 
 
-// Segédfüggvény az összesített értékelés kiszámításához
+
 const calculateTotalRating = (user_rate, critic_rate, NumberOfRate_L, NumberOfRate_C) => {
-    if ((NumberOfRate_L + NumberOfRate_C) === 0) return 0; // Ha nincs értékelés
+    if ((NumberOfRate_L + NumberOfRate_C) === 0) return 0; 
     const totalRating = (user_rate * NumberOfRate_L + critic_rate * NumberOfRate_C) / (NumberOfRate_L + NumberOfRate_C);
-    return Math.round(totalRating * 2) / 2; // Kerekítés 0.5-es lépésekben
+    return Math.round(totalRating * 2) / 2; 
 };
 
-// Kép Base64 formátumra alakítása
 
 
-// 7 leglátogatottabb hely
+
+
 const getPopularPlaces = async () => {
     const places = await Place.findAll({ 
         order: [["visits", "DESC"]], 
         limit: 7,
-        raw: true // ✅ Biztosítja, hogy tiszta adatokat kapjunk
+        raw: true 
     });
 
     console.log("📌 Lekérdezett helyek:", places.length, "db hely");
@@ -28,7 +28,7 @@ const getPopularPlaces = async () => {
    
 };
 
-// 20 legutóbbi megtekintett hely (felhasználónak)
+
 const getRecentPlaces = async (userVisitedPlaceIds) => {
     if (!userVisitedPlaceIds || userVisitedPlaceIds.length < 7) return [];
 
@@ -36,24 +36,24 @@ const getRecentPlaces = async (userVisitedPlaceIds) => {
         where: { ID: { [Op.in]: userVisitedPlaceIds } }
     });
 
-    // Kézi rendezés a küldött sorrend alapján (például FIFO vagy LIFO szerint)
+    
     const placeMap = new Map(places.map(place => [place.ID, place]));
     
     return userVisitedPlaceIds
-        .slice() // hogy ne módosítsd az eredetit
+        .slice() 
         .reverse()
         .map(id => placeMap.get(id))
         .filter(Boolean)
         .map(place => formatPlace(place));
 };
 
-// Legújabb helyek
+
 const getLatestPlaces = async () => {
     const places = await Place.findAll({ order: [["createdAt", "DESC"]], limit: 40 });
     return places.map(place => formatPlace(place));
 };
 
-// 10 legjobban értékelt hely
+
 const getTopRatedPlaces = async () => {
     try {
         const places = await Place.findAll({
@@ -79,7 +79,7 @@ const getTopRatedPlaces = async () => {
     }
 };
 
-// Formázza az adatokat a frontend számára
+
 const formatPlace = (place) => ({
     id: place.ID,
     url: place.Picture ? `http://localhost:3000/api/main/image/${place.ID}` : null,

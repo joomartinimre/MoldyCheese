@@ -20,6 +20,8 @@ interface Comment {
   likeCount: number;
   isEditing: boolean;
   originalContent?: string;
+  likeDisabled : boolean;
+  userID : number;
 }
 
 interface Place {
@@ -53,7 +55,7 @@ const fetchPlace = async () => {
           return [];
         }
       })(),
-      Picture: data.url, // ez most már egy teljes URL, nem base64
+      Picture: data.url, 
       rating: data.rating ?? 0,
       user_ratenumberL : data.user_ratenumberL ?? 0,
       user_ratenumberC : data.user_ratenumberC ?? 0,
@@ -66,9 +68,9 @@ const fetchPlace = async () => {
       Comments: data.Comments
 };
       
-      comments.value = data.Comments.map((c: any) => ({
-        
+comments.value = data.Comments.map((c: any) => ({
       id: c.ID,
+      userID: c.user_ID,
       author: c.User?.userName || "Ismeretlen",
       role: c.User?.role || "Ismeretlen",
       time: new Date(c.createdAt).toLocaleString("hu-HU"),
@@ -76,9 +78,10 @@ const fetchPlace = async () => {
         ? `http://localhost:3000/api/user/image/${c.User.ID}`
         : "http://localhost:3000/api/user/image/defaultPP.jpg",
       content: c.text,
-      liked: false,           // alapértelmezett állapot
-      likeCount: c.likes || 0,  // ha van adat, akkor abból, különben 0
-      isEditing: false        // új mező, mely jelzi, hogy a komment szerkesztés alatt áll-e
+      liked: false,           
+      likeCount: c.likes || 0,  
+      isEditing: false,        
+      likeDisabled: false     
     }));
     } catch (error) {
       console.error("Hiba a hely betöltésekor:", error);
@@ -164,7 +167,7 @@ const Ertekel = (newValue : any) => {
   createRating();
 }
 
-// Értékelés beküldését végző függvény
+
 const createRating = async () => {
   if (form.place_ID === null) {
     alert("Hiba: Nem található érvényes hely ID.");
@@ -176,7 +179,7 @@ const createRating = async () => {
     return;
   }
 
-  const userID = authStore.user.ID; // 🟢 Itt deklaráljuk
+  const userID = authStore.user.ID; 
 
   if (ertekeles.value === null) {
     alert("Kérlek, válassz értékelést!");
@@ -185,7 +188,7 @@ const createRating = async () => {
 
   const ratingValue = ertekeles.value;
 
-  console.log(userID, form.place_ID, ratingValue); // ✅ Most már biztonságos
+  console.log(userID, form.place_ID, ratingValue); 
 
   try {
     const response = await fetch('http://localhost:3000/api/rating/rating', {
@@ -227,6 +230,9 @@ const { mobile } = useDisplay();
 const globalLiked = ref(false);
 const globalLikes = ref(0);
 
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const placelikeButtonVisible = ref(true);
+
 const toggleGlobalLike = async () => {
   if (!authStore.user) {
     alert("Kérlek, jelentkezz be a like-oláshoz!");
@@ -234,6 +240,8 @@ const toggleGlobalLike = async () => {
   }
 
   try {
+    placelikeButtonVisible.value = false;
+    await delay(500);
     if (!globalLiked.value) {
       await axios.post(`/api/p/placelike`, {
         user_ID: authStore.user.ID,
@@ -252,6 +260,9 @@ const toggleGlobalLike = async () => {
   } catch (error) {
     console.error("Hiba a place-like művelet közben:", error);
   }
+  finally {
+    placelikeButtonVisible.value = true;
+  }
 };
 
 const checkUserCommentLikes = async () => {
@@ -263,23 +274,21 @@ const checkUserCommentLikes = async () => {
 
     comments.value = comments.value.map(comment => ({
       ...comment,
-      liked: likedCommentIDs.includes(Number(comment.id)) // TÍPUS-EGYEZTETÉS!
+      liked: likedCommentIDs.includes(Number(comment.id)) 
     }));
   } catch (error) {
     console.error("Hiba a comment-like állapot lekérdezésekor:", error);
   }
 };
 
-
-
-
 const toggleCommentLike = async (comment: any) => {
   if (!authStore.user) {
     alert("Kérlek, jelentkezz be a like-oláshoz!");
     return;
   }
-
   try {
+    comment.likeDisabled = true;
+    await delay(500); 
     if (!comment.liked) {
       await axios.post(`/api/c/commentlike`, {
         user_ID: authStore.user.ID,
@@ -298,6 +307,10 @@ const toggleCommentLike = async (comment: any) => {
   } catch (error) {
     console.error("Hiba a comment-like művelet közben:", error);
   }
+  finally {
+    
+    comment.likeDisabled = false;
+  }
 };
 
 
@@ -313,12 +326,12 @@ const saveEditComment = async (comment: Comment) => {
       text: comment.content,
     });
     console.log(comment)
-    comment.content = response.data.text; // backend válaszból frissítjük
+    comment.content = response.data.text; 
     comment.originalContent = comment.content;
     comment.isEditing = false;
   } catch (error) {
     console.error('Hiba a komment mentésekor:', error);
-    // opcionálisan vissza lehet állítani az eredetit hiba esetén:
+    
     comment.content = comment.originalContent || comment.content;
     comment.isEditing = false;
   }
@@ -361,6 +374,8 @@ onMounted(async () => {
   }
 });
 
+console.log(comments);
+
 </script>
 
 <template>
@@ -383,7 +398,7 @@ onMounted(async () => {
           <div style="padding-left: 10px; font-size: 17px;">
             {{placeData.createdAt}} |
             <v-icon size="small">mdi-eye</v-icon>  {{placeData.visits}} |
-            <v-btn variant="text" size="small" :icon="globalLiked ? 'mdi-thumb-up' : 'mdi-thumb-up-outline'" @click="toggleGlobalLike" style="width: 20px;"></v-btn>
+            <v-btn :disabled="!placelikeButtonVisible" variant="text" size="small" :icon="globalLiked ? 'mdi-thumb-up' : 'mdi-thumb-up-outline'" @click="toggleGlobalLike" style="width: 20px;"></v-btn>
             {{ globalLikes }}
           </div>
           <div style="display: flex;">
@@ -417,7 +432,6 @@ onMounted(async () => {
               @update:model-value="Ertekel"
               hover
               half-increments
-              v-model="selectedPlace.rating"
               :length="10"
               size="large"
               active-color="elevated text-surface"
@@ -426,7 +440,6 @@ onMounted(async () => {
             hover
               half-increments
               @update:model-value="Ertekel"
-              v-model="selectedPlace.rating"
               :length="10"
               :size="40"
               active-color="elevated text-surface"
@@ -450,7 +463,7 @@ onMounted(async () => {
               </span>
               <span class="comment-time">
                 {{ comment.time }}
-                <v-menu>
+                <v-menu v-if="comment.userID === authStore.userId">
                   <template v-slot:activator="{ props }">
                     <v-btn v-bind="props" icon="mdi-dots-vertical" size="" variant="text"></v-btn>
                   </template>
@@ -476,7 +489,7 @@ onMounted(async () => {
               <textarea style="padding: 0px;" v-if="comment.isEditing" rows="1" v-model="comment.content"></textarea>
               <v-card-actions style="padding: 0px; min-height: 30px; justify-content: flex-end;">
                 <div style="display: flex; align-items: center;">
-                  <v-btn style="width: 30px;" variant="text" size="small" :icon="comment.liked ? 'mdi-thumb-up' : 'mdi-thumb-up-outline'" @click="toggleCommentLike(comment)"></v-btn>
+                  <v-btn :disabled="comment.likeDisabled" style="width: 30px;" variant="text" size="small" :icon="comment.liked ? 'mdi-thumb-up' : 'mdi-thumb-up-outline'" @click="toggleCommentLike(comment)"></v-btn>
                   <p>{{ comment.likeCount  }}</p>
                 </div>
                 <v-spacer></v-spacer>
@@ -567,7 +580,7 @@ onMounted(async () => {
 
 .homepage-container {
   width: 100%;
-  min-height: 100%; /* A tartalom magasságához igazodik */
+  min-height: 100%; 
   height: 94vh;
   background-size: cover;
   background-position: center;
@@ -576,7 +589,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding-bottom: 20px; /* Alsó padding a biztonság kedvéért */
+  padding-bottom: 20px; 
   z-index: 0;
 }
 
@@ -646,7 +659,7 @@ onMounted(async () => {
   margin-right: auto;
 }
 
-/* Vastagabb elválasztó csak a címsor alatt */
+
 .comments-divider {
   width: 100%;
   border-bottom: 2px solid #ddd;
@@ -659,7 +672,7 @@ onMounted(async () => {
   box-sizing: border-box;
 }
 
-/* Komment item: avatar és szövegbuborék */
+
 .comment-item {
   display: flex;
   align-items: flex-start;
@@ -671,13 +684,13 @@ onMounted(async () => {
 }
 
 .comment-avatar {
-  width: 50px; /* kicsit nagyobb, mint korábban */
+  width: 50px; 
   height: 50px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-/* Szövegbuborék stílus */
+
 .comment-bubble {
   border-radius: 10px;
   padding: 10px;
@@ -686,7 +699,7 @@ onMounted(async () => {
   flex: 1;
 }
 
-/* Buborék kis nyíl */
+
 .comment-bubble::before {
   content: "";
   position: absolute;
@@ -697,7 +710,7 @@ onMounted(async () => {
   border-color: transparent #fff59d transparent transparent;
 }
 
-/* Buborék fejléc: felhasználónév és dátum */
+
 .bubble-header {
   display: flex;
   justify-content: space-between;
@@ -723,7 +736,7 @@ onMounted(async () => {
   box-sizing: border-box;
 }
 
-/* Komment beküldő űrlap stílusai */
+
 .comment-form {
   display: flex;
   flex-direction: column;

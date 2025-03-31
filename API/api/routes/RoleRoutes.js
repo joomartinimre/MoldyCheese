@@ -6,9 +6,6 @@ const {
   demoteToUser
 } = require("../services/RoleService");
 
-/**
- * Összes felhasználó lekérése
- */
 router.get("/all", async (req, res) => {
   try {
     const users = await getAllUsers();
@@ -19,9 +16,6 @@ router.get("/all", async (req, res) => {
   }
 });
 
-/**
- * Felhasználó adminná tétele
- */
 router.post("/promote/:id", async (req, res) => {
   try {
     const userId = parseInt(req.params.id);
@@ -33,9 +27,6 @@ router.post("/promote/:id", async (req, res) => {
   }
 });
 
-/**
- * Felhasználó visszaállítása User-re
- */
 router.post("/demote/:id", async (req, res) => {
   try {
     const userId = parseInt(req.params.id);

@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const db = require("../database/dbContext"); // ✅ Betöltjük a DB kapcsolatot
+const db = require("../database/dbContext"); 
 const Place = db.Place;
 const User = db.User;
 const RatingRepository = require("../repositories/RatingRepository");
@@ -28,7 +28,7 @@ class RatingService {
     const isCritic = roleToTopicMap[user.role] === place.topic_ID;
     const existingRating = await RatingRepository.findRating(user_ID, place_ID);
 
-    // ⭐️ TÖRLÉS
+    
     if (ratingValue === 0) {
       if (existingRating) {
         const oldVal = existingRating.rating;
@@ -50,7 +50,7 @@ class RatingService {
       }
     }
 
-    // 🔁 FRISSÍTÉS
+    
     if (existingRating) {
       const oldVal = existingRating.rating;
 
@@ -69,7 +69,7 @@ class RatingService {
       return { message: "Rating frissítve és a hely is módosítva lett" };
     }
 
-    // ➕ ÚJ LÉTREHOZÁS
+    
     const newRating = await RatingRepository.createRating(user_ID, place_ID, ratingValue);
 
     if (isCritic) {

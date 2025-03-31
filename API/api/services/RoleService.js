@@ -9,7 +9,7 @@ const getAllUsers = async () => {
       attributes: ["ID", "userName", "role"],
       where: {
         role: {
-          [db.Sequelize.Op.ne]: "Admin", // ❗️ Kizárjuk az "Admin"-okat
+          [db.Sequelize.Op.ne]: "Admin", 
         }
       },
       order: [["userName", "ASC"]],

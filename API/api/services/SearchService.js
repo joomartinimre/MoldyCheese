@@ -1,9 +1,9 @@
-// 📁 PlaceSearchService.js
+
 const db = require("../database/dbContext");
 const { Op } = require("sequelize");
 const Place = db.Place;
 
-// Kategória ID -> név leképezés (topicMap)
+
 const topicMap = {
   1: "Iskola",
   2: "Étterem",

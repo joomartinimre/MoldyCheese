@@ -239,7 +239,7 @@ const userNameCancel = () => {
               <p>{{ comment.content }}</p>
             </div>
             <div style="display: flex; align-items: center;">
-              <v-btn style="width: 30px;" variant="text" size="small" icon='mdi-thumb-up'></v-btn>
+              <v-icon style="width: 30px;" variant="text" size="small">mdi-thumb-up</v-icon>
               <p>{{ comment.likeCount  }}</p>
             </div>
           </div>

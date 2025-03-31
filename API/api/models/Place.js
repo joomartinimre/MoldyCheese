@@ -46,9 +46,9 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(2000)
             },
             tags: {
-                type: DataTypes.JSON, // MySQL esetén JSON típus
+                type: DataTypes.JSON,
                 allowNull: true,
-                defaultValue: [] // alapértelmezettként üres tömb
+                defaultValue: []
             },
             topic_ID: {
                 type: DataTypes.INTEGER,

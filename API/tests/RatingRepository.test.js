@@ -38,17 +38,17 @@ describe("Rating Repository Tests", () => {
 
     describe("Update Rating", () => {
         test("Should update an existing rating", async () => {
-            // Előző rekordok törlése
+            
             await ratingRepository.deleteRating(testUser.id, testPlace.id);
             
-            // Új rating létrehozása
+            
             await ratingRepository.createRating(testUser.id, testPlace.id, 3);
             
-            // Frissítés
+            
             const updatedRows = await ratingRepository.updateRating(testUser.id, testPlace.id, 4);
-            expect(updatedRows).toBe(1); // Csak egy sort kell frissítenie
+            expect(updatedRows).toBe(1); 
     
-            // Ellenőrzés
+            
             const updatedRating = await ratingRepository.findRating(testUser.id, testPlace.id);
             expect(updatedRating.rating).toBe(4);
         });
@@ -56,17 +56,17 @@ describe("Rating Repository Tests", () => {
     
     describe("Delete Rating", () => {
         test("Should delete a rating successfully", async () => {
-            // Előző rekordok törlése
+            
             await ratingRepository.deleteRating(testUser.id, testPlace.id);
     
-            // Új rating létrehozása
+            
             await ratingRepository.createRating(testUser.id, testPlace.id, 2);
             
-            // Törlés
+            
             const deletedRows = await ratingRepository.deleteRating(testUser.id, testPlace.id);
-            expect(deletedRows).toBe(1); // Csak egy sort kell törölnie
+            expect(deletedRows).toBe(1); 
     
-            // Ellenőrzés
+            
             const deletedRating = await ratingRepository.findRating(testUser.id, testPlace.id);
             expect(deletedRating).toBeNull();
         });

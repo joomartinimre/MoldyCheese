@@ -65,7 +65,7 @@ describe("Place Repository Tests", () => {
             const allPlaces = await placeRepository.getAllPlaces();
 
             expect(Array.isArray(allPlaces)).toBe(true);
-            expect(allPlaces.length).toBeGreaterThanOrEqual(2); // Az előző tesztek 2 helyet létrehoztak
+            expect(allPlaces.length).toBeGreaterThanOrEqual(2); 
         });
     });
 });

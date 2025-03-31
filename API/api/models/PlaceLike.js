@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         references: {
           model: 'Users',
-          key: 'ID' // pontosan az adatbázis oszlopnév
+          key: 'ID'
         }
       },
       place_ID: {

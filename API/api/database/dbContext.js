@@ -26,24 +26,24 @@ try {
 
 const db = {};
 
-// Betöltjük az összes modellt
+
 const models = require("../models")(sequelize, DataTypes);
 Object.assign(db, models);
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// Backup fájl elérési útja
+
 const seedDataPath = path.join(__dirname, "../backup/seedData.json");
 
-// Biztosítsuk, hogy a backup könyvtár létezik
+
 const dirPath = path.join(__dirname, "../backup");
 if (!fs.existsSync(dirPath)) {
     console.log("📁 Backup directory does not exist. Creating...");
     fs.mkdirSync(dirPath, { recursive: true });
 }
 
-// **Dinamikus mentés minden táblára**
+
 const saveDataOnExit = async () => {
     console.log("💾 Saving database state before exit...");
   
@@ -76,7 +76,7 @@ const saveDataOnExit = async () => {
   
         let transformedRecords = records;
   
-        // 🔹 Ha a Place modellt mentjük, alakítsuk át a képet base64-re
+        
         if (modelName === "Place") {
           transformedRecords = transformedRecords.map(record => ({
             ...record,
@@ -112,7 +112,7 @@ const saveDataOnExit = async () => {
   
   module.exports = saveDataOnExit;
 
-// **Shutdown API – Biztonságos leállítás**
+
 app.post("/shutdown", async (req, res) => {
     console.log("⚠️ Shutdown request received via API. Saving data before exit...");
     res.json({ message: "Server is shutting down..." });
@@ -121,11 +121,11 @@ app.post("/shutdown", async (req, res) => {
         await saveDataOnExit();
         console.log("✅ Data saved. Now closing database connections...");
 
-        // **Először zárjuk be a Sequelize kapcsolatot**
+        
         await db.sequelize.close();
         console.log("🛑 Database connection closed.");
 
-        // **Kilőjük a nodemon processzt is**
+        
         if (process.env.NODE_ENV !== "production") {
             console.log("💀 Killing nodemon...");
             exec("taskkill /IM node.exe /F", (err) => {
@@ -146,11 +146,11 @@ app.post("/shutdown", async (req, res) => {
     }
 });
 
-// **Shutdown API szerver indítása**
+
 const SHUTDOWN_PORT = 4000;
 app.listen(SHUTDOWN_PORT, () => console.log(`🛑 Shutdown API running on http://localhost:${SHUTDOWN_PORT}/shutdown`));
 
-// **Seeding adatbázis visszatöltés**
+
 const seedDatabase = async () => {
     console.log("📥 Seeding database from backup...");
   
@@ -162,7 +162,7 @@ const seedDatabase = async () => {
     try {
       const seedData = JSON.parse(fs.readFileSync(seedDataPath, "utf-8"));
   
-      // 🔸 Sorrend fontos: először független táblák, majd függők
+      
       const seedOrder = [
         "User",
         "Topic",
@@ -186,7 +186,7 @@ const seedDatabase = async () => {
           continue;
         }
   
-        // 🔹 Base64 → bináris kép visszaalakítás csak Place-nél
+        
         if (modelName === "Place") {
           records = records.map(record => ({
             ...record,
@@ -194,7 +194,7 @@ const seedDatabase = async () => {
           }));
         }
   
-        // 🔹 DATE mezők formázása
+        
         const formatted = records.map(record => formatDates(record, db[modelName]));
   
         console.log(`📥 Seeding ${modelName}...`);
@@ -209,14 +209,14 @@ const seedDatabase = async () => {
   };    
 
 
-// **Adatbázis szinkronizálás és visszatöltés**
+
 db.sequelize.sync({ force: true }).then(async () => {
     console.log("✅ Database synchronized");
 
-    await seedDatabase(); // 🔥 **ELŐSZÖR a független modellek betöltése**
+    await seedDatabase(); 
 
 
-    // **Ellenőrizzük, hogy van-e már comment**
+    
     const existingComments = await db.Comment.count();
     if (existingComments === 0) {
         console.log("📥 Inserting a test comment manually...");
@@ -233,7 +233,7 @@ db.sequelize.sync({ force: true }).then(async () => {
     }
 });
 
-// **Fixáljuk a DATEONLY mezőket visszatöltésnél**
+
 const formatDates = (record, model) => {
     return Object.keys(record).reduce((obj, key) => {
         if (!model.rawAttributes[key] || model.rawAttributes[key].type.key !== "DATEONLY") {
@@ -241,25 +241,25 @@ const formatDates = (record, model) => {
             return obj;
         }
 
-        // Ha a mező DATEONLY és string, akkor ellenőrizzük a formátumot
+        
         if (typeof record[key] === "string") {
             if (record[key] === "0000-00-00" || !record[key].match(/^\d{4}-\d{2}-\d{2}$/)) {
                 console.warn(`⚠️ WARNING: Invalid DATEONLY value for "${key}" ->`, record[key]);
-                obj[key] = null; // Ha rossz a dátum, inkább legyen NULL
+                obj[key] = null; 
             } else {
-                obj[key] = record[key]; // Ha már jó, hagyjuk úgy
+                obj[key] = record[key]; 
             }
         } else if (record[key] instanceof Date) {
-            obj[key] = record[key].toISOString().split("T")[0]; // YYYY-MM-DD formátumba alakítjuk
+            obj[key] = record[key].toISOString().split("T")[0]; 
         } else {
             console.warn(`⚠️ WARNING: Unexpected DATEONLY value for "${key}" ->`, record[key]);
-            obj[key] = null; // Ha nem kezelhető, akkor legyen NULL
+            obj[key] = null; 
         }
         return obj;
     }, {});
 };
 
-// **Process exit biztosítása**
+
 process.on("exit", async () => {
     console.log("⚠️ Process exit triggered. Ensuring data is saved...");
     await saveDataOnExit();

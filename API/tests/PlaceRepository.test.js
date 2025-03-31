@@ -1,7 +1,7 @@
 jest.mock("../api/database/dbContext", () => require("../__mocks__/db"));
 require("dotenv").config();
 
-const db = require("../__mocks__/db");  // Közvetlen import a mock adatbázishoz
+const db = require("../__mocks__/db");  
 const placeRepository = require("../api/repositories/PlaceRepository");
 
 let testTopic;
@@ -25,7 +25,7 @@ describe("Place Repository Tests", () => {
                 Picture: Buffer.from("test-image"),
             };
 
-            // Győződjünk meg róla, hogy a db.Place valóban létezik!
+            
             expect(db.Place).toBeDefined();
 
             const newPlace = await db.Place.create(placeData);

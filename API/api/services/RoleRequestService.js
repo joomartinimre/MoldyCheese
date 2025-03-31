@@ -23,16 +23,16 @@ class RoleRequestService {
     }
 
     async approveRequest(requestId, adminId) {
-        // Lekérjük a requestet
+        
         const request = await db.RoleRequest.findByPk(requestId);
         if (!request) {
             throw new Error("Request not found");
         }
     
-        // Frissítjük a request státuszát
+        
         await RoleRequestRepository.updateRequestStatus(requestId, "approved", adminId);
     
-        // Frissítjük a felhasználó szerepkörét
+        
         await db.User.update(
             { role: request.requested_role },
             { where: { ID: request.user_id } }

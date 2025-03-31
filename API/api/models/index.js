@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
     const CommentLike = require("./CommentLike")(sequelize, DataTypes);
 
 
-    //user kapcsolat 
     User.hasMany(Comment, {
         foreignKey: "user_ID",
     });
@@ -41,7 +40,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_ID'
       });
       
-      // Place -> PlaceLike
       Place.hasMany(PlaceLike, {
         foreignKey: 'place_ID'
       });
@@ -56,7 +54,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_ID'
       });
       
-      // Comment -> CommentLike
       Comment.hasMany(CommentLike, {
         foreignKey: 'comment_ID'
       });
