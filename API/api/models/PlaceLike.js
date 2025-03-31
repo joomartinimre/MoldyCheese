@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const PlaceLike = sequelize.define('PlaceLike', {
-      userId: {
+      user_ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
           key: 'ID' // pontosan az adatbázis oszlopnév
         }
       },
-      placeId: {
+      place_ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     });
   
     PlaceLike.associate = (models) => {
-      PlaceLike.belongsTo(models.User, { foreignKey: 'userId' });
-      PlaceLike.belongsTo(models.Place, { foreignKey: 'placeId' });
+      PlaceLike.belongsTo(models.User, { foreignKey: 'user_ID' });
+      PlaceLike.belongsTo(models.Place, { foreignKey: 'place_ID' });
     };
   
     return PlaceLike;

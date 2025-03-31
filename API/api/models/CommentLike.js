@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const CommentLike = sequelize.define('CommentLike', {
-      userId: {
+      user_ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
           key: 'ID' 
         }
       },
-      commentId: {
+      comment_ID: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     });
   
     CommentLike.associate = (models) => {
-        CommentLike.belongsTo(models.User, { foreignKey: 'userId' });
-        CommentLike.belongsTo(models.Place, { foreignKey: 'placeId' });
+        CommentLike.belongsTo(models.User, { foreignKey: 'user_ID' });
+        CommentLike.belongsTo(models.Comment, { foreignKey: 'comment_ID' });
     };
   
     return CommentLike;

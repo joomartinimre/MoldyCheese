@@ -46,92 +46,71 @@ if (!fs.existsSync(dirPath)) {
 // **Dinamikus mentés minden táblára**
 const saveDataOnExit = async () => {
     console.log("💾 Saving database state before exit...");
-
+  
     try {
-        let seedData = {};
-
-        // **Először a User (független)**
-        const independentModels = ["User"];
-        for (const modelName of independentModels) {
-            if (db[modelName] && db[modelName].findAll) {
-                console.log(`🔍 Fetching data from ${modelName}...`);
-                const records = await db[modelName].findAll({ raw: true });
-                if (records.length > 0) {
-                    seedData[modelName] = records.map(record => formatDates(record, db[modelName]));
-                }
-            }
+      const seedOrder = [
+        "User",
+        "Topic",
+        "Place",
+        "Comment",
+        "Rating",
+        "RoleRequest",
+        "PlaceLike",
+        "CommentLike"
+      ];
+  
+      let seedData = {};
+  
+      for (const modelName of seedOrder) {
+        if (!db[modelName] || !db[modelName].findAll) {
+          console.warn(`⚠️ Model ${modelName} not found or findAll not available, skipping.`);
+          continue;
+        }
+  
+        console.log(`🔍 Fetching data from ${modelName}...`);
+        const records = await db[modelName].findAll({ raw: true });
+        if (records.length === 0) {
+          console.log(`⚠️ No data found for ${modelName}, skipping.`);
+          continue;
+        }
+  
+        let transformedRecords = records;
+  
+        // 🔹 Ha a Place modellt mentjük, alakítsuk át a képet base64-re
+        if (modelName === "Place") {
+          transformedRecords = transformedRecords.map(record => ({
+            ...record,
+            Picture: record.Picture ? Buffer.from(record.Picture).toString("base64") : null
+          }));
         }
 
-        // **Másodiknak a Topic (független, de User után kell)**
-        const topicModel = "Topic";
-        if (db[topicModel] && db[topicModel].findAll) {
-            console.log(`🔍 Fetching data from ${topicModel}...`);
-            const records = await db[topicModel].findAll({ raw: true });
-            if (records.length > 0) {
-                seedData[topicModel] = records.map(record => formatDates(record, db[topicModel]));
-            }
-        }
-
-        // **Harmadiknak a Place (Topic után kell)**
-        const placeModel = "Place";
-        if (db[placeModel] && db[placeModel].findAll) {
-            console.log(`🔍 Fetching data from ${placeModel}...`);
-            const records = await db[placeModel].findAll({ raw: true });
-            if (records.length > 0) {
-                seedData[placeModel] = records.map(record => formatDates(record, db[placeModel]));
-            }
-        }
-
-        // **Végül a FK függő táblák (User & Place után)**
-        const phase1Models = ["Comment", "Rating", "RoleRequest"];
-        const phase2Models = ["PlaceLike", "CommentLike"];
-
-        for (const modelName of phase1Models) {
-            if (!db[modelName]) continue;
-            const data = seedData[modelName];
-            if (!Array.isArray(data) || data.length === 0) continue;
-          
-            console.log(`📥 Seeding ${modelName}...`);
-            await db[modelName].bulkCreate(data, { ignoreDuplicates: true });
-            console.log(`✅ Seeded ${modelName}`);
+        if (modelName === "User") {
+            transformedRecords = transformedRecords.map(record => ({
+              ...record,
+              ProfilePicture: record.ProfilePicture
+                ? Buffer.from(record.ProfilePicture).toString("base64")
+                : null
+            }));
           }
-          
-          // PHASE 2 – Like táblák, csak az előzők után
-          for (const modelName of phase2Models) {
-            if (!db[modelName]) continue;
-            const data = seedData[modelName];
-            if (!Array.isArray(data) || data.length === 0) continue;
-          
-            console.log(`📥 Seeding ${modelName}...`);
-            await db[modelName].bulkCreate(data, { ignoreDuplicates: true });
-            console.log(`✅ Seeded ${modelName}`);
-          }
-
-        console.log("📁 Writing data to seedData.json...");
-        fs.writeFileSync(
-            seedDataPath,
-            JSON.stringify(seedData, (key, value) => {
-                if (key === "tags" && typeof value === "string") {
-                    try {
-                        return JSON.parse(value); // Ha JSON string, alakítsuk át tömbbé
-                    } catch (e) {
-                        return value; // Ha nem JSON, hagyjuk változatlanul
-                    }
-                }
-                if (key === "Picture" && Buffer.isBuffer(value)) {
-                    return value.toString("base64"); // ✅ A bináris képadatot base64 formátumba mentjük
-                }
-                return value;
-            }, 2),
-            "utf-8"
-        );
-        console.log("✅ Data successfully saved to seedData.json");
-
+  
+        seedData[modelName] = transformedRecords.map(record => formatDates(record, db[modelName]));
+      }
+  
+      console.log("📁 Writing data to backup.json...");
+      fs.writeFileSync(
+        seedDataPath,
+        JSON.stringify(seedData, null, 2),
+        "utf-8"
+      );
+      console.log("✅ Data successfully saved to backup.json");
+  
     } catch (error) {
-        console.error("❌ Error saving data:", error.message);
-        console.error(error.stack);
+      console.error("❌ Error saving data:", error.message);
+      console.error(error.stack);
     }
-};
+  };
+  
+  module.exports = saveDataOnExit;
 
 // **Shutdown API – Biztonságos leállítás**
 app.post("/shutdown", async (req, res) => {
@@ -174,76 +153,60 @@ app.listen(SHUTDOWN_PORT, () => console.log(`🛑 Shutdown API running on http:/
 // **Seeding adatbázis visszatöltés**
 const seedDatabase = async () => {
     console.log("📥 Seeding database from backup...");
-
+  
     if (!fs.existsSync(seedDataPath)) {
-        console.log("⚠️ No seed data found. Skipping seeding.");
-        return;
+      console.log("⚠️ No seed data found. Skipping seeding.");
+      return;
     }
-
+  
     try {
-        const seedData = JSON.parse(fs.readFileSync(seedDataPath, "utf-8"));
-
-        // **Először töltsük be a független táblákat**
-        const independentModels = ["User", "Topic", "Place"];
-        for (const modelName of independentModels) {
-            if (!db[modelName]) {
-                console.warn(`⚠️ Model ${modelName} not found in DB context.`);
-                continue;
-            }
-
-            const data = seedData[modelName];
-
-            if (!Array.isArray(data) || data.length === 0) {
-                console.log(`⚠️ No data found for ${modelName}, skipping.`);
-                continue;
-            }
-
-            console.log(`📥 Seeding ${modelName}...`);
-
-            let transformedData = data;
-
-            // 🔹 Ha a `Place` modellről van szó, akkor a `Picture` mezőt visszaalakítjuk bináris formátumba
-            if (modelName === "Place") {
-                transformedData = data.map(record => ({
-                    ...record,
-                    Picture: record.Picture ? Buffer.from(record.Picture, "base64") : null // ✅ Base64-ből vissza binárisra
-                }));
-            }
-
-            await db[modelName].bulkCreate(transformedData, { ignoreDuplicates: true });
-            console.log(`✅ Successfully seeded ${modelName} with ${data.length} records.`);
+      const seedData = JSON.parse(fs.readFileSync(seedDataPath, "utf-8"));
+  
+      // 🔸 Sorrend fontos: először független táblák, majd függők
+      const seedOrder = [
+        "User",
+        "Topic",
+        "Place",
+        "Comment",
+        "Rating",
+        "RoleRequest",
+        "PlaceLike",
+        "CommentLike"
+      ];
+  
+      for (const modelName of seedOrder) {
+        if (!db[modelName] || !seedData[modelName]) {
+          console.warn(`⚠️ Model or data missing: ${modelName}, skipping.`);
+          continue;
         }
-
-        // **Most jöhetnek a függő modellek**
-        const phase1Models = ["Comment", "Rating", "RoleRequest"];
-        const phase2Models = ["PlaceLike", "CommentLike"];
-
-
-        for (const modelName of phase1Models) {
-            if (!db[modelName]) continue;
-            const data = seedData[modelName];
-            if (!Array.isArray(data) || data.length === 0) continue;
-          
-            console.log(`📥 Seeding ${modelName}...`);
-            await db[modelName].bulkCreate(data, { ignoreDuplicates: true });
-            console.log(`✅ Seeded ${modelName}`);
-          }
-          
-          // PHASE 2 – Like táblák, csak az előzők után
-          for (const modelName of phase2Models) {
-            if (!db[modelName]) continue;
-            const data = seedData[modelName];
-            if (!Array.isArray(data) || data.length === 0) continue;
-          
-            console.log(`📥 Seeding ${modelName}...`);
-            await db[modelName].bulkCreate(data, { ignoreDuplicates: true });
-            console.log(`✅ Seeded ${modelName}`);
-          }
-        console.log("✅ Database successfully restored from backup!");
+  
+        let records = seedData[modelName];
+        if (!Array.isArray(records) || records.length === 0) {
+          console.log(`⚠️ No data for ${modelName}, skipping.`);
+          continue;
+        }
+  
+        // 🔹 Base64 → bináris kép visszaalakítás csak Place-nél
+        if (modelName === "Place") {
+          records = records.map(record => ({
+            ...record,
+            Picture: record.Picture ? Buffer.from(record.Picture, "base64") : null
+          }));
+        }
+  
+        // 🔹 DATE mezők formázása
+        const formatted = records.map(record => formatDates(record, db[modelName]));
+  
+        console.log(`📥 Seeding ${modelName}...`);
+        await db[modelName].bulkCreate(formatted, { ignoreDuplicates: true });
+        console.log(`✅ Successfully seeded ${modelName}`);
+      }
+  
+      console.log("✅ Database successfully restored from backup!");
     } catch (error) {
-        console.error("❌ Failed to restore seed data:", error.message);
+      console.error("❌ Failed to restore seed data:", error.message);
     }
-};
+  };    
 
 
 // **Adatbázis szinkronizálás és visszatöltés**

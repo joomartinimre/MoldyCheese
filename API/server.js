@@ -11,6 +11,8 @@ const RoleRoutes = require("./api/routes/RoleRoutes");
 const PlaceViewRoutes = require("./api/routes/PlaceViewRoutes")
 const PlaceDetailRoutes = require("./api/routes/PlaceDetailRoutes")
 const SearchRoutes = require("./api/routes/SearchRoutes")
+const PlaceLikeRoutes = require("./api/routes/placeLikeRoutes")
+const CommentLikeRoutes = require("./api/routes/commentLikeRoutes")
 require("dotenv").config();
 
 
@@ -48,6 +50,8 @@ app.use("/api/role", RoleRoutes)
 app.use("/api/placeview", PlaceViewRoutes)
 app.use("/api/placedetail", PlaceDetailRoutes)
 app.use("/api/search", SearchRoutes)
+app.use("/api/c", CommentLikeRoutes)
+app.use("/api/p", PlaceLikeRoutes)
 
 require("./api/database/dbContext");
 

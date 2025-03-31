@@ -55,6 +55,9 @@ const fetchPlace = async () => {
       })(),
       Picture: data.url, // ez most már egy teljes URL, nem base64
       rating: data.rating ?? 0,
+      user_ratenumberL : data.user_ratenumberL ?? 0,
+      user_ratenumberC : data.user_ratenumberC ?? 0,
+      topic_id: data.topic_id,
       user_rate: data.user_rate ?? 0,
       critic_rate: data.critic_rate ?? 0,
       visits: data.visits ?? 0,
@@ -75,7 +78,7 @@ const fetchPlace = async () => {
         : "http://localhost:3000/api/user/image/defaultPP.jpg",
       content: c.text,
       liked: false,           // alapértelmezett állapot
-      likeCount: c.likeCount || 0,  // ha van adat, akkor abból, különben 0
+      likeCount: c.likes || 0,  // ha van adat, akkor abból, különben 0
       isEditing: false        // új mező, mely jelzi, hogy a komment szerkesztés alatt áll-e
     }));
     } catch (error) {
@@ -84,14 +87,19 @@ const fetchPlace = async () => {
   }
 }
 
-onMounted(() => {
-  fetchPlace();
-  authStore.addRecentPlace(Number(placeID.value))
-  console.log(placeID.value)
- 
-  console.log(comments)
-  
-})
+const checkIfUserLikedPlace = async () => {
+  try {
+    const response = await axios.get(`/api/p/placelike/${authStore.user?.ID}/${placeID.value}`);
+
+    globalLiked.value = response.data.liked;
+    globalLikes.value = placeData.value.likes;
+  } catch (error) {
+    console.error("Hiba a place-like lekérdezésnél:", error);
+  }
+};
+
+
+
 
 
 
@@ -139,7 +147,8 @@ const submitComment = async () => {
     }
 
     form.text = "";
-    await fetchPlace(); // friss komment lista lekérdezése
+    await fetchPlace();
+    await checkUserCommentLikes(); 
   } catch (err) {
     console.error('Hiba történt a komment beküldése során:', err);
     alert('Nem sikerült csatlakozni a szerverhez.');
@@ -221,23 +230,79 @@ const { mobile } = useDisplay();
 const globalLiked = ref(false);
 const globalLikes = ref(0);
 
-const toggleGlobalLike = () => {
-  globalLiked.value = !globalLiked.value;
-  if (globalLiked.value) {
-    globalLikes.value++;
-  } else {
-    globalLikes.value--;
+const toggleGlobalLike = async () => {
+  if (!authStore.user) {
+    alert("Kérlek, jelentkezz be a like-oláshoz!");
+    return;
+  }
+
+  try {
+    if (!globalLiked.value) {
+      await axios.post(`/api/p/placelike`, {
+        user_ID: authStore.user.ID,
+        place_ID: placeID.value
+      });
+      globalLikes.value++;
+      globalLiked.value = true;
+    } else {
+      await axios.post(`/api/p/placelike`, {
+        user_ID: authStore.user.ID,
+        place_ID: placeID.value
+      });
+      globalLikes.value--;
+      globalLiked.value = false;
+    }
+  } catch (error) {
+    console.error("Hiba a place-like művelet közben:", error);
   }
 };
 
-const toggleCommentLike = (comment: { liked: boolean; likeCount: number }) => {
-  comment.liked = !comment.liked;
-  if (comment.liked) {
-    comment.likeCount++;
-  } else {
-    comment.likeCount--;
+const checkUserCommentLikes = async () => {
+  try {
+    const response = await axios.get(`/api/c/commentlike/user/${authStore.user?.ID}`);
+    const likedCommentIDs = response.data.map((like: any) => like.comment_ID);
+
+    console.log("✔️ LIKE-OLT COMMENTEK:", likedCommentIDs);
+
+    comments.value = comments.value.map(comment => ({
+      ...comment,
+      liked: likedCommentIDs.includes(Number(comment.id)) // TÍPUS-EGYEZTETÉS!
+    }));
+  } catch (error) {
+    console.error("Hiba a comment-like állapot lekérdezésekor:", error);
   }
 };
+
+
+
+
+const toggleCommentLike = async (comment: any) => {
+  if (!authStore.user) {
+    alert("Kérlek, jelentkezz be a like-oláshoz!");
+    return;
+  }
+
+  try {
+    if (!comment.liked) {
+      await axios.post(`/api/c/commentlike`, {
+        user_ID: authStore.user.ID,
+        comment_ID: comment.id
+      });
+      comment.likeCount++;
+      comment.liked = true;
+    } else {
+      await axios.post(`/api/c/commentlike`, {
+        user_ID: authStore.user.ID,
+        comment_ID: comment.id
+      });
+      comment.likeCount--;
+      comment.liked = false;
+    }
+  } catch (error) {
+    console.error("Hiba a comment-like művelet közben:", error);
+  }
+};
+
 
 const editComment = (comment: Comment) => {
   comment.originalContent = comment.content;
@@ -273,6 +338,7 @@ const deleteComment = async (comment: Comment) => {
 
     });
     await fetchPlace();
+    await checkUserCommentLikes(); 
   } catch (error) {
     console.error('Hiba a komment mentésekor:', error);
   
@@ -286,6 +352,17 @@ const cancelEditComment = (comment: Comment) => {
   comment.isEditing = false;
 };
 
+
+onMounted(async () => {
+  await fetchPlace();
+
+  authStore.addRecentPlace(Number(placeID.value));
+
+  if (authStore.user) {
+    await checkIfUserLikedPlace();
+    await checkUserCommentLikes();
+  }
+});
 
 </script>
 
@@ -325,7 +402,8 @@ const cancelEditComment = (comment: Comment) => {
             <v-rating v-if="mobile"
             hover
               half-increments
-              :model-value="selectedPlace.rating"
+              @update:model-value="Ertekel"
+              v-model="selectedPlace.rating"
               :length="10"
               :size="40"
               active-color="elevated text-surface"

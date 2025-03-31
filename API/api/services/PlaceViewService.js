@@ -26,7 +26,7 @@ const getPlacesByTopic = async (topicSlug, sort = "visits", tagFilter = null) =>
     oldest: [["createdAt", "ASC"]],
     abc: [["name", "ASC"]],
     abcReverse: [["name", "DESC"]],
-    mostLiked: [["likes", "DESC"]],
+    mostLiked: [["Likes", "DESC"]],
   };
 
   const order = orderMap[sort] || orderMap.visits;

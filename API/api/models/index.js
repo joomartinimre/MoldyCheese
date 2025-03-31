@@ -35,33 +35,33 @@ module.exports = (sequelize, DataTypes) => {
 
 
     User.hasMany(PlaceLike, {
-        foreignKey: 'userId'
+        foreignKey: 'user_ID'
       });
       PlaceLike.belongsTo(User, {
-        foreignKey: 'userId'
+        foreignKey: 'user_ID'
       });
       
       // Place -> PlaceLike
       Place.hasMany(PlaceLike, {
-        foreignKey: 'placeId'
+        foreignKey: 'place_ID'
       });
       PlaceLike.belongsTo(Place, {
-        foreignKey: 'placeId'
+        foreignKey: 'place_ID'
       });
 
       User.hasMany(CommentLike, {
-        foreignKey: 'userId'
+        foreignKey: 'user_ID'
       });
       CommentLike.belongsTo(User, {
-        foreignKey: 'userId'
+        foreignKey: 'user_ID'
       });
       
       // Comment -> CommentLike
       Comment.hasMany(CommentLike, {
-        foreignKey: 'commentId'
+        foreignKey: 'comment_ID'
       });
       CommentLike.belongsTo(Comment, {
-        foreignKey: 'commentId'
+        foreignKey: 'comment_ID'
       });
    
 
