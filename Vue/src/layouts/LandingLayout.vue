@@ -130,7 +130,7 @@ const topics: Topic[] = [
   {id: 4, name: 'Játszótér', tags: ["Ctype", "0-5 Év", "6-12 Év", "Csúszda", "Mászóka", "Homokozó", "Kültéri", "Beltéri", "Multifunkcionális", "Vízi Játszótér", "Biztonságos", "Kalandpark", "Zöldterület"] },
 ]
 
-const roles = ['Étterem kritikus','Játszótér szakértő','Iskológus','Vegyesbolt vegyész']
+const roles = ['Iskológus', 'Étterem kritikus', 'Vegyesbolt vegyész', 'Játszótér szakértő']
 
 const selectedTopic = ref<number | null>(null);
 const selectedTags = ref<string[]>([]);
@@ -400,6 +400,35 @@ onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside);
 });
 
+interface User {
+  ID: number;
+  userName: string;
+  role: string;
+  profilePictureUrl?: string;
+  // egyéb property-k...
+}
+
+console.log("User:", authStore.user);
+
+const convertBufferToBase64 = (bufferObj: { data: number[] }): string => {
+  if (!bufferObj || !bufferObj.data || !Array.isArray(bufferObj.data) || bufferObj.data.length === 0) {
+    return "";
+  }
+  const uint8Array = new Uint8Array(bufferObj.data);
+  const binaryString = uint8Array.reduce((acc, byte) => acc + String.fromCharCode(byte), '');
+  return btoa(binaryString);
+};
+
+const userProfilePicture = computed(() => {
+  const user = authStore.user as any;
+  if (user && user.ProfilePicture && user.ProfilePicture.data.length > 100) {
+    return `data:image/jpeg;base64,${convertBufferToBase64(user.ProfilePicture)}`;
+  }
+  return "";
+});
+
+
+
 </script>
 
 <template>
@@ -430,13 +459,19 @@ onBeforeUnmount(() => {
         <v-menu transition="scale-transition" v-if="mobile">
           <template v-slot:activator="{ props }">
             <v-app-bar-nav-icon
+              v-if="!userProfilePicture"
+              v-bind="props"
               variant="elevated"
               color="primary"
               class="text-surface ma-1"
-              v-bind="props"
             >
               <v-icon class="text-surface" v-if="authStore.isLoggedIn">mdi-account</v-icon>
               <v-icon class="text-surface" v-if="!authStore.isLoggedIn">mdi-login</v-icon>
+            </v-app-bar-nav-icon>
+            <v-app-bar-nav-icon
+              v-if="userProfilePicture"
+              v-bind="props">
+              <img :src="userProfilePicture" style="width: 50px; height: 50px; border-radius: 50%;"/>
             </v-app-bar-nav-icon>
           </template>
           <v-list>
@@ -453,11 +488,6 @@ onBeforeUnmount(() => {
               </v-list-item>
             </template>
             <template v-else>
-              <v-list-item>
-                <v-btn variant="text" color="primary" class="ma-1" @click="handleLogout">
-                  Kijelentkezés
-                </v-btn>
-              </v-list-item>
               <v-list-item>
                 <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/profile')">
                   Profil
@@ -488,51 +518,6 @@ onBeforeUnmount(() => {
                         </v-card-text>
                         <v-card-actions style="padding: 24px; justify-content: flex-start;">
                           <v-btn variant="elevated" color="primary" class="text-surface" @click="sendRoleRequest">Űrlap elküldése</v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </template>
-                  </v-dialog>
-                </v-list-item>
-                <v-list-item v-if="authStore.userRole == 'Admin'">
-                  <!-- Hely feltöltő modal -->
-                  <v-dialog v-model="newPlaceDialog" max-width="700px">
-                    <template #activator="{ props: activatorProps }">
-                      <v-btn v-bind="activatorProps" color="primary" variant="text">
-                        Új hely létrehozása
-                      </v-btn>
-                    </template>
-
-                    <template #default="{ isActive }">
-                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
-                      <v-card>
-                        <v-card-title>Új hely létrehozása</v-card-title>
-                        <v-card-text>
-                          <v-text-field v-model="placeName" label="Adja meg a hely nevét" required></v-text-field>
-                          <v-textarea v-model="description" label="Írjon egy leírást a helyről" variant="outlined" required></v-textarea>
-                          <v-select
-                            v-model="selectedTopic"
-                            :items="topics"
-                            item-title="name"
-                            item-value="id"
-                            label="Válassza ki milyen helyet szeretne létrehozni"
-                            hide-details
-                          ></v-select>
-                          <div v-if="selectedTopic">
-                            <h4 style="padding: 10px;">Válassza ki a hely jellemzőit</h4>
-                            <v-checkbox
-                              v-for="tag in tagItems"
-                              :key="tag"
-                              :label="tag"
-                              :value="tag"
-                              @change="toggleTag(tag, $event)"
-                              hide-details
-                              variant="elevated" color="primary"
-                            />
-                          </div>
-                        </v-card-text>
-                        <v-file-upload title="Kép feltöltése" ref="fileUploadRef" @change="handleFileUpload" accept="image/*" clearable density="comfortable" variant="comfortable"><template #icon><v-icon variant="elevated" color="primary"></v-icon></template></v-file-upload>
-                        <v-card-actions style="padding: 24px; justify-content: flex-start;">
-                          <v-btn variant="elevated" color="primary" class="text-surface" @click="uploadPlace">Hely feltöltése</v-btn>
                         </v-card-actions>
                       </v-card>
                     </template>
@@ -587,7 +572,7 @@ onBeforeUnmount(() => {
                                         <v-card-text>
                                           <div>
                                             <h4>Indoklás</h4>
-                                            <p style="padding-left: 20px; padding-right: 20px;">{{ selectedRequest.reason }}</p>
+                                            <p>{{ selectedRequest.reason }}</p>
                                           </div>
                                           <br>
                                           <div>
@@ -611,6 +596,51 @@ onBeforeUnmount(() => {
                       </v-card>
                     </template>
                     <!-- jog kezelés modal 1-->
+                  </v-dialog>
+                </v-list-item>
+                <v-list-item v-if="authStore.userRole == 'Admin'">
+                  <!-- Hely feltöltő modal -->
+                  <v-dialog v-model="newPlaceDialog" max-width="700px">
+                    <template #activator="{ props: activatorProps }">
+                      <v-btn v-bind="activatorProps" color="primary" variant="text">
+                        Új hely létrehozása
+                      </v-btn>
+                    </template>
+
+                    <template #default="{ isActive }">
+                      <button class="close-btn-modal" @click="isActive.value = false" aria-label="Bezárás">×</button>
+                      <v-card>
+                        <v-card-title>Új hely létrehozása</v-card-title>
+                        <v-card-text>
+                          <v-text-field v-model="placeName" label="Adja meg a hely nevét" required></v-text-field>
+                          <v-textarea v-model="description" label="Írjon egy leírást a helyről" variant="outlined" required></v-textarea>
+                          <v-select
+                            v-model="selectedTopic"
+                            :items="topics"
+                            item-title="name"
+                            item-value="id"
+                            label="Válassza ki milyen helyet szeretne létrehozni"
+                            hide-details
+                          ></v-select>
+                          <div v-if="selectedTopic">
+                            <h4 style="padding: 10px;">Válassza ki a hely jellemzőit</h4>
+                            <v-checkbox
+                              v-for="tag in tagItems"
+                              :key="tag"
+                              :label="tag"
+                              :value="tag"
+                              @change="toggleTag(tag, $event)"
+                              hide-details
+                              variant="elevated" color="primary"
+                            />
+                          </div>
+                        </v-card-text>
+                        <v-file-upload title="Kép feltöltése" ref="fileUploadRef" @change="handleFileUpload" accept="image/*" clearable density="comfortable" variant="comfortable"><template #icon><v-icon variant="elevated" color="primary"></v-icon></template></v-file-upload>
+                        <v-card-actions style="padding: 24px; justify-content: flex-start;">
+                          <v-btn variant="elevated" color="primary" class="text-surface" @click="uploadPlace">Hely feltöltése</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </template>
                   </v-dialog>
                 </v-list-item>
                 <v-list-item v-if="authStore.userRole == 'Admin'">
@@ -661,6 +691,11 @@ onBeforeUnmount(() => {
                     </template>
                   </v-dialog>
                 </v-list-item>
+                <v-list-item>
+                <v-btn variant="text" color="primary" class="ma-1" @click="handleLogout">
+                  Kijelentkezés
+                </v-btn>
+              </v-list-item>
             </template>
           </v-list>
         </v-menu>
@@ -691,16 +726,22 @@ onBeforeUnmount(() => {
         <div>
           <v-menu transition="scale-transition">
             <template v-slot:activator="{ props }">
-              <v-app-bar-nav-icon
-                variant="elevated"
-                color="primary"
-                class="text-surface ma-1"
-                v-bind="props"
-              >
+            <v-app-bar-nav-icon
+              v-if="!userProfilePicture"
+              v-bind="props"
+              variant="elevated"
+              color="primary"
+              class="text-surface ma-1"
+            >
               <v-icon class="text-surface" v-if="authStore.isLoggedIn">mdi-account</v-icon>
               <v-icon class="text-surface" v-if="!authStore.isLoggedIn">mdi-login</v-icon>
-              </v-app-bar-nav-icon>
-            </template>
+            </v-app-bar-nav-icon>
+            <v-app-bar-nav-icon
+              v-if="userProfilePicture"
+              v-bind="props">
+              <img :src="userProfilePicture" style="width: 50px; height: 50px; border-radius: 50%;"/>
+            </v-app-bar-nav-icon>
+          </template>
             <v-list>
               <template v-if="!authStore.isLoggedIn">
                 <v-list-item>
@@ -768,7 +809,7 @@ onBeforeUnmount(() => {
                                         <v-card-text>
                                           <div>
                                             <h4>Indoklás</h4>
-                                            <p style="padding-left: 20px; padding-right: 20px;">{{ selectedRequest.reason }}</p>
+                                            <p>{{ selectedRequest.reason }}</p>
                                           </div>
                                           <br>
                                           <div>
@@ -1063,7 +1104,7 @@ onBeforeUnmount(() => {
                                 <v-card-text>
                                   <div>
                                     <h4>Indoklás</h4>
-                                    <p style="padding-left: 20px; padding-right: 20px;">{{ selectedRequest.reason }}</p>
+                                    <p>{{ selectedRequest.reason }}</p>
                                   </div>
                                   <br>
                                   <div>
@@ -1136,6 +1177,12 @@ onBeforeUnmount(() => {
 
 .v-navigation-drawer {
   height: auto !important;
+}
+
+@media (max-width: 465px) {
+  .v-navigation-drawer {
+  height: 89px !important;
+}
 }
 
 

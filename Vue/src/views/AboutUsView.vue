@@ -36,7 +36,7 @@ const dialog2 = ref(false)
 
         <h3>Értékelési Rendszerünk</h3>
         <p>
-          Platformunk két fő értékelési csoportot különböztet meg: a hétköznapi felhasználók véleményét, akik saját tapasztalataik alapján adnak visszajelzést, valamint a témák szakértői által megadott értékeléseket. A kritikusok között megtalálhatók az olyan kategóriák, mint az <em>Étterem kritikus</em>, a <em>Játszóter szakértő</em>, az <em>Iskológus</em> és a <em>Vegyesbolt vegyész</em>. Az általuk adott értékelések egyedi számlálóval rendelkeznek, amelyek segítik a megítélt információk pontos és átfogó bemutatását.
+          Platformunk két fő értékelési csoportot különböztet meg: a hétköznapi felhasználók véleményét, akik saját tapasztalataik alapján adnak visszajelzést, valamint a témák szakértői által megadott értékeléseket. A kritikusok között megtalálhatók az olyan kategóriák, mint az <em>Iskológus</em>, az <em>Étterem kritikus</em>, a <em>Vegyesbolt vegyész</em> és a <em>Játszóter szakértő</em>. Az általuk adott értékelések egyedi számlálóval rendelkeznek, amelyek segítik a megítélt információk pontos és átfogó bemutatását.
         </p>
         
         <h3>Közösségi Interakció és Moderáció</h3>

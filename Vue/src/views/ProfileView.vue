@@ -16,7 +16,7 @@ const fetchProfileData = async () => {
 
     profileInfo.value[0].value = userName.value;
     profileInfo.value[1].value = data.email;
-    profileInfo.value[2].value = data.role;
+    profileInfo.value[2].value = (data.role == 'User') ? 'Laikus' : data.role;
     profileInfo.value[3].value = data.commentCount;
     profileInfo.value[4].value = data.ratingCount;
     profileInfo.value[5].value = data.totalCommentLikes;
@@ -196,7 +196,7 @@ const userNameCancel = () => {
     <v-row justify="center" dense>
       <v-col cols="auto" class="text-center">
         <v-btn variant="elevated" color="primary" class="text-surface ma-2" @click="kepNezet">Profilkép módosítása</v-btn>
-        <v-btn variant="elevated" color="primary" class="text-surface ma-2" @click="topNezet">Top 3 kommentjeim</v-btn>
+        <v-btn variant="elevated" color="primary" class="text-surface ma-2" @click="topNezet">Top 3 Hozzászólásaim</v-btn>
       </v-col>
     </v-row>
 
@@ -204,6 +204,7 @@ const userNameCancel = () => {
       <v-card-title class="text-h5">Itt töltsd fel a profilképed:</v-card-title>
       <div style="max-width: 350px; margin-left: auto; margin-right: auto;">
         <v-file-upload
+        title="Profilkép feltöltése"
         ref="fileUploadRef"
         @change="handleProfilePictureUpload" 
         accept="image/*"
@@ -214,7 +215,7 @@ const userNameCancel = () => {
         <template #icon>
           <v-icon variant="elevated" color="primary"></v-icon>
         </template>
-      </v-file-upload>     </div>
+      </v-file-upload></div>
         <v-card-actions style="justify-content: flex-start;">
           <v-btn variant="elevated" color="primary" class="text-surface"  @click="uploadProfilePicture">Feltöltés</v-btn>
         </v-card-actions>
@@ -229,7 +230,8 @@ const userNameCancel = () => {
             <div class="bubble-header">
               <span class="comment-author">
                 {{ comment.author }}
-                <small style="color: gray;">({{ comment.role }})</small>
+                <small v-if="comment.role != 'User'" style="color: gray;">({{ comment.role }})</small>
+                <small v-else style="color: gray;">(Laikus)</small>
               </span>
               <span class="comment-time">
                 {{ comment.time }}

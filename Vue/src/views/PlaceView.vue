@@ -67,6 +67,16 @@ const fetchPlace = async () => {
       createdAt: data.createdAt ?? null,
       Comments: data.Comments
 };
+
+const convertBufferToBase64 = (bufferObj: { data: number[] }): string => {
+  if (!bufferObj || !bufferObj.data) return "";
+  const uint8Array = new Uint8Array(bufferObj.data);
+  const binaryString = Array.from(uint8Array)
+    .map(byte => String.fromCharCode(byte))
+    .join('');
+  return btoa(binaryString);
+};
+
       
 comments.value = data.Comments.map((c: any) => ({
       id: c.ID,
@@ -74,9 +84,9 @@ comments.value = data.Comments.map((c: any) => ({
       author: c.User?.userName || "Ismeretlen",
       role: c.User?.role || "Ismeretlen",
       time: new Date(c.createdAt).toLocaleString("hu-HU"),
-      avatar: c.User?.ID
-        ? `http://localhost:3000/api/user/image/${c.User.ID}`
-        : "http://localhost:3000/api/user/image/defaultPP.jpg",
+      avatar: (c.User?.ProfilePicture && c.User.ProfilePicture.data.length > 100)
+    ? `data:image/jpeg;base64,${convertBufferToBase64(c.User.ProfilePicture)}`
+    : "http://localhost:3000/api/user/image/defaultPP.jpg",
       content: c.text,
       liked: false,           
       likeCount: c.likes || 0,  
@@ -459,7 +469,8 @@ console.log(comments);
             <div class="bubble-header">
               <span class="comment-author">
                 {{ comment.author }}
-                <small style="color: gray;">({{ comment.role }})</small>
+                <small v-if="comment.role != 'User'" style="color: gray;">({{ comment.role }})</small>
+                <small v-else style="color: gray;">(Laikus)</small>
               </span>
               <span class="comment-time">
                 {{ comment.time }}
