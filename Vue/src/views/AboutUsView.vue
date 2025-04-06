@@ -107,7 +107,7 @@ const dialog2 = ref(false)
     <v-dialog v-model="dialog1" max-width="1500px">
       <v-card>
         <v-card-title style="font-size: 30px;">Ha azt hiszed hogy igénytelen az oldalunk, akkor még nem láttad az asztalunkat:</v-card-title>
-        <v-img src="/finalboss.png"></v-img>
+        <v-img src="http://localhost:3000/api/user/image/finalboss.png"></v-img>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="dialog1 = false">Bezár</v-btn>
@@ -127,7 +127,7 @@ const dialog2 = ref(false)
     <v-dialog v-model="dialog2" max-width="800px">
       <v-card>
         <v-card-title style="font-size: 30px;">A kutyánk:</v-card-title>
-        <v-img src="/gizsgugya.png"></v-img>
+        <v-img src="http://localhost:3000/api/user/image/gizsgugya.png"></v-img>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="dialog2 = false">Bezár</v-btn>
