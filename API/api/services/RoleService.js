@@ -1,9 +1,6 @@
 const db = require("../database/dbContext");
 const User = db.User;
 
-/**
- * Összes felhasználó lekérése (név + role)
- */
 const getAllUsers = async () => {
     const users = await User.findAll({
       attributes: ["ID", "userName", "role"],
@@ -19,9 +16,6 @@ const getAllUsers = async () => {
     return users;
   };
 
-/**
- * Felhasználó adminná tétele
- */
 const promoteToAdmin = async (userId) => {
   const user = await User.findByPk(userId);
   if (!user) throw new Error("Felhasználó nem található.");
@@ -32,9 +26,6 @@ const promoteToAdmin = async (userId) => {
   return { message: `Felhasználó (${user.userName}) adminná lett téve.` };
 };
 
-/**
- * Felhasználó jogának visszaállítása "User"-re
- */
 const demoteToUser = async (userId) => {
   const user = await User.findByPk(userId);
   if (!user) throw new Error("Felhasználó nem található.");

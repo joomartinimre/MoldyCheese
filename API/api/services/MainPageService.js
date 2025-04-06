@@ -2,16 +2,11 @@ const { Op, Sequelize } = require("sequelize");
 const db = require("../database/dbContext"); 
 const Place = db.Place; 
 
-
 const calculateTotalRating = (user_rate, critic_rate, NumberOfRate_L, NumberOfRate_C) => {
-    if ((NumberOfRate_L + NumberOfRate_C) === 0) return 0; 
+    if ((NumberOfRate_L + NumberOfRate_C) === 0) return 0;
     const totalRating = (user_rate * NumberOfRate_L + critic_rate * NumberOfRate_C) / (NumberOfRate_L + NumberOfRate_C);
     return Math.round(totalRating * 2) / 2; 
 };
-
-
-
-
 
 const getPopularPlaces = async () => {
     const places = await Place.findAll({ 
@@ -22,12 +17,8 @@ const getPopularPlaces = async () => {
 
     console.log("📌 Lekérdezett helyek:", places.length, "db hely");
 
-    
-
         return places.map(place => formatPlace(place));
-   
 };
-
 
 const getRecentPlaces = async (userVisitedPlaceIds) => {
     if (!userVisitedPlaceIds || userVisitedPlaceIds.length < 7) return [];
@@ -36,7 +27,6 @@ const getRecentPlaces = async (userVisitedPlaceIds) => {
         where: { ID: { [Op.in]: userVisitedPlaceIds } }
     });
 
-    
     const placeMap = new Map(places.map(place => [place.ID, place]));
     
     return userVisitedPlaceIds
@@ -47,12 +37,10 @@ const getRecentPlaces = async (userVisitedPlaceIds) => {
         .map(place => formatPlace(place));
 };
 
-
 const getLatestPlaces = async () => {
     const places = await Place.findAll({ order: [["createdAt", "DESC"]], limit: 40 });
     return places.map(place => formatPlace(place));
 };
-
 
 const getTopRatedPlaces = async () => {
     try {
@@ -78,7 +66,6 @@ const getTopRatedPlaces = async () => {
         throw new Error("Lekérdezési hiba: " + error.message);
     }
 };
-
 
 const formatPlace = (place) => ({
     id: place.ID,

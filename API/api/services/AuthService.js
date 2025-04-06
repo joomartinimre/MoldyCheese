@@ -26,6 +26,7 @@ class AuthService {
 
         const defaultProfilePictureUrl = `http://localhost:3000/api/user/image/defaultPP.jpg`;
 
+
         return await UserRepository.createUser(userName, password, email, role, defaultProfilePictureUrl);
     }
 

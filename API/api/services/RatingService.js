@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const db = require("../database/dbContext"); 
+const db = require("../database/dbContext");
 const Place = db.Place;
 const User = db.User;
 const RatingRepository = require("../repositories/RatingRepository");
@@ -9,17 +9,12 @@ class RatingService {
     const user = await User.findByPk(user_ID);
     const place = await Place.findByPk(place_ID);
 
-
-    
     const roleToTopicMap = {
       "Étterem kritikus": 2,
       "Játszótér szakértő": 4,
       "Iskológus": 1,
       "Vegyesbolt vegyész": 3
     };
-
-   
-    
 
     if (!user || !place) {
       throw new Error("User vagy Place nem található");
@@ -28,12 +23,13 @@ class RatingService {
     const isCritic = roleToTopicMap[user.role] === place.topic_ID;
     const existingRating = await RatingRepository.findRating(user_ID, place_ID);
 
-    
     if (ratingValue === 0) {
       if (existingRating) {
         const oldVal = existingRating.rating;
+        const prevRole = existingRating.roleWhenRated;
+        const wasCritic = roleToTopicMap[prevRole] === place.topic_ID;
 
-        if (isCritic) {
+        if (wasCritic) {
           place.critic_rate = (place.critic_rate || 0) - oldVal;
           place.NumberOfRate_C = Math.max((place.NumberOfRate_C || 1) - 1, 0);
         } else {
@@ -50,27 +46,34 @@ class RatingService {
       }
     }
 
-    
     if (existingRating) {
       const oldVal = existingRating.rating;
+      const prevRole = existingRating.roleWhenRated;
+      const wasCritic = roleToTopicMap[prevRole] === place.topic_ID;
 
-      if (isCritic) {
-        place.critic_rate = (place.critic_rate || 0) - oldVal + ratingValue;
+      if (wasCritic) {
+        place.critic_rate = (place.critic_rate || 0) - oldVal;
+        place.NumberOfRate_C = Math.max((place.NumberOfRate_C || 1) - 1, 0);
       } else {
-        place.user_rate = (place.user_rate || 0) - oldVal + ratingValue;
+        place.user_rate = (place.user_rate || 0) - oldVal;
+        place.NumberOfRate_L = Math.max((place.NumberOfRate_L || 1) - 1, 0);
       }
 
-      console.log("FRISSÍTÉS ELŐTT:", place.toJSON());
-        await place.save();
-        console.log("FRISSÍTÉS UTÁN:", place.toJSON());
+      if (isCritic) {
+        place.critic_rate += ratingValue;
+        place.NumberOfRate_C += 1;
+      } else {
+        place.user_rate += ratingValue;
+        place.NumberOfRate_L += 1;
+      }
 
-      await RatingRepository.updateRating(user_ID, place_ID, ratingValue);
+      await place.save();
+      await RatingRepository.updateRating(user_ID, place_ID, ratingValue, user.role);
 
-      return { message: "Rating frissítve és a hely is módosítva lett" };
+      return { message: "Rating frissítve, előző hatás figyelembevételével" };
     }
 
-    
-    const newRating = await RatingRepository.createRating(user_ID, place_ID, ratingValue);
+    const newRating = await RatingRepository.createRating(user_ID, place_ID, ratingValue, user.role);
 
     if (isCritic) {
       place.critic_rate = (place.critic_rate || 0) + ratingValue;

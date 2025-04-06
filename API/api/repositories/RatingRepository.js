@@ -1,17 +1,18 @@
 const db = require("../database/dbContext");
 
 class RatingRepository {
-  async createRating(user_ID, place_ID, rating) {
+  async createRating(user_ID, place_ID, rating,roleWhenRated) {
     return await db.Rating.create({
       user_ID: user_ID,
       place_ID: place_ID,
-      rating: rating
+      rating: rating,
+      roleWhenRated: roleWhenRated
     });
   }
 
-  async updateRating(user_ID, place_ID, ratingValue) {
+  async updateRating(user_ID, place_ID, ratingValue, roleWhenRated) {
     const [affectedRows] = await db.Rating.update(
-      { rating: ratingValue },
+      { rating: ratingValue, roleWhenRated: roleWhenRated },
       { where: { user_ID: user_ID, place_ID: place_ID } }
     );
     return affectedRows;

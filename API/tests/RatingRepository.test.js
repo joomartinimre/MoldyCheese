@@ -38,17 +38,13 @@ describe("Rating Repository Tests", () => {
 
     describe("Update Rating", () => {
         test("Should update an existing rating", async () => {
-            
             await ratingRepository.deleteRating(testUser.id, testPlace.id);
             
-            
             await ratingRepository.createRating(testUser.id, testPlace.id, 3);
-            
             
             const updatedRows = await ratingRepository.updateRating(testUser.id, testPlace.id, 4);
             expect(updatedRows).toBe(1); 
     
-            
             const updatedRating = await ratingRepository.findRating(testUser.id, testPlace.id);
             expect(updatedRating.rating).toBe(4);
         });
@@ -56,17 +52,13 @@ describe("Rating Repository Tests", () => {
     
     describe("Delete Rating", () => {
         test("Should delete a rating successfully", async () => {
-            
             await ratingRepository.deleteRating(testUser.id, testPlace.id);
     
-            
             await ratingRepository.createRating(testUser.id, testPlace.id, 2);
-            
             
             const deletedRows = await ratingRepository.deleteRating(testUser.id, testPlace.id);
             expect(deletedRows).toBe(1); 
     
-            
             const deletedRating = await ratingRepository.findRating(testUser.id, testPlace.id);
             expect(deletedRating).toBeNull();
         });

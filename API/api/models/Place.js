@@ -46,9 +46,9 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING(2000)
             },
             tags: {
-                type: DataTypes.JSON,
+                type: DataTypes.JSON, 
                 allowNull: true,
-                defaultValue: []
+                defaultValue: [] 
             },
             topic_ID: {
                 type: DataTypes.INTEGER,

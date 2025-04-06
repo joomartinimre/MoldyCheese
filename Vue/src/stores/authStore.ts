@@ -28,7 +28,15 @@ export const useAuthStore = defineStore('auth', {
     login(userData: User, token: string) {
       this.user = userData;
       this.token = token;
-      localStorage.setItem('user', JSON.stringify(userData));
+
+      const minimalUserData = {
+        ID: userData.ID,
+        name: userData.name,
+        email: userData.email,
+        role: userData.role,
+        
+      };
+      localStorage.setItem('user', JSON.stringify(minimalUserData));
       localStorage.setItem('token', token);
     },
     logout() {
@@ -54,15 +62,11 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     addRecentPlace(placeId: number) {
-      
       this.recentPlaceIds = this.recentPlaceIds.filter(id => id !== placeId);
-      
       this.recentPlaceIds.push(placeId);
-      
       if (this.recentPlaceIds.length > 12) {
         this.recentPlaceIds.shift();
       }
-      
       localStorage.setItem('recentPlaceIds', JSON.stringify(this.recentPlaceIds));
     }
   },

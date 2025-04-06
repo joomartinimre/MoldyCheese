@@ -25,7 +25,6 @@ describe("Place Repository Tests", () => {
                 Picture: Buffer.from("test-image"),
             };
 
-            
             expect(db.Place).toBeDefined();
 
             const newPlace = await db.Place.create(placeData);

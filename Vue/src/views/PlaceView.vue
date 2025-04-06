@@ -40,7 +40,9 @@ const placeData = ref<any>(null);
 const fetchPlace = async () => {
   if (placeID.value !== null) {
     try {
-      const response = await axios.get(`/api/placedetail/${placeID.value}`);
+      const response = await axios.post(`/api/placedetail/${placeID.value}`, {
+        user_ID: authStore.user?.ID
+      });
       const data = response.data;
 
       placeData.value = {
@@ -65,7 +67,8 @@ const fetchPlace = async () => {
       visits: data.visits ?? 0,
       likes: data.likes ?? 0,
       createdAt: data.createdAt ?? null,
-      Comments: data.Comments
+      Comments: data.Comments,
+      userRating: data.userrating
 };
 
 const convertBufferToBase64 = (bufferObj: { data: number[] }): string => {
@@ -377,6 +380,7 @@ onMounted(async () => {
   await fetchPlace();
 
   authStore.addRecentPlace(Number(placeID.value));
+  console.log("anyád   "+ placeData.value.userRating)
 
   if (authStore.user) {
     await checkIfUserLikedPlace();
@@ -442,14 +446,17 @@ console.log(comments);
               @update:model-value="Ertekel"
               hover
               half-increments
+              v-model="placeData.userRating"
               :length="10"
               size="large"
               active-color="elevated text-surface"
+              
             ></v-rating>
             <v-rating v-if="mobile"
             hover
               half-increments
               @update:model-value="Ertekel"
+               v-model="placeData.userRating"
               :length="10"
               :size="40"
               active-color="elevated text-surface"
@@ -458,7 +465,6 @@ console.log(comments);
         </div>
       </div>
     </div>
-    <!-- Kommentek szekció -->
     <div class="comments">
       <h5 style="font-size: 2rem;">Hozzászólások</h5>
       <div class="comments-divider"></div>
@@ -511,7 +517,6 @@ console.log(comments);
           </div>
         </div>
       </div>
-      <!-- Komment beküldő űrlap -->
       <form @submit.prevent="submitComment" class="comment-form" style="margin-bottom: 20px;">
           <textarea @focus="megjegyzestIr = true" v-model="form.text" placeholder="Írj megjegyzést..." rows="1"></textarea>
           <v-card-actions v-if="megjegyzestIr" style="padding: 0px; min-height: 30px; justify-content: flex-end;">

@@ -225,7 +225,7 @@ const userNameCancel = () => {
       <v-card-title class="text-h5">A legtöbbet likeolt 3 hozzászólásod:</v-card-title>
       <div class="comments-list">
         <div v-for="(comment, index) in topComments" :key="index" class="comment-item">
-          <img :src="comment.avatar" alt="Profilkép" class="comment-avatar">
+          <img :src="profilePictureUrl" alt="Profilkép" class="comment-avatar">
           <div class="comment-bubble bg-yellow-lighten-3">
             <div class="bubble-header">
               <span class="comment-author">

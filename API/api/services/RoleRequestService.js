@@ -23,16 +23,13 @@ class RoleRequestService {
     }
 
     async approveRequest(requestId, adminId) {
-        
         const request = await db.RoleRequest.findByPk(requestId);
         if (!request) {
             throw new Error("Request not found");
         }
     
-        
         await RoleRequestRepository.updateRequestStatus(requestId, "approved", adminId);
     
-        
         await db.User.update(
             { role: request.requested_role },
             { where: { ID: request.user_id } }

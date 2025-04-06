@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       rating: {
         type: DataTypes.FLOAT, 
         allowNull: false
+      },
+      roleWhenRated: {
+        type: DataTypes.STRING,
+        allowNull: false
       }
     }, {
       tableName: 'Ratings', 

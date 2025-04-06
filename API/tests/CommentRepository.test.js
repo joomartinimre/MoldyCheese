@@ -14,7 +14,7 @@ describe("Comment Repository Tests", () => {
         expect(testTopic.id).toBeDefined();
 
         testPlace = await db.Place.create({
-            name: "Test Place",
+            name: "Test Place",  // HOZZÁADVA
             topic_ID: testTopic.id,
             user_rate: 0,
             critic_rate: 0,
@@ -22,7 +22,7 @@ describe("Comment Repository Tests", () => {
             visits: 0,
             location: "Test Location",
             text: "Test Place",
-            Picture: Buffer.from("test-image")
+            Picture: Buffer.from("test-image") 
         });
 
         expect(testPlace).toBeDefined();
@@ -74,31 +74,35 @@ describe("Comment Repository Tests", () => {
         });
     });
 
-    describe("Update Comment", () => {
-        test("Should update comment text successfully", async () => {
-            
-            const comment = await commentRepository.createComment(1, testPlace.id, "Original text");
-            const updatedComment = await commentRepository.updateCommentText(comment.id, "Updated text");
-
-            expect(updatedComment).toBeDefined();
-            expect(updatedComment.text).toBe("Updated text");
-        });
-
-        test("Should return null if comment does not exist", async () => {
-            const nonExistentId = 99999; 
-            const result = await commentRepository.updateCommentText(nonExistentId, "New text");
-            expect(result).toBeNull();
-        });
-    });
-
     describe("Delete Comment", () => {
         test("Should delete a comment successfully", async () => {
             expect(testPlace.id).toBeDefined();
-            const commentToDelete = await commentRepository.createComment(1, testPlace.id, "Comment to delete");
+            const commentToDelete = await commentRepository.createComment(1, testPlace.id, "Comment to delete", 4);
             
             expect(commentToDelete).toHaveProperty("id");
             
             await expect(commentRepository.deleteComment(commentToDelete.id)).resolves.toBe(1);
+        });
+    });
+
+    describe("Update Comment Text", () => {
+        test("Should update the comment text successfully", async () => {
+            const originalComment = await commentRepository.createComment(
+                1,
+                testPlace.id,
+                "Original text"
+            );
+    
+            const updated = await commentRepository.updateCommentText(originalComment.id, "Updated text");
+    
+            expect(updated).toBeDefined();
+            expect(updated.text).toBe("Updated text");
+            expect(updated.id).toBe(originalComment.id);
+        });
+    
+        test("Should return null if the comment does not exist", async () => {
+            const result = await commentRepository.updateCommentText(99999, "Won't work");
+            expect(result).toBeNull();
         });
     });
 });

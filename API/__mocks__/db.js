@@ -19,7 +19,7 @@ db.Topic = sequelize.define("Topic", {
 }, { timestamps: false });
 
 db.Place = sequelize.define("Place", {
-    name: { type: DataTypes.STRING(255), allowNull: false },  
+    name: { type: DataTypes.STRING(255), allowNull: false },  // NÉV HOZZÁADVA
     topic_ID: { 
         type: DataTypes.INTEGER, 
         allowNull: false,
@@ -27,14 +27,14 @@ db.Place = sequelize.define("Place", {
     },
     user_rate: { type: DataTypes.INTEGER, defaultValue: 0 },
     critic_rate: { type: DataTypes.INTEGER, defaultValue: 0 },
-    NumberOfRate_L: { type: DataTypes.INTEGER, defaultValue: 0 },  
-    NumberOfRate_C: { type: DataTypes.INTEGER, defaultValue: 0 },  
-    Likes: { type: DataTypes.INTEGER, defaultValue: 0 },  
-    Picture: { type: DataTypes.BLOB("long"), allowNull: false },  
-    tags: { type: DataTypes.JSON, allowNull: true, defaultValue: [] },  
+    NumberOfRate_L: { type: DataTypes.INTEGER, defaultValue: 0 },  // HOZZÁADVA
+    NumberOfRate_C: { type: DataTypes.INTEGER, defaultValue: 0 },  // HOZZÁADVA
+    Likes: { type: DataTypes.INTEGER, defaultValue: 0 },  // HOZZÁADVA
+    Picture: { type: DataTypes.BLOB("long"), allowNull: false },  // BLOB HOZZÁADVA
+    tags: { type: DataTypes.JSON, allowNull: true, defaultValue: [] },  // TAGS HOZZÁADVA
     createdAt: { type: DataTypes.DATE, allowNull: false, defaultValue: Sequelize.NOW },
     updatedAt: { type: DataTypes.DATE, allowNull: false, defaultValue: Sequelize.NOW },
-    visits: { type: DataTypes.INTEGER, defaultValue: 0 },  
+    visits: { type: DataTypes.INTEGER, defaultValue: 0 },  // Alapértelmezett érték megadva
     text: { type: DataTypes.STRING(255), allowNull: false }
 }, { timestamps: true });
 
@@ -74,7 +74,7 @@ db.Rating.belongsTo(db.User, { foreignKey: "user_ID" });
 db.Rating.belongsTo(db.Place, { foreignKey: "place_ID" });
 
 async function initializeMockData() {
-    await db.sequelize.sync({ force: true });  
+    await db.sequelize.sync({ force: true });  // Felesleges '3' törölve
     const defaultTopic = await db.Topic.create({ name: "Default Test Topic" });
     return defaultTopic;
 }

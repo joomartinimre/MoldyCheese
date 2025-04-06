@@ -1,8 +1,6 @@
-
 const db = require("../database/dbContext");
 const { Op } = require("sequelize");
 const Place = db.Place;
-
 
 const topicMap = {
   1: "Iskola",

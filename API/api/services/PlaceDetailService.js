@@ -9,7 +9,7 @@ const calculateTotalRating = (user_rate, critic_rate, NumberOfRate_L, NumberOfRa
   return Math.round(totalRating * 2) / 2; 
 };
 
-const getPlaceWithComments = async (placeId) => {
+const getPlaceWithComments = async (placeId , user_ID) => {
   
   const place = await Place.findByPk(placeId, {
     
@@ -24,13 +24,23 @@ const getPlaceWithComments = async (placeId) => {
             attributes: ["userName", "role", "ProfilePicture"]
           }
         ]
+      },
+      {
+        model: db.Rating,
+        as: "Ratings"
       }
     ]
   });
+
+
   console.log("✅ Betöltött hely:", place.tags);
   if (!place) throw new Error("Nem található a hely.");
   
   await place.increment("visits", { by: 1 });
+  const userRating = place.Ratings.find(r => r.user_ID === user_ID)?.rating ?? null;
+
+  console.log("a user rating: " + userRating)
+  console.log("a user ID: " + user_ID)
 
   return {
     id: place.ID,
@@ -47,6 +57,7 @@ const getPlaceWithComments = async (placeId) => {
     createdAt: place.createdAt.toISOString().split('T')[0],
     visits: place.visits,
     likes: place.Likes,
+    userrating: userRating,
     Comments: place.Comments
   };
 }

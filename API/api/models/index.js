@@ -60,6 +60,16 @@ module.exports = (sequelize, DataTypes) => {
       CommentLike.belongsTo(Comment, {
         foreignKey: 'comment_ID'
       });
+
+      Place.hasMany(Rating, {
+        foreignKey: "place_ID",
+        as: "Ratings"
+    });
+    
+      Rating.belongsTo(Place, {
+          foreignKey: "place_ID",
+          as: "Place"
+      });
    
 
 

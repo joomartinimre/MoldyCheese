@@ -26,23 +26,19 @@ try {
 
 const db = {};
 
-
 const models = require("../models")(sequelize, DataTypes);
 Object.assign(db, models);
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-
 const seedDataPath = path.join(__dirname, "../backup/seedData.json");
-
 
 const dirPath = path.join(__dirname, "../backup");
 if (!fs.existsSync(dirPath)) {
     console.log("📁 Backup directory does not exist. Creating...");
     fs.mkdirSync(dirPath, { recursive: true });
 }
-
 
 const saveDataOnExit = async () => {
     console.log("💾 Saving database state before exit...");
@@ -76,11 +72,21 @@ const saveDataOnExit = async () => {
   
         let transformedRecords = records;
   
-        
         if (modelName === "Place") {
           transformedRecords = transformedRecords.map(record => ({
             ...record,
-            Picture: record.Picture ? Buffer.from(record.Picture).toString("base64") : null
+            Picture: record.Picture ? Buffer.from(record.Picture).toString("base64") : null,
+            tags: Array.isArray(record.tags)
+              ? record.tags
+              : typeof record.tags === "string"
+              ? (() => {
+                  try {
+                    return JSON.parse(record.tags);
+                  } catch {
+                    return [];
+                  }
+                })()
+              : []
           }));
         }
 
@@ -112,7 +118,6 @@ const saveDataOnExit = async () => {
   
   module.exports = saveDataOnExit;
 
-
 app.post("/shutdown", async (req, res) => {
     console.log("⚠️ Shutdown request received via API. Saving data before exit...");
     res.json({ message: "Server is shutting down..." });
@@ -121,11 +126,9 @@ app.post("/shutdown", async (req, res) => {
         await saveDataOnExit();
         console.log("✅ Data saved. Now closing database connections...");
 
-        
         await db.sequelize.close();
         console.log("🛑 Database connection closed.");
 
-        
         if (process.env.NODE_ENV !== "production") {
             console.log("💀 Killing nodemon...");
             exec("taskkill /IM node.exe /F", (err) => {
@@ -146,10 +149,8 @@ app.post("/shutdown", async (req, res) => {
     }
 });
 
-
 const SHUTDOWN_PORT = 4000;
 app.listen(SHUTDOWN_PORT, () => console.log(`🛑 Shutdown API running on http://localhost:${SHUTDOWN_PORT}/shutdown`));
-
 
 const seedDatabase = async () => {
     console.log("📥 Seeding database from backup...");
@@ -162,7 +163,6 @@ const seedDatabase = async () => {
     try {
       const seedData = JSON.parse(fs.readFileSync(seedDataPath, "utf-8"));
   
-      
       const seedOrder = [
         "User",
         "Topic",
@@ -186,7 +186,6 @@ const seedDatabase = async () => {
           continue;
         }
   
-        
         if (modelName === "Place") {
           records = records.map(record => ({
             ...record,
@@ -194,7 +193,6 @@ const seedDatabase = async () => {
           }));
         }
   
-        
         const formatted = records.map(record => formatDates(record, db[modelName]));
   
         console.log(`📥 Seeding ${modelName}...`);
@@ -208,15 +206,11 @@ const seedDatabase = async () => {
     }
   };    
 
-
-
 db.sequelize.sync({ force: true }).then(async () => {
     console.log("✅ Database synchronized");
 
     await seedDatabase(); 
 
-
-    
     const existingComments = await db.Comment.count();
     if (existingComments === 0) {
         console.log("📥 Inserting a test comment manually...");
@@ -233,7 +227,6 @@ db.sequelize.sync({ force: true }).then(async () => {
     }
 });
 
-
 const formatDates = (record, model) => {
     return Object.keys(record).reduce((obj, key) => {
         if (!model.rawAttributes[key] || model.rawAttributes[key].type.key !== "DATEONLY") {
@@ -241,7 +234,6 @@ const formatDates = (record, model) => {
             return obj;
         }
 
-        
         if (typeof record[key] === "string") {
             if (record[key] === "0000-00-00" || !record[key].match(/^\d{4}-\d{2}-\d{2}$/)) {
                 console.warn(`⚠️ WARNING: Invalid DATEONLY value for "${key}" ->`, record[key]);
@@ -258,7 +250,6 @@ const formatDates = (record, model) => {
         return obj;
     }, {});
 };
-
 
 process.on("exit", async () => {
     console.log("⚠️ Process exit triggered. Ensuring data is saved...");
