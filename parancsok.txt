@@ -7,11 +7,13 @@ npm install pinia
 
 
 API: 
+npm i
 
--
-alap: 
+
+MoldyCheese:
 npm install concurrently --save-dev
 
-Database saving: 
 
+
+Database saving: 
 curl -X POST http://localhost:4000/shutdown
