@@ -1,17 +1,36 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { usePageLoader } from '@/composables/usePageLoader';
+import { onMounted } from 'vue';
+
+onMounted(() => {
+  startLoading();
+  setTimeout(() => {
+    stopLoading();
+  }, 500);
+});
+
+
+const { loading, startLoading, stopLoading } = usePageLoader();
+
 
 const dialog1 = ref(false)
 const dialog2 = ref(false)
 </script>
 
 <template>
-  <body>
-    <!-- Fejléc rész -->
+  <v-container v-if="loading" class="loading-screen">
+    <v-progress-circular
+      indeterminate
+      color="primary"
+      size="40"
+    ></v-progress-circular>
+    <p>Betöltés folyamatban...</p>
+  </v-container>
+  <body v-else>
     <header>
       <h1 color="primary">MoldyCheese - A helyértékelés forradalma</h1>
       <p>- "Minél több hely, minél több vélemény, minél egyszerűbb értékelés!"</p>
-      <!-- Véletlenszerűen elhelyezett dekorációs kép a fejléc bal felső sarkában-->
       <img
         class="floating-image header-deco"
         src="https://www.tasteofhome.com/wp-content/uploads/2022/09/GettyImages-470340853.jpg"
@@ -19,8 +38,6 @@ const dialog2 = ref(false)
         style="top: 0px; left: 10px; transform: rotate(-10deg);"
       />
     </header>
-
-    <!-- Tartalom rész -->
     <div class="container">
         <section id="about">
         <h2>Rólunk</h2>
@@ -32,7 +49,7 @@ const dialog2 = ref(false)
         <p>
             A platformunk elsődleges célja az, hogy a város lakói számára egy átlátható és könnyen kezelhető felületet biztosítsunk, ahol a közösségi értékelések és a szakértői visszajelzések alapján választásaikat alakíthatják ki. Az oldalunkon megjelenő információk hozzájárulnak a helyszínek minőségének folyamatos javításához és a szolgáltatások optimalizálásához.
         </p>
-        <img src="https://www.speexx.com/wp-content/uploads/Speexx_Blog_5_Steps_to_Achieving_a_Goal-scaled.jpg" style="float: left;" width="400px" alt="Kép 1">
+        <img src="https://www.speexx.com/wp-content/uploads/Speexx_Blog_5_Steps_to_Achieving_a_Goal-scaled.jpg" style="max-width: 100%; float: left;" width="400px" alt="Kép 1">
 
         <h3>Értékelési Rendszerünk</h3>
         <p>
@@ -51,7 +68,7 @@ const dialog2 = ref(false)
         </p>
 
         <h3>Elkötelezettségünk az Átláthatóság és a Felelősségvállalás Mellett</h3>
-        <img src="https://uploads.dailydot.com/2024/06/kurt-angel-meme.jpg?auto=compress&fm=pjpg" style="float: left;" width="400px" alt="Kép 1">
+        <img src="https://uploads.dailydot.com/2024/06/kurt-angel-meme.jpg?auto=compress&fm=pjpg" style="max-width: 100%; float: left;" width="400px" alt="Kép 1">
         <p>
           A MoldyCheese alapelve a közösségi felelősségvállalás és az átláthatóság. Minden felhasználói értékelés és visszajelzés hozzájárul ahhoz, hogy a platformunk egyre pontosabb képet adjon a város különböző helyszíneinek minőségéről. Hiszünk abban, hogy az információk szabad megosztása és a hiteles visszajelzések révén a közösségi élet javítható, és elősegíthetjük a környező térségek fejlődését.
         </p>
@@ -62,7 +79,14 @@ const dialog2 = ref(false)
       </section>
 
       <section id="gallery">
-        <h2>Képgaléria</h2>
+        <div class="gallery-header">
+          <h2>Képgaléria</h2>
+          <img
+            class="floating-image gallery-floating"
+            src="https://meglepetes.hu/uploads/2025/02/peneszes-sajt.jpg"
+            alt="Dekoráció"
+          />
+        </div>
         <div class="gallery">
           <img src="https://meglepetes.hu/uploads/2025/02/peneszes-sajt.jpg" alt="Kép 1">
           <img src="https://meglepetes.hu/uploads/2025/02/peneszes-sajt.jpg" alt="Kép 2">
@@ -72,8 +96,6 @@ const dialog2 = ref(false)
           <img src="https://meglepetes.hu/uploads/2025/02/peneszes-sajt.jpg" alt="Kép 6">
         </div>
       </section>
-
-      <!-- Véletlenszerűen elhelyezett abszolút pozicionált képek a containeren belül -->
       <img
         class="floating-image"
         src="https://meglepetes.hu/uploads/2025/02/peneszes-sajt.jpg"
@@ -86,15 +108,8 @@ const dialog2 = ref(false)
         alt="Dekoráció"
         style="bottom: 40px; left: 2%; transform: rotate(-15deg);"
       />
-      <img
-        class="floating-image"
-        src="https://meglepetes.hu/uploads/2025/02/peneszes-sajt.jpg"
-        alt="Dekoráció"
-        style="bottom: 25%; left: 80%; transform: rotate(7deg);"
-      />
     </div>
     <div style="display: flex; gap: 20px;">
-    <!-- Kattintható szöveg -->
     <p 
       id="bal"
       @click="dialog1 = true" 
@@ -102,8 +117,6 @@ const dialog2 = ref(false)
     >
       --------------------
     </p>
-
-    <!-- Popup dialog -->
     <v-dialog v-model="dialog1" max-width="1500px">
       <v-card>
         <v-card-title style="font-size: 30px;">Ha azt hiszed hogy igénytelen az oldalunk, akkor még nem láttad az asztalunkat:</v-card-title>
@@ -122,8 +135,6 @@ const dialog2 = ref(false)
     >
       --------------------
     </p>
-
-    <!-- Popup dialog -->
     <v-dialog v-model="dialog2" max-width="800px">
       <v-card>
         <v-card-title style="font-size: 30px;">A kutyánk:</v-card-title>
@@ -147,6 +158,7 @@ body {
   background-color: #f4f4f4;
   color: #333;
   line-height: 1.8;
+  max-width: 100%;
 }
 
 
@@ -258,6 +270,18 @@ p {
 }
 
 
+.gallery-header {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.gallery-header h2 {
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+  margin: 0 0 30px 0;
+  font-size: 2.2em;
+}
+
 .floating-image {
   position: absolute;
   max-width: 150px;
@@ -266,8 +290,30 @@ p {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
+.gallery-floating {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) rotate(7deg);
+}
+
+
 #about img {
     padding: 20px;
+}
+
+.loading-screen {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 450px) {
+  .gallery-floating {
+    max-width: 30%;
+  }
 }
 
 </style>

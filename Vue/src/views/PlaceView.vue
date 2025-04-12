@@ -4,10 +4,28 @@ import { ref, reactive, computed, onMounted, watch } from 'vue'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 import { useDisplay } from 'vuetify'
+import { usePageLoader } from '@/composables/usePageLoader'
 
 axios.defaults.baseURL = "http://localhost:3000"
 
 const authStore = useAuthStore()
+
+const { loading, startLoading, stopLoading } = usePageLoader();
+
+onMounted(async () => {
+  startLoading();
+
+  await fetchPlace();
+  authStore.addRecentPlace(Number(placeID.value));
+
+  if (authStore.user) {
+    await checkIfUserLikedPlace();
+    await checkUserCommentLikes();
+  }
+
+  stopLoading();
+});
+
 
 interface Comment {
   id: number;
@@ -393,7 +411,15 @@ console.log(comments);
 </script>
 
 <template>
-  <v-container fluid v-if="placeData" style="padding: 0px;">
+  <v-container v-if="loading" class="loading-screen">
+    <v-progress-circular
+      indeterminate
+      color="primary"
+      size="40"
+    ></v-progress-circular>
+    <p>Betöltés folyamatban...</p>
+  </v-container>
+  <v-container fluid v-else style="padding: 0px;">
     <div class="homepage-container" :style="{ backgroundImage: `url(${placeData.Picture})` }">
       <div class="content">
         <div class="image-section">
@@ -458,7 +484,7 @@ console.log(comments);
               @update:model-value="Ertekel"
                v-model="placeData.userRating"
               :length="10"
-              :size="40"
+              :size="30"
               active-color="elevated text-surface"
             ></v-rating>
           </v-card-text>
@@ -531,9 +557,6 @@ console.log(comments);
         </p>
       </form>
     </div>
-  </v-container>
-  <v-container v-else class="not-found">
-      <h2>Nincs ilyen hely!</h2>
   </v-container>
 </template>
 
@@ -750,6 +773,9 @@ console.log(comments);
   text-align: left;
   width: 100%;
   box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 
@@ -790,6 +816,15 @@ console.log(comments);
 .content .v-card-text 
 {
     padding: 0px !important;
+}
+
+.loading-screen {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 </style>

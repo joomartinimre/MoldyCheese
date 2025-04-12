@@ -405,7 +405,6 @@ interface User {
   userName: string;
   role: string;
   profilePictureUrl?: string;
-  // egyéb property-k...
 }
 
 console.log("User:", authStore.user);
@@ -433,14 +432,12 @@ const userProfilePicture = computed(() => {
 
 <template>
   <v-layout class="rounded rounded-md">
-    <!-- 📌 FIXÁLT FEJLÉC -->
     <v-app-bar height="80" style="position: fixed !important;">
       <template v-slot:title>
         <div class="header-container">
           <button style="font-size: 25px;" @click="navigateTo('/')">
             🧀 <span v-if="!mobile">Moldy Cheese</span>
           </button>
-          <!-- Csak a keresőmező -->
           <v-text-field
             v-model="search"
             density="compact"
@@ -455,7 +452,6 @@ const userProfilePicture = computed(() => {
         </div>
       </template>
       <div class="d-flex justify-space-around">
-        <!-- Mobil nézet: account menü -->
         <v-menu transition="scale-transition" v-if="mobile">
           <template v-slot:activator="{ props }">
             <v-app-bar-nav-icon
@@ -556,8 +552,6 @@ const userProfilePicture = computed(() => {
                               <tr v-for="request in pendingRequests" :key="request.id">
                                 <td class="text-left">{{ request.User ? request.User.userName : 'N/A' }}</td>
                                 <td class="text-right">
-                                  
-                                  <!-- Belső jelentkezési modal -->
                                   <v-dialog  v-model="isInnerDialogOpen" max-width="700px">
                                     <template #activator="{ props: activatorProps }">
                                       <v-btn v-bind="activatorProps" variant="elevated" color="primary"  class="text-surface" @click="openRequestModal(request)">
@@ -595,11 +589,9 @@ const userProfilePicture = computed(() => {
                         </v-card-text>
                       </v-card>
                     </template>
-                    <!-- jog kezelés modal 1-->
                   </v-dialog>
                 </v-list-item>
                 <v-list-item v-if="authStore.userRole == 'Admin'">
-                  <!-- Hely feltöltő modal -->
                   <v-dialog v-model="newPlaceDialog" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
@@ -699,8 +691,6 @@ const userProfilePicture = computed(() => {
             </template>
           </v-list>
         </v-menu>
-
-        <!-- Helyek menü -->
         <v-menu transition="scale-transition">
           <template v-slot:activator="{ props }">
             <v-app-bar-nav-icon v-if="mobile" color="primary" v-bind="props"></v-app-bar-nav-icon>
@@ -714,8 +704,6 @@ const userProfilePicture = computed(() => {
           </v-list>
         </v-menu>
       </div>
-
-      <!-- Asztali nézet: navigáció és account menü -->
       <nav v-if="!mobile" class="desktop-nav">
         <div>
           <v-btn variant="text" color="primary" class="ma-1" @click="navigateTo('/school')">Iskolák</v-btn>
@@ -793,8 +781,6 @@ const userProfilePicture = computed(() => {
                               <tr v-for="request in pendingRequests" :key="request.id">
                                 <td class="text-left">{{ request.User ? request.User.userName : 'N/A' }}</td>
                                 <td class="text-right">
-                                  
-                                  <!-- Belső jelentkezési modal -->
                                   <v-dialog v-model="isInnerDialogOpen" max-width="700px">
                                     <template #activator="{ props: activatorProps }">
                                       <v-btn v-bind="activatorProps" variant="elevated" color="primary"  class="text-surface" @click="openRequestModal(request)">
@@ -832,11 +818,9 @@ const userProfilePicture = computed(() => {
                         </v-card-text>
                       </v-card>
                     </template>
-                    <!-- jog kezelés modal 2-->
                   </v-dialog>
                 </v-list-item>
                 <v-list-item v-if="authStore.userRole == 'Admin'">
-                  <!-- Hely feltöltő modal -->
                   <v-dialog v-model="newPlaceDialog" max-width="700px">
                     <template #activator="{ props: activatorProps }">
                       <v-btn v-bind="activatorProps" color="primary" variant="text">
@@ -969,8 +953,6 @@ const userProfilePicture = computed(() => {
         </div>
       </nav>
     </v-app-bar>
-
-    <!-- Searchbar itemek -->
     <div class="search-overlay" v-if="searchResults.length > 0" ref="searchContainer">
       <v-card>
         <v-card-text>
@@ -987,11 +969,11 @@ const userProfilePicture = computed(() => {
                 
                 @click="search = '', goToPlace(item.id)"
               >
-                <div v-if="!mobile" class="search-image">
+                <div class="search-image" style="flex: 0 0 auto;">
                   <v-img :src="item.picture" height="100" width="100" cover></v-img>
                 </div>
                 <v-spacer></v-spacer>
-                <v-card-item style="font-size: 13px;">{{ item.name }}</v-card-item>
+                <v-card-item style="font-size: 13px; max-width: 100%; flex: 1 1 auto;">{{ item.name }}</v-card-item>
                 <v-spacer></v-spacer>
                 <v-card-item v-if="!mobile" style="font-size: 13px;">{{ item.category }}</v-card-item>
               </v-card>
@@ -1000,18 +982,13 @@ const userProfilePicture = computed(() => {
         </v-card-text>
       </v-card>
     </div>
-
-    <!-- FŐ TARTALOM -->
     <div class="page-content">
       <v-container fluid class="main-container">
-        <!-- Egyéb tartalom, például a router-view -->
         <router-view />
         <br>
         <br v-if="mobile">
       </v-container>
     </div>
-
-    <!-- Visitor figyelmeztetés, X gombbal -->
     <v-container>
       <div class="visitor-container" v-if="showVisitor && !authStore.isLoggedIn && !['/login', '/registration'].includes(route.path)">
         <button class="close-btn-jelentkezzbe" @click="hideVisitor" aria-label="Bezárás">×</button>
@@ -1023,8 +1000,6 @@ const userProfilePicture = computed(() => {
         </div>
       </div>
     </v-container>
-
-    <!-- LÁBLÉC -->
     <v-navigation-drawer location="bottom" :mobile="false">
       <v-footer class="bg-yellow-darken-1">
         <v-row justify="center" no-gutters>
@@ -1088,8 +1063,6 @@ const userProfilePicture = computed(() => {
                       <tr v-for="request in pendingRequests" :key="request.id">
                         <td class="text-left">{{ request.User ? request.User.userName : 'N/A' }}</td>
                         <td class="text-right">
-                          
-                          <!-- Belső jelentkezési modal -->
                           <v-dialog v-model="isInnerDialogOpen" max-width="700px">
                             <template #activator="{ props: activatorProps }">
                               <v-btn v-bind="activatorProps" variant="elevated" color="primary"  class="text-surface" @click="openRequestModal(request)">
@@ -1127,7 +1100,6 @@ const userProfilePicture = computed(() => {
                 </v-card-text>
               </v-card>
             </template>
-            <!-- jog kezelés modal 2-->
           </v-dialog>
         </v-row>
       </v-footer>

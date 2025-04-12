@@ -2,13 +2,16 @@
 import { ref, onMounted  } from 'vue';
 import { useAuthStore } from '@/stores/authStore'
 import axios from 'axios'
+import { usePageLoader } from '@/composables/usePageLoader';
+import { useDisplay } from 'vuetify';
 const keptoltes = ref(true);
 const defaultProfilePictureUrl = `http://localhost:3000/api/user/image/defaultPP.jpg`;
 const profilePictureUrl = ref(defaultProfilePictureUrl);
-
+const { loading, startLoading, stopLoading } = usePageLoader();
 const authStore = useAuthStore();
 
 const fetchProfileData = async () => {
+  startLoading();
   try {
     const { data } = await axios.get(`/api/profile/${authStore.user?.ID}`);
     userName.value = data.userName;
@@ -36,6 +39,8 @@ const fetchProfileData = async () => {
     }));
   } catch (err) {
     console.error("❌ Hiba a profiladatok lekérésekor:", err);
+  } finally {
+    stopLoading();
   }
 };
 
@@ -142,17 +147,25 @@ const userNameSave = async () => {
   
 };
 
-
-
 const userNameCancel = () => {
   userNameEdit.value = userName.value;
   atnevezie.value = false;
 };
 
+const { mobile } = useDisplay();
+
 </script>
 
 <template>
-  <v-container fluid class="pa-0" style="max-width: 1300px; margin: 50px;">
+  <v-container v-if="loading" class="loading-screen">
+    <v-progress-circular
+      indeterminate
+      color="primary"
+      size="40"
+    ></v-progress-circular>
+    <p>Betöltés folyamatban...</p>
+  </v-container>
+  <v-container v-else fluid class="pa-0" style="max-width: 1300px; margin: 50px;">
     <v-card class="mx-auto pa-4" outlined>
       <v-row>
         <v-col cols="12" sm="4" class="d-flex justify-center" style="align-items: center; object-fit: cover;">
@@ -164,7 +177,7 @@ const userNameCancel = () => {
           ></v-img>
         </v-col>
         <v-col cols="12" sm="8">
-          <v-card-title class="text-h4">Üdvözöllek, {{ userName }}!</v-card-title>
+          <v-card-title class="text-h4">Üdvözöllek, <span class="tores">{{ userName }}!</span> </v-card-title>
           <v-card-text>
             <v-row dense class="mb-2" v-for="(item, index) in profileInfo" :key="index">
               <v-col cols="6">
@@ -176,10 +189,17 @@ const userNameCancel = () => {
                     <p>{{ item.value }}</p>
                     <v-btn size="small" color="primary" class="text-surface" @click="userNameUpdate">Módosítás</v-btn>
                   </div>
-                  <div v-if="atnevezie" style="display: flex; gap: 10px;">
+                  <div v-if="atnevezie && !mobile" style="display: flex; gap: 10px; align-items: center;">
                     <textarea v-model="userNameEdit" style="resize: none;" maxlength="20" rows="1">{{ item.value }}</textarea>
                     <v-btn size="small" color="primary" class="text-surface" @click="userNameSave">Mentés</v-btn>
                     <v-btn size="small" color="primary" class="text-surface" @click="userNameCancel">Mégse</v-btn>
+                  </div>
+                  <div v-if="atnevezie && mobile" style="display: flex; flex-direction: column; gap: 10px;">
+                    <textarea v-model="userNameEdit" style="resize: none;" maxlength="20" rows="1">{{ item.value }}</textarea>
+                    <div style="display: flex; gap: 10px;">
+                      <v-btn size="small" color="primary" class="text-surface" @click="userNameSave">Mentés</v-btn>
+                      <v-btn size="small" color="primary" class="text-surface" @click="userNameCancel">Mégse</v-btn>
+                    </div>
                   </div>
                 </template>
                 <template v-else>
@@ -316,7 +336,12 @@ const userNameCancel = () => {
   text-align: left;
   width: 100%;
   box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
 }
+
+
 
 textarea {
   resize: none; 
@@ -330,6 +355,21 @@ textarea:focus {
 
 .v-card-text div {
   font-size:medium
+}
+
+.loading-screen {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 750px) {
+  .tores {
+    display: block;
+  }
 }
 
 </style>

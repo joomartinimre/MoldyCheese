@@ -63,9 +63,9 @@ if (tagFilter) {
 
 const calculateRating = (place) => {
   const { user_rate, critic_rate, NumberOfRate_L, NumberOfRate_C } = place;
-  const total = NumberOfRate_L + NumberOfRate_C;
-  if (total === 0) return 0;
-  return Math.round(((user_rate * NumberOfRate_L + critic_rate * NumberOfRate_C) / total) * 2) / 2;
+  if ((NumberOfRate_L + NumberOfRate_C) === 0) return 0;
+    const totalRating = (user_rate  + critic_rate) / (NumberOfRate_L + NumberOfRate_C);
+    return Math.round(totalRating * 2) / 2; 
 };
 
 module.exports = { getPlacesByTopic };

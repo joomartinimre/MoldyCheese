@@ -3,6 +3,7 @@ import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import { useDisplay } from 'vuetify';
 import axios from 'axios';
 import { useAuthStore } from '@/stores/authStore';
+import { usePageLoader } from '@/composables/usePageLoader';
 
 interface Place {
   id: number;
@@ -24,6 +25,7 @@ const convertBlobToUrl = (blobData: string): string => {
 const API_BASE = "http://localhost:3000/api/main";
 
 const fetchPlaces = async () => {
+  startLoading();
   try {
     const authStore = useAuthStore();
 
@@ -75,6 +77,9 @@ const fetchPlaces = async () => {
   } catch (error) {
     console.error("Hiba történt a helyek lekérése közben:", error);
   }
+  finally {
+    stopLoading();
+  }
 };
 
 
@@ -118,7 +123,7 @@ onUnmounted(() => {
 });
 
 const { mobile } = useDisplay();
-const loading = ref(false);
+const { loading, startLoading, stopLoading } = usePageLoader();
 const transitionState = ref("");
 const windowModel = ref(0);
 const displayedPlaces = ref(18);
@@ -311,14 +316,21 @@ watch(windowModel, () => {
   }
 });
 
-
 </script>
 
 
 
 <template>
-  <!-- Popular-->
-  <v-container fluid style="padding: 0px;">
+  <v-container v-if="loading" class="loading-screen" fluid>
+    <div class="loader-content">
+      <v-icon size="100" color="yellow-darken-2">mdi-cheese</v-icon>
+      <div class="loader-inline">
+        <v-progress-circular indeterminate color="primary" size="24"></v-progress-circular>
+        <span>Betöltés folyamatban...</span>
+      </div>
+    </div>
+  </v-container>
+  <v-container v-else fluid style="padding: 0px;">
     <v-window v-model="windowModel" :show-arrows="$vuetify.display.mdAndUp">
       <v-window-item v-for="hely in popularPlaces" :key="hely.id">
         <div class="homepage-container" :style="{ backgroundImage: `url(${hely.url})` }">
@@ -342,7 +354,7 @@ watch(windowModel, () => {
                   readonly
                   :model-value="hely.rating"
                   :length="10"
-                  :size="40"
+                  :size="30"
                   active-color="elevated text-surface"
                 ></v-rating>
               </v-card-text>
@@ -355,8 +367,6 @@ watch(windowModel, () => {
         </div>
       </v-window-item>
     </v-window>
-    <!-- Recent-->
-       
     <h1 v-if="recentPlaces.length > 0" style="padding: 0px 30px; max-width: 2300px; margin: auto;">Korábban megtekintve</h1>
     <v-container v-if="recentPlaces.length > 0" class="horizontal-scroll-container" fluid>
       <v-row class="horizontal-scroll-track">
@@ -394,8 +404,6 @@ watch(windowModel, () => {
       </v-col>
       </v-row>
     </v-container>
-
-      <!-- latest-->
     <h1 style="padding: 0px 30px; max-width: 2300px; margin: auto;">Legújabb helyek</h1>
     <v-row style="max-width: 2300px; margin: auto; padding: 0px 18px 0px 18px">
       <v-col
@@ -432,8 +440,6 @@ watch(windowModel, () => {
         </v-card>
       </v-col>
     </v-row>
-
-    <!-- Továbbiak betöltése gomb -->
     <v-btn
       v-if="displayedPlaces < totalPlaces" 
       @click="loadMore"
@@ -443,8 +449,6 @@ watch(windowModel, () => {
     >
       Továbbiak betöltése
     </v-btn>
-    
-      <!-- popular-->
     <div class="slider-container"
      @mousedown="onMouseDown"
      @mousemove="onMouseMove"
@@ -498,8 +502,6 @@ watch(windowModel, () => {
         ></div>
       </div>
     </div>
-    
-      <!-- top-rated-->
     <h1 style="padding: 0px 30px; max-width: 2300px; margin: auto;">A legjobb 10</h1>
   </v-container>
   <div class="custom-slider-container">
@@ -604,7 +606,8 @@ watch(windowModel, () => {
   .content {
     flex-direction: column; 
     align-items: center; 
-    min-height: fit-content; 
+    min-height: fit-content;
+    max-width: 100%;
   }
 
   .image-section {
@@ -829,5 +832,33 @@ div .v-card-text
   flex-wrap: nowrap;
 }
 
+.loading-screen {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.loader-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+}
+
+@media (max-width: 959px) {
+  .content {
+    padding: 50px;
+  }
+}
 
 </style>

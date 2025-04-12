@@ -1,90 +1,171 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
 import { useDisplay } from 'vuetify';
+import { usePageLoader } from '@/composables/usePageLoader';
+import type { SortingState } from '@tanstack/vue-table';
 
 const API_BASE = "http://localhost:3000/api/placeview";
+
 interface Place {
   id: number;
   url: string;
   title: string;
   rating: number;
+  visits?: number;
+  createdAt?: string;
+  likes?: number;
 }
 
+const sorting = ref<SortingState>([]);
+
+const { loading, startLoading, stopLoading } = usePageLoader();
+
 const selectedTags = ref<string[]>([]);
+  const tagItems = ["Ctype", "0-5 Év", "6-12 Év", "Csúszda", "Mászóka", "Homokozó", "Kültéri", "Beltéri", "Multifunkcionális", "Vízi Játszótér", "Biztonságos", "Kalandpark", "Zöldterület"];
 
 const popularPlaces = ref<Place[]>([]);
 
-const fetchPlaces = async (sort = "visits") => {
+const latestPlaces = ref<Place[]>([]);
+const mostVisitedPlaces = ref<Place[]>([]);
+const abcPlaces = ref<Place[]>([]);
+const mostLikedPlaces = ref<Place[]>([]);
+
+const currentPlaces = ref<Place[]>([]);
+
+const sortDateAsc = ref(false);
+const sortViewsAsc = ref(false);
+const sortAlphaAsc = ref(false);
+
+const displayedPlaces = ref(12);
+const totalPlaces = computed(() => currentPlaces.value.length);
+
+const loadMore = () => {
+  displayedPlaces.value += 12;
+};
+
+const fetchPlaces = async (sort = "visits"): Promise<Place[]> => {
+  startLoading();
   try {
     let tagParams = "";
     if (selectedTags.value.length > 0) {
       tagParams = selectedTags.value.map(tag => `tag=${encodeURIComponent(tag)}`).join("&");
     }
 
-    const popularResponse = await axios.get(`${API_BASE}/playground?sort=${sort}&${tagParams}`);
-
-    popularPlaces.value = popularResponse.data.map((place: any) => ({
+    const response = await axios.get(`${API_BASE}/playground?sort=${sort}&${tagParams}`);
+    return response.data.map((place: any) => ({
       id: place.id,
       url: place.url,
       title: place.title,
-      rating: place.rating
+      rating: place.rating,
+      visits: place.visits,
+      createdAt: place.createdAt,
+      likes: place.likes,
     }));
   } catch (error) {
     console.error("Hiba történt a helyek lekérése közben:", error);
+    return [];
+  } finally {
+    stopLoading();
   }
 };
 
+const loadAllSorts = async () => {
+  const [latest, visited, abc, liked] = await Promise.all([
+    fetchPlaces("latest"),
+    fetchPlaces("visits"),
+    fetchPlaces("abc"),
+    fetchPlaces("mostLiked"),
+  ]);
 
-
-
-  const loading = ref(false)
-const displayedPlaces = ref(12);
-const totalPlaces = computed(() => popularPlaces.value.length);
-const loadMore = () => {
-  displayedPlaces.value += 12;
-}
+  latestPlaces.value = latest;
+  mostVisitedPlaces.value = visited;
+  abcPlaces.value = abc;
+  mostLikedPlaces.value = liked;
+  currentPlaces.value = visited;
+};
 
 onMounted(async () => {
-  await fetchPlaces();
-  
+  await loadAllSorts();
 });
 
-const tagItems = ["Ctype", "0-5 Év", "6-12 Év", "Csúszda", "Mászóka", "Homokozó", "Kültéri", "Beltéri", "Multifunkcionális", "Vízi Játszótér", "Biztonságos", "Kalandpark", "Zöldterület"];
-
-
-const sortDateAsc = ref(true);
-const sortViewsAsc = ref(true);
-const sortAlphaAsc = ref(true);
-
-
-const toggleSortDate = async () => {
+const toggleSortDate = () => {
   sortDateAsc.value = !sortDateAsc.value;
-  await fetchPlaces(sortDateAsc.value ? "oldest" : "latest");
+  currentPlaces.value = sortDateAsc.value
+    ? [...latestPlaces.value].reverse()
+    : latestPlaces.value;
 };
 
-const toggleSortViews = async () => {
+const toggleSortViews = () => {
   sortViewsAsc.value = !sortViewsAsc.value;
-  await fetchPlaces(sortViewsAsc.value ? "visitsAsc" : "visits");
+  currentPlaces.value = sortViewsAsc.value
+    ? [...mostVisitedPlaces.value].reverse()
+    : mostVisitedPlaces.value;
 };
 
-const toggleSortAlpha = async () => {
+const toggleSortAlpha = () => {
   sortAlphaAsc.value = !sortAlphaAsc.value;
-  await fetchPlaces(sortAlphaAsc.value ? "abc" : "abcReverse");
+  currentPlaces.value = sortAlphaAsc.value
+    ? abcPlaces.value
+    : [...abcPlaces.value].reverse();
 };
 
-watch(selectedTags, () => {
-  fetchPlaces(); 
+const toggleSortLikes = () => {
+  currentPlaces.value = mostLikedPlaces.value;
+};
+
+watch(selectedTags, async () => {
+  const [latest, visited, abc, liked] = await Promise.all([
+    fetchPlaces("latest"),
+    fetchPlaces("visits"),
+    fetchPlaces("abc"),
+    fetchPlaces("mostLiked"),
+  ]);
+
+  latestPlaces.value = latest;
+  mostVisitedPlaces.value = visited;
+  abcPlaces.value = abc;
+  mostLikedPlaces.value = liked;
+
+  if (sortDateAsc.value) {
+    currentPlaces.value = [...latest].reverse();
+  } else if (sortViewsAsc.value) {
+    currentPlaces.value = [...visited].reverse();
+  } else {
+    currentPlaces.value = visited;
+  }
 });
 
-const toggleSortLikes = async () => {
-  await fetchPlaces("mostLiked");
-};
+const columns = [
+  {
+    header: 'Név',
+    accessorKey: 'title',
+  },
+  {
+    header: 'Rating',
+    accessorKey: 'rating',
+  },
+  {
+    header: 'Látogatottság',
+    accessorKey: 'visits',
+  },
+  {
+    header: 'Létrehozva',
+    accessorKey: 'createdAt',
+    cell: (info: any) => new Date(info.getValue()).toLocaleDateString(),
+  },
+  {
+    header: 'Like-ok',
+    accessorKey: 'likes',
+  },
+];
+
+
 
 const { mobile, width } = useDisplay();
 
 const layoutWrapperStyle = computed(() => {
-  const count = popularPlaces.value.slice(0, displayedPlaces.value).length;
+  const count = currentPlaces.value.length;
   if (count < 6 && width.value > 2068) {
     return { minWidth: '2068px' };
   }
@@ -95,7 +176,7 @@ const layoutWrapperStyle = computed(() => {
 });
 
 const colProps = computed(() => {
-  const count = popularPlaces.value.slice(0, displayedPlaces.value).length;
+  const count = currentPlaces.value.length;
   if (count <= 2) {
     return { cols: 12, sm: 12, md: 6, lg: 6, xl: 6 };
   } else {
@@ -103,8 +184,17 @@ const colProps = computed(() => {
   }
 });
 </script>
+
 <template>
-<div class="layout-wrapper" :style="layoutWrapperStyle">
+<v-container v-if="loading" class="loading-screen">
+  <v-progress-circular
+    indeterminate
+    color="primary"
+    size="40"
+  ></v-progress-circular>
+  <p>Betöltés folyamatban...</p>
+</v-container>
+<div v-else class="layout-wrapper" :style="layoutWrapperStyle">
   <v-container class="custom-drawer">
     <v-card class="drawer-content">
       <v-card-title class="text-h6">Szűrj tagek alapján:</v-card-title>
@@ -121,15 +211,12 @@ const colProps = computed(() => {
           />
     </v-card>
   </v-container>
-
-  <!-- Eredeti container -->
   <v-container>
     <v-card max-width="1700px" style="margin-left: auto; margin-right: auto;">
-      <v-card-title v-if="!mobile" class="text-h4">Magyarország játszóterei (2025)</v-card-title>
-      <v-card-title v-if="mobile" class="text-h5">Magyarország játszóterei (2025)</v-card-title>
-      <v-card-text v-if="!mobile" class="text-h6">Itt külön kategóriák szerint szűrhet:</v-card-text>
-      <v-card-text v-if="mobile" class="text-h7">Itt külön kategóriák szerint szűrhet:</v-card-text>
-      <!-- A sort gombokat tartalmazó rész -->
+      <v-card-title style="white-space: normal;" v-if="!mobile" class="text-h4">Magyarország játszóterei (2025)</v-card-title>
+      <v-card-title style="white-space: normal;" v-if="mobile" class="text-h5">Magyarország játszóterei (2025)</v-card-title>
+      <v-card-text style="white-space: normal;" v-if="!mobile" class="text-h6">Itt külön kategóriák szerint szűrhet:</v-card-text>
+      <v-card-text style="white-space: normal;" v-if="mobile" class="text-h7">Itt külön kategóriák szerint szűrhet:</v-card-text>
       <div v-if="!mobile">
         <v-card-actions>
           <v-btn @click="toggleSortDate" color="primary" class="text-surface">
@@ -183,7 +270,7 @@ const colProps = computed(() => {
     </v-card>
     <v-row style="max-width: 1700px; margin: auto;">
       <v-col
-        v-for="hely in popularPlaces.slice(0, displayedPlaces)" 
+        v-for="hely in currentPlaces.slice(0, 12)" 
         :key="hely.title" 
         v-bind:colProps
       >
@@ -230,6 +317,40 @@ const colProps = computed(() => {
   display: flex;
   padding: 20px;
   min-height: 1300px;
+}
+
+.loading-screen {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 550px) {
+  .drawer-content {
+    padding: 10px;
+    font-size: 0.8rem;
+  }
+
+  .drawer-content * {
+    font-size: 0.8rem !important;
+  }
+
+  .v-col .v-card-title {
+    font-size: 0.9rem;
+  }
+
+  .v-col .v-card-text {
+    font-size: 0.7rem;
+    padding-bottom: 0px !important;
+  }
+
+  
+  .v-container {
+    padding: 4px;
+  }
 }
 
 </style>

@@ -14,7 +14,7 @@ describe("Comment Repository Tests", () => {
         expect(testTopic.id).toBeDefined();
 
         testPlace = await db.Place.create({
-            name: "Test Place",  // HOZZÁADVA
+            name: "Test Place",
             topic_ID: testTopic.id,
             user_rate: 0,
             critic_rate: 0,

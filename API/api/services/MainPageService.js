@@ -4,7 +4,7 @@ const Place = db.Place;
 
 const calculateTotalRating = (user_rate, critic_rate, NumberOfRate_L, NumberOfRate_C) => {
     if ((NumberOfRate_L + NumberOfRate_C) === 0) return 0;
-    const totalRating = (user_rate * NumberOfRate_L + critic_rate * NumberOfRate_C) / (NumberOfRate_L + NumberOfRate_C);
+    const totalRating = (user_rate  + critic_rate) / (NumberOfRate_L + NumberOfRate_C);
     return Math.round(totalRating * 2) / 2; 
 };
 
